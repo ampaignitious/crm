@@ -17,6 +17,7 @@ class _ThirdSplashScreenState extends State<ThirdSplashScreen> {
   Widget build(BuildContext context) {
   final size =MediaQuery.of(context).size;
         return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(

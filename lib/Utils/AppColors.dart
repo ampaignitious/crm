@@ -26,6 +26,7 @@ class AppColors {
   // Additional Colors
   static const Color coffeeBean = Color(0xFF6F4E37);
   static const Color caramel = Color(0xFF8C593B);
+  static const Color greyColor = Colors.grey;
   static const Color darkRoast = Color(0xFF503B32);
   static const Color hazelnut = Color(0xFFC18A42);
   static const Color mocha = Color(0xFF8D6854);

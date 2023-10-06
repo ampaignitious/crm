@@ -31,6 +31,7 @@ dependencies:
   google_fonts:
   lottie:
   flutter:
+  # google_nav_bar:
     sdk: flutter
     
 
