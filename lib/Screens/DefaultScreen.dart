@@ -28,12 +28,13 @@ class _DefaultScreenState extends State<DefaultScreen> {
         return Scaffold(
       body: Page[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
-       backgroundColor: AppColors.contentColorPurple,
+       backgroundColor: AppColors.contentColorCyan,
         currentIndex: _selectedIndex,
         onTap: ((value) => onItemTapped(value)),
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Color.fromARGB(255, 169, 230, 216).withOpacity(0.5),
+        selectedItemColor: AppColors.contentColorPurple ,
+        unselectedItemColor: Colors.grey.withOpacity(0.5),
+        // keep me this color:Color.fromARGB(255, 169, 230, 216).withOpacity(0.5),
         showUnselectedLabels: true,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.home), label:'Home'),

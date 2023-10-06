@@ -30,8 +30,8 @@ environment:
 dependencies:
   google_fonts:
   lottie:
+  intl:
   flutter:
-  # google_nav_bar:
     sdk: flutter
     
 

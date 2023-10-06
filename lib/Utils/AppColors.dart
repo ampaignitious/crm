@@ -13,7 +13,7 @@ class AppColors {
   static const Color gridLinesColor = Color(0x11FFFFFF);
 
   static const Color contentColorBlack = Colors.black;
-  static const Color contentColorWhite = Colors.white;
+  static const Color contentColorWhite = Color.fromARGB(255, 248, 235, 248);
   static const Color contentColorBlue = Color.fromARGB(255, 27, 152, 255);
   static const Color contentColorYellow = Color(0xFFFFC300);
   static const Color contentColorOrange = Color(0xFFFF683B);
@@ -21,7 +21,7 @@ class AppColors {
   static const Color contentColorPurple = Color.fromARGB(255, 110, 8, 136);
   static const Color contentColorPink = Color.fromARGB(255, 241, 29, 241);
   static const Color contentColorRed = Color(0xFFE80054);
-  static const Color contentColorCyan = Color(0xFF50E4FF);
+  static const Color contentColorCyan = Color.fromARGB(255, 240, 253, 255);
 
   // Additional Colors
   static const Color coffeeBean = Color(0xFF6F4E37);
