@@ -1,7 +1,11 @@
+import 'package:crm/Screens/DefaultScreen.dart';
 import 'package:crm/Screens/SplashScreen/FirstScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() {
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+
   runApp(const MyApp());
 }
 
@@ -17,7 +21,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const FirstScreen(),
+      // home: const FirstScreen(),
+      home: DefaultScreen(),
     );
   }
 }

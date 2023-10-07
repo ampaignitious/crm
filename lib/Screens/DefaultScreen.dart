@@ -1,4 +1,5 @@
 import 'package:crm/Screens/HomePage.dart';
+import 'package:crm/Screens/VisitsPage.dart';
 import 'package:crm/Utils/AppColors.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +15,7 @@ class _DefaultScreenState extends State<DefaultScreen> {
   int _selectedIndex = 0;
   List Page = [
  HomePage(),
- HomePage(),
+ VisitsPage(),
  HomePage(),
  HomePage(),
 

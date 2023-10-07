@@ -293,8 +293,8 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
                        child: Center(
                         child: Lottie.asset(
                         'assets/json/target.json', // Path to your Lottie animation JSON file
-                        width: size.width*0.22, // Adjust width as needed
-                        height: size.height*0.85,  
+                        width: size.width*0.17, // Adjust width as needed
+                        height: size.height*0.05,  
                         fit: BoxFit.fill,
                           ),
                        ),
@@ -378,7 +378,7 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                          color: AppColors.contentColorPink.withOpacity(0.3)
+                          color: AppColors.gridLinesColor.withOpacity(0.3)
                         ),
                   boxShadow: [
                         BoxShadow(
@@ -407,16 +407,18 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
                        ),
                        child: Center(
                         child: Lottie.asset(
-                        'assets/json/target.json', // Path to your Lottie animation JSON file
+                        'assets/json/login2.json', // Path to your Lottie animation JSON file
                         width: size.width*0.22, // Adjust width as needed
                         height: size.height*0.85,  
                         fit: BoxFit.fill,
                           ),
                        ),
                     ),
-                    Text("Targets", style: GoogleFonts.lato(
-                      fontSize: size.width*0.04,
-                    ),)
+                    Text("Account settings", style: GoogleFonts.lato(
+                      fontSize: size.width*0.025,
+                    ),
+                     
+                    )
                   ],
                 ),
             ),
@@ -429,7 +431,7 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                          color: AppColors.contentColorOrange.withOpacity(0.3)
+                          color: AppColors.mainTextColor2.withOpacity(0.3)
                         ),
                   boxShadow: [
                         BoxShadow(
@@ -449,7 +451,7 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
                 child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Text("Notifications", style: GoogleFonts.lato(
+                    Text("Feedback", style: GoogleFonts.lato(
                       fontSize: size.width*0.04,
                     ),),
                     Container(
@@ -459,12 +461,12 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
                         color: AppColors.contentColorCyan,
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: AppColors.contentColorOrange
+                          color: AppColors.mainTextColor2
                         )
                        ),
                        child: Center(
                         child: Lottie.asset(
-                        'assets/json/notification.json', // Path to your Lottie animation JSON file
+                        'assets/json/feedback.json', // Path to your Lottie animation JSON file
                         width: size.width*0.18, // Adjust width as needed
                         height: size.height*0.16,  
                         fit: BoxFit.fill,

@@ -37,7 +37,14 @@ class _ContainerDisplayingStatsState extends State<ContainerDisplayingStats> {
                           blurRadius: 4.0,
                           spreadRadius: 0.2,
                         ),
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          offset: Offset(0.8, 1.0),
+                          blurRadius: 4.0,
+                          spreadRadius: 0.2,
+                        ),
                       ],
+                      borderRadius: BorderRadius.circular(10),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -97,7 +104,9 @@ class _ContainerDisplayingStatsState extends State<ContainerDisplayingStats> {
               )
                 ],
               ),
-              Divider(),
+              Divider(
+                thickness: 1,
+              ),
               Padding(
                 padding: EdgeInsets.only(left: size.width*0.03),
                 child: Text("Monthly target", style: GoogleFonts.lato(
