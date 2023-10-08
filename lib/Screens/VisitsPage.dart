@@ -32,6 +32,7 @@ class _VisitsPageState extends State<VisitsPage> with TickerProviderStateMixin{
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       drawer:Drawer(
         backgroundColor: AppColors.contentColorPurple,
         width: size.width*0.8,

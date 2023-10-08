@@ -1,4 +1,6 @@
+import 'package:crm/Screens/VisitsPage.dart';
 import 'package:crm/Utils/AppColors.dart';
+import 'package:crm/Widgets/VisitScreenWidgets/CreateRoutePlan.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
@@ -23,57 +25,64 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(
-                height: size.height*0.10,
-                width: size.width*0.45,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                          color: AppColors.contentColorPurple.withOpacity(0.3)
-                        ),
-                  boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.3),
-                          offset: Offset(0.8, 1.0),
-                          blurRadius: 4.0,
-                          spreadRadius: 0.2,
-                        ),
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.3),
-                          offset: Offset(-0.8, -1.0),
-                          blurRadius: 4.0,
-                          spreadRadius: 0.2,
-                        ),
-                      ],
-                ),
-                child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Container(
-                      height:size.height*0.10 ,
-                      width: size.width*0.18,
-                      decoration: BoxDecoration(
-                        color: AppColors.contentColorCyan,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: AppColors.contentColorPurple
-                        )
-                       ),
-                       child: Center(
-                        child: Lottie.asset(
-                        'assets/json/visits.json', // Path to your Lottie animation JSON file
-                        width: size.width*0.14, // Adjust width as needed
-                        height: size.height*0.16,  
-                        fit: BoxFit.fill,
+            InkWell(
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context){
+                  return VisitsPage();
+                }));
+              },
+              child: Container(
+                  height: size.height*0.10,
+                  width: size.width*0.45,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                            color: AppColors.contentColorPurple.withOpacity(0.3)
                           ),
-                       ),
-                    ),
-                    Text("Visits", style: GoogleFonts.lato(
-                      fontSize: size.width*0.04,
-                    ),)
-                  ],
-                ),
+                    boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.3),
+                            offset: Offset(0.8, 1.0),
+                            blurRadius: 4.0,
+                            spreadRadius: 0.2,
+                          ),
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.3),
+                            offset: Offset(-0.8, -1.0),
+                            blurRadius: 4.0,
+                            spreadRadius: 0.2,
+                          ),
+                        ],
+                  ),
+                  child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                        height:size.height*0.10 ,
+                        width: size.width*0.18,
+                        decoration: BoxDecoration(
+                          color: AppColors.contentColorCyan,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: AppColors.contentColorPurple
+                          )
+                         ),
+                         child: Center(
+                          child: Lottie.asset(
+                          'assets/json/visits.json', // Path to your Lottie animation JSON file
+                          width: size.width*0.14, // Adjust width as needed
+                          height: size.height*0.16,  
+                          fit: BoxFit.fill,
+                            ),
+                         ),
+                      ),
+                      Text("Visits", style: GoogleFonts.lato(
+                        fontSize: size.width*0.04,
+                      ),)
+                    ],
+                  ),
+              ),
             ),
             // 
             // first row element two
@@ -480,7 +489,132 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
           ],
         ),
       ),
+       SizedBox(height: size.height*0.03,),
+      // fifth secction
+      Padding(
+        padding: EdgeInsets.symmetric(horizontal: size.width*0.03),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            InkWell(
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context){
+                  return CreateRoutePlan();
+                }));
+              },
+              child: Container(
+                  height: size.height*0.10,
+                  width: size.width*0.45,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                            color: AppColors.gridLinesColor.withOpacity(0.3)
+                          ),
+                    boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.3),
+                            offset: Offset(0.8, 1.0),
+                            blurRadius: 4.0,
+                            spreadRadius: 0.2,
+                          ),
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.3),
+                            offset: Offset(-0.8, -1.0),
+                            blurRadius: 4.0,
+                            spreadRadius: 0.2,
+                          ),
+                        ],
+                  ),
+                  child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                        height:size.height*0.17 ,
+                        width: size.width*0.19,
+                        decoration: BoxDecoration(
+                          color: AppColors.contentColorCyan,
+                          shape: BoxShape.circle,
+                         ),
+                         child: Center(
+                          child: Lottie.asset(
+                          'assets/json/routeplan.json', // Path to your Lottie animation JSON file
+                          width: size.width*0.22, // Adjust width as needed
+                          height: size.height*0.65,  
+                          fit: BoxFit.fill,
+                            ),
+                         ),
+                      ),
+                      Text("Route plan", style: GoogleFonts.lato(
+                        fontSize: size.width*0.03,
+                      ),
+                       
+                      )
+                    ],
+                  ),
+              ),
+            ),
+            // 
+            // Third row element two
+             Container(
+                height: size.height*0.10,
+                width: size.width*0.45,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                          color: AppColors.mainTextColor2.withOpacity(0.3)
+                        ),
+                  boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.3),
+                          offset: Offset(0.8, 1.0),
+                          blurRadius: 4.0,
+                          spreadRadius: 0.2,
+                        ),
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.3),
+                          offset: Offset(-0.8, -1.0),
+                          blurRadius: 4.0,
+                          spreadRadius: 0.2,
+                        ),
+                      ],
+                ),
+                child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text("Feedback", style: GoogleFonts.lato(
+                      fontSize: size.width*0.04,
+                    ),),
+                    Container(
+                      height:size.height*0.10,
+                      width: size.width*0.18,
+                      decoration: BoxDecoration(
+                        color: AppColors.contentColorCyan,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: AppColors.mainTextColor2
+                        )
+                       ),
+                       child: Center(
+                        child: Lottie.asset(
+                        'assets/json/feedback.json', // Path to your Lottie animation JSON file
+                        width: size.width*0.18, // Adjust width as needed
+                        height: size.height*0.16,  
+                        fit: BoxFit.fill,
+                          ),
+                       ),
+                    ),
+                  ],
+                ),
+            ),
+            
+          ],
+        ),
+      ),
       
+      SizedBox(height: size.height*0.02,),
+                  
     
     ],
     );

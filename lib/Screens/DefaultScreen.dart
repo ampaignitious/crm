@@ -1,4 +1,5 @@
 import 'package:crm/Screens/HomePage.dart';
+import 'package:crm/Screens/NotificationScreen.dart';
 import 'package:crm/Screens/VisitsPage.dart';
 import 'package:crm/Utils/AppColors.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,7 @@ class _DefaultScreenState extends State<DefaultScreen> {
   List Page = [
  HomePage(),
  VisitsPage(),
- HomePage(),
+ NotificationScreen(),
  HomePage(),
 
    ];
@@ -40,7 +41,7 @@ class _DefaultScreenState extends State<DefaultScreen> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.home), label:'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.location_on_rounded), label: 'Visits'),
-          BottomNavigationBarItem(icon: Icon(Icons.notifications), label: 'Notification'),
+          BottomNavigationBarItem(icon: Icon(Icons.wallet_travel_rounded), label: 'Sales'),
           BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
         ],
       ),

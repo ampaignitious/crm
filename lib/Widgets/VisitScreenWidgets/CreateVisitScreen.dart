@@ -12,6 +12,9 @@ class CreateVisitScreen extends StatefulWidget {
 class _CreateVisitScreenState extends State<CreateVisitScreen> {
   @override
   Widget build(BuildContext context) {
+    String? _selectedOption = '';
+    String? _selectedVisitPurpose='Demo';
+  List<String> _visitPurposes = ['Demo', 'Sale', 'Maintenance'];
     final size = MediaQuery.of(context).size;
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -266,6 +269,139 @@ class _CreateVisitScreenState extends State<CreateVisitScreen> {
                           ),
                         ),
                       ),
+                      // 
+                      // radio buttons
+                  Column(
+                    children: <Widget>[
+                      RadioListTile(
+                        title: Text(
+                          'Interested',
+                          style: GoogleFonts.lato(
+                            fontSize: size.width * 0.04,
+                          ),
+                        ),
+                        value: 'Interested',
+                        groupValue: _selectedOption, // This is crucial for radio button selection
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedOption = value as String?;
+                          });
+                        },
+                        activeColor: AppColors.contentColorPurple,
+                      ),
+                      RadioListTile(
+                        title: Text(
+                          'Maybe',
+                          style: GoogleFonts.lato(
+                            fontSize: size.width * 0.04,
+                          ),
+                        ),
+                        value: 'Maybe',
+                        groupValue: _selectedOption, // This is crucial for radio button selection
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedOption = value as String?;
+                          });
+                        },
+                        activeColor: AppColors.contentColorPurple,
+                      ),
+                      RadioListTile(
+                        title: Text(
+                          'Not',
+                          style: GoogleFonts.lato(
+                            fontSize: size.width * 0.04,
+                          ),
+                        ),
+                        value: 'Not',
+                        groupValue: _selectedOption, // This is crucial for radio button selection
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedOption = value as String?;
+                          });
+                        },
+                        activeColor: AppColors.contentColorPurple,
+                      ),
+                    ],
+                  ),
+
+                      // 
+                      SizedBox(height: size.height*0.022,),
+                      // contact display promt container
+                      Container(
+                          margin: EdgeInsets.only(left: size.width*0.008),
+                          height: size.height*0.07,
+                          width: size.width*0.92,
+                          decoration: BoxDecoration(
+                            color:AppColors.contentColorPurple,
+                            boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          offset: Offset(0.8, 1.0),
+                          blurRadius: 4.0,
+                          spreadRadius: 0.2,
+                        ),
+                            ]
+                          ),
+                        child: Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Text(
+                                "Visit purpose",style: GoogleFonts.lato(
+                                  color: AppColors.contentColorWhite
+                                ),
+                              ),
+                        DropdownButton<String>(
+                          iconEnabledColor: Colors.white,
+                      value: _selectedVisitPurpose,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _selectedVisitPurpose = newValue;
+                        });
+                      },
+                      items: _visitPurposes.asMap().entries.map((entry) {
+                      int index = entry.key;
+                      String purpose = entry.value;
+                      return DropdownMenuItem<String>(
+                        value: purpose,
+                        child: Text(
+                          purpose,
+                          style: index == 0
+                              ? TextStyle(color: Color.fromARGB(255, 255, 252, 69))  // Change the color for the first item
+                              : null,  // Use default style for other items
+                        ),
+                      );
+                    }).toList(),
+                    ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      //
+                      SizedBox(height: size.height*0.025,), 
+                      Center(
+                        child: ElevatedButton(
+                        onPressed: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context){
+                            return CreateVisitScreen();
+                          }));
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: size.width*0.26,
+                            vertical: size.height*0.028,
+                          ),
+                          child: Text('record a visit',
+                          style: GoogleFonts.lato(
+                            color: AppColors.contentColorPurple,
+                          ),),
+                        ),
+                          style: ElevatedButton.styleFrom(
+                          primary: AppColors.contentColorYellow,  // Set button color to purple
+                        ),
+                        ),
+                      ),
+                      SizedBox(height: size.height*0.035,),
                       // 
                    ],
                  ),

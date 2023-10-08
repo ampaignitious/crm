@@ -23,22 +23,113 @@ class _DrawerItemsState extends State<DrawerItems> {
           ), child: null,
           // ... other header content ...
         ),
-        ListTile(
-          leading: IconButton(
-            icon: Icon(
-              Icons.menu,
-              color: Colors.red, // Change the color of the drawer icon here
+        Card(
+          child: ListTile(
+            leading: IconButton(
+              icon: Icon(
+                Icons.menu,
+                color: Colors.red, // Change the color of the drawer icon here
+              ),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
             ),
-            onPressed: () {
+            title: Text('Menu'),
+            onTap: () {
               Scaffold.of(context).openDrawer();
             },
           ),
-          title: Text('Menu'),
-          onTap: () {
-            Scaffold.of(context).openDrawer();
-          },
         ),
-        // ... other drawer items ...
+        // 
+        Card(
+          child: ListTile(
+            leading: IconButton(
+              icon: Icon(
+                Icons.menu,
+                color: Colors.red, // Change the color of the drawer icon here
+              ),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            ),
+            title: Text('Menu'),
+            onTap: () {
+              Scaffold.of(context).openDrawer();
+            },
+          ),
+        ),
+        // 
+        Card(
+          child: ListTile(
+            leading: IconButton(
+              icon: Icon(
+                Icons.menu,
+                color: Colors.red, // Change the color of the drawer icon here
+              ),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            ),
+            title: Text('Menu'),
+            onTap: () {
+              Scaffold.of(context).openDrawer();
+            },
+          ),
+        ),
+        // 
+        Card(
+          child: ListTile(
+            leading: IconButton(
+              icon: Icon(
+                Icons.menu,
+                color: Colors.red, // Change the color of the drawer icon here
+              ),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            ),
+            title: Text('Menu'),
+            onTap: () {
+              Scaffold.of(context).openDrawer();
+            },
+          ),
+        ),
+        // 
+        Card(
+          child: ListTile(
+            leading: IconButton(
+              icon: Icon(
+                Icons.menu,
+                color: Colors.red, // Change the color of the drawer icon here
+              ),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            ),
+            title: Text('Menu'),
+            onTap: () {
+              Scaffold.of(context).openDrawer();
+            },
+          ),
+        ),
+        // 
+        Card(
+          child: ListTile(
+            leading: IconButton(
+              icon: Icon(
+                Icons.menu,
+                color: Colors.red, // Change the color of the drawer icon here
+              ),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            ),
+            title: Text('Menu'),
+            onTap: () {
+              Scaffold.of(context).openDrawer();
+            },
+          ),
+        ),
       ],
     ),
   ),

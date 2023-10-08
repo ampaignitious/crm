@@ -1,4 +1,5 @@
 import 'package:crm/Utils/AppColors.dart';
+import 'package:crm/Widgets/VisitScreenWidgets/CreateRoutePlan.dart';
 import 'package:crm/Widgets/VisitScreenWidgets/CreateVisitScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -250,7 +251,9 @@ class _MenuOptionsState extends State<MenuOptions> {
             SizedBox(height: size.height*0.018,), 
             ElevatedButton(
             onPressed: (){
-
+              Navigator.push(context, MaterialPageRoute(builder: (context){
+                return CreateRoutePlan();
+              }));
             },
             child: Padding(
               padding: EdgeInsets.symmetric(

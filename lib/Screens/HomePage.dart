@@ -98,9 +98,8 @@ class _HomePageState extends State<HomePage> {
                         child: SingleChildScrollView(
                           scrollDirection: Axis.vertical,
                           child: ContainerDisplayingMenuItems()),
-                      )
-                      
-                  
+                      ),
+
                     ],
                   ),
                 )

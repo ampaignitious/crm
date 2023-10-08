@@ -149,7 +149,9 @@ class _ContainerDisplayingStatsState extends State<ContainerDisplayingStats> {
                         padding: EdgeInsets.only(bottom: size.height*0.016),
                         child: Text("Mainteance: 15"),
                       ),
-                      Text("Total sales: 15")
+                      Text("Total sales: 15", style: GoogleFonts.lato(
+                        fontWeight:FontWeight.bold
+                      ),)
                     ],
                   ),
                 )
