@@ -1,5 +1,6 @@
 import 'package:crm/Screens/HomePage.dart';
-import 'package:crm/Screens/NotificationScreen.dart';
+import 'package:crm/Screens/MainteanceScreen.dart';
+import 'package:crm/Screens/SalesScreen.dart';
 import 'package:crm/Screens/VisitsPage.dart';
 import 'package:crm/Utils/AppColors.dart';
 import 'package:flutter/material.dart';
@@ -17,8 +18,8 @@ class _DefaultScreenState extends State<DefaultScreen> {
   List Page = [
  HomePage(),
  VisitsPage(),
- NotificationScreen(),
- HomePage(),
+ SalesScreen(),
+ MainteanceScreen(),
 
    ];
        void onItemTapped(int index) {
@@ -42,7 +43,7 @@ class _DefaultScreenState extends State<DefaultScreen> {
           BottomNavigationBarItem(icon: Icon(Icons.home), label:'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.location_on_rounded), label: 'Visits'),
           BottomNavigationBarItem(icon: Icon(Icons.wallet_travel_rounded), label: 'Sales'),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
+          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Mainteance'),
         ],
       ),
     );

@@ -3,17 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 
-class NotificationScreen extends StatefulWidget {
-  const NotificationScreen({super.key});
+class Targets extends StatefulWidget {
+  const Targets({super.key});
 
   @override
-  State<NotificationScreen> createState() => _NotificationScreenState();
+  State<Targets> createState() => _TargetsState();
 }
 
-class _NotificationScreenState extends State<NotificationScreen> {
+class _TargetsState extends State<Targets> {
   @override
   Widget build(BuildContext context) {
-  final size = MediaQuery.of(context).size;
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(
@@ -25,7 +25,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
  
         title: Padding(
           padding: EdgeInsets.only(left: size.width*0.06),
-          child: Text("Notification page",
+          child: Text("Targets page",
            style: GoogleFonts.lato(
             fontSize: size.width*0.05, 
             color: AppColors.menuBackground,

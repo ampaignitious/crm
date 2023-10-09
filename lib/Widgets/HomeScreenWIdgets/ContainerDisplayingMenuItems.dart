@@ -1,3 +1,7 @@
+import 'package:crm/Screens/MainteanceScreen.dart';
+import 'package:crm/Screens/NotificationScreen.dart';
+import 'package:crm/Screens/SalesScreen.dart';
+import 'package:crm/Screens/Targets.dart';
 import 'package:crm/Screens/VisitsPage.dart';
 import 'package:crm/Utils/AppColors.dart';
 import 'package:crm/Widgets/VisitScreenWidgets/CreateRoutePlan.dart';
@@ -174,29 +178,36 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
                         ),
                       ],
                 ),
-                child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Container(
-                      height:size.height*0.10 ,
-                      width: size.width*0.18,
-                      decoration: BoxDecoration(
-                        color: AppColors.contentColorCyan,
-                        shape: BoxShape.circle,
-                       ),
-                       child: Center(
-                        child: Lottie.asset(
-                        'assets/json/sales.json', // Path to your Lottie animation JSON file
-                        width: size.width*0.14, // Adjust width as needed
-                        height: size.height*0.16,  
-                        fit: BoxFit.fill,
-                          ),
-                       ),
-                    ),
-                    Text("Sales", style: GoogleFonts.lato(
-                      fontSize: size.width*0.04,
-                    ),)
-                  ],
+                child: InkWell(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context){
+                      return SalesScreen();
+                    }));
+                  },
+                  child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                        height:size.height*0.10 ,
+                        width: size.width*0.18,
+                        decoration: BoxDecoration(
+                          color: AppColors.contentColorCyan,
+                          shape: BoxShape.circle,
+                         ),
+                         child: Center(
+                          child: Lottie.asset(
+                          'assets/json/sales.json', // Path to your Lottie animation JSON file
+                          width: size.width*0.14, // Adjust width as needed
+                          height: size.height*0.16,  
+                          fit: BoxFit.fill,
+                            ),
+                         ),
+                      ),
+                      Text("Sales", style: GoogleFonts.lato(
+                        fontSize: size.width*0.04,
+                      ),)
+                    ],
+                  ),
                 ),
             ),
             // 
@@ -225,32 +236,39 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
                         ),
                       ],
                 ),
-                child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text("Mainteance", style: GoogleFonts.lato(
-                      fontSize: size.width*0.04,
-                    ),),
-                    Container(
-                      height:size.height*0.10,
-                      width: size.width*0.18,
-                      decoration: BoxDecoration(
-                        color: AppColors.contentColorCyan,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: AppColors.contentColorGreen
-                        )
-                       ),
-                       child: Center(
-                        child: Lottie.asset(
-                        'assets/json/mainteance.json', // Path to your Lottie animation JSON file
-                        width: size.width*0.18, // Adjust width as needed
-                        height: size.height*0.16,  
-                        fit: BoxFit.fill,
-                          ),
-                       ),
-                    ),
-                  ],
+                child: InkWell(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context){
+                      return MainteanceScreen();
+                    }));
+                  },
+                  child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text("Mainteance", style: GoogleFonts.lato(
+                        fontSize: size.width*0.04,
+                      ),),
+                      Container(
+                        height:size.height*0.10,
+                        width: size.width*0.18,
+                        decoration: BoxDecoration(
+                          color: AppColors.contentColorCyan,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: AppColors.contentColorGreen
+                          )
+                         ),
+                         child: Center(
+                          child: Lottie.asset(
+                          'assets/json/mainteance.json', // Path to your Lottie animation JSON file
+                          width: size.width*0.18, // Adjust width as needed
+                          height: size.height*0.16,  
+                          fit: BoxFit.fill,
+                            ),
+                         ),
+                      ),
+                    ],
+                  ),
                 ),
             ),
             
@@ -289,29 +307,36 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
                         ),
                       ],
                 ),
-                child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Container(
-                      height:size.height*0.17 ,
-                      width: size.width*0.19,
-                      decoration: BoxDecoration(
-                        color: AppColors.contentColorCyan,
-                        shape: BoxShape.circle,
-                       ),
-                       child: Center(
-                        child: Lottie.asset(
-                        'assets/json/target.json', // Path to your Lottie animation JSON file
-                        width: size.width*0.17, // Adjust width as needed
-                        height: size.height*0.05,  
-                        fit: BoxFit.fill,
-                          ),
-                       ),
-                    ),
-                    Text("Targets", style: GoogleFonts.lato(
-                      fontSize: size.width*0.04,
-                    ),)
-                  ],
+                child: InkWell(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context){
+                      return Targets();
+                    }));
+                  },
+                  child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                        height:size.height*0.17 ,
+                        width: size.width*0.19,
+                        decoration: BoxDecoration(
+                          color: AppColors.contentColorCyan,
+                          shape: BoxShape.circle,
+                         ),
+                         child: Center(
+                          child: Lottie.asset(
+                          'assets/json/target.json', // Path to your Lottie animation JSON file
+                          width: size.width*0.17, // Adjust width as needed
+                          height: size.height*0.05,  
+                          fit: BoxFit.fill,
+                            ),
+                         ),
+                      ),
+                      Text("Targets", style: GoogleFonts.lato(
+                        fontSize: size.width*0.04,
+                      ),)
+                    ],
+                  ),
                 ),
             ),
             // 
@@ -340,32 +365,39 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
                         ),
                       ],
                 ),
-                child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text("Notifications", style: GoogleFonts.lato(
-                      fontSize: size.width*0.04,
-                    ),),
-                    Container(
-                      height:size.height*0.10,
-                      width: size.width*0.18,
-                      decoration: BoxDecoration(
-                        color: AppColors.contentColorCyan,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: AppColors.contentColorOrange
-                        )
-                       ),
-                       child: Center(
-                        child: Lottie.asset(
-                        'assets/json/notification.json', // Path to your Lottie animation JSON file
-                        width: size.width*0.18, // Adjust width as needed
-                        height: size.height*0.16,  
-                        fit: BoxFit.fill,
-                          ),
-                       ),
-                    ),
-                  ],
+                child: InkWell(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context){
+                      return NotificationScreen();
+                    }));
+                  },
+                  child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text("Notifications", style: GoogleFonts.lato(
+                        fontSize: size.width*0.04,
+                      ),),
+                      Container(
+                        height:size.height*0.10,
+                        width: size.width*0.18,
+                        decoration: BoxDecoration(
+                          color: AppColors.contentColorCyan,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: AppColors.contentColorOrange
+                          )
+                         ),
+                         child: Center(
+                          child: Lottie.asset(
+                          'assets/json/notification.json', // Path to your Lottie animation JSON file
+                          width: size.width*0.18, // Adjust width as needed
+                          height: size.height*0.16,  
+                          fit: BoxFit.fill,
+                            ),
+                         ),
+                      ),
+                    ],
+                  ),
                 ),
             ),
             
@@ -526,31 +558,38 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
                           ),
                         ],
                   ),
-                  child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Container(
-                        height:size.height*0.17 ,
-                        width: size.width*0.19,
-                        decoration: BoxDecoration(
-                          color: AppColors.contentColorCyan,
-                          shape: BoxShape.circle,
-                         ),
-                         child: Center(
-                          child: Lottie.asset(
-                          'assets/json/routeplan.json', // Path to your Lottie animation JSON file
-                          width: size.width*0.22, // Adjust width as needed
-                          height: size.height*0.65,  
-                          fit: BoxFit.fill,
-                            ),
-                         ),
-                      ),
-                      Text("Route plan", style: GoogleFonts.lato(
-                        fontSize: size.width*0.03,
-                      ),
-                       
-                      )
-                    ],
+                  child: InkWell(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context){
+                        return CreateRoutePlan();
+                      }));
+                    },
+                    child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Container(
+                          height:size.height*0.17 ,
+                          width: size.width*0.19,
+                          decoration: BoxDecoration(
+                            color: AppColors.contentColorCyan,
+                            shape: BoxShape.circle,
+                           ),
+                           child: Center(
+                            child: Lottie.asset(
+                            'assets/json/routeplan.json', // Path to your Lottie animation JSON file
+                            width: size.width*0.22, // Adjust width as needed
+                            height: size.height*0.65,  
+                            fit: BoxFit.fill,
+                              ),
+                           ),
+                        ),
+                        Text("Route plan", style: GoogleFonts.lato(
+                          fontSize: size.width*0.03,
+                        ),
+                         
+                        )
+                      ],
+                    ),
                   ),
               ),
             ),
