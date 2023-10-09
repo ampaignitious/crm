@@ -42,7 +42,7 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                            color: AppColors.contentColorPurple.withOpacity(0.3)
+                            color: AppColors.contentColorPurple.withOpacity(0.5)
                           ),
                     boxShadow: [
                           BoxShadow(
@@ -97,7 +97,7 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                          color: AppColors.contentColorGreen.withOpacity(0.3)
+                          color: AppColors.contentColorGreen.withOpacity(0.5)
                         ),
                   boxShadow: [
                         BoxShadow(
@@ -161,7 +161,7 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                          color: AppColors.contentColorYellow.withOpacity(0.3)
+                          color: AppColors.contentColorYellow.withOpacity(0.5)
                         ),
                   boxShadow: [
                         BoxShadow(
@@ -219,7 +219,7 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                          color: AppColors.darkRoast.withOpacity(0.3)
+                          color: AppColors.darkRoast.withOpacity(0.5)
                         ),
                   boxShadow: [
                         BoxShadow(

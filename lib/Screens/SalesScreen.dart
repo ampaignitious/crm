@@ -2,6 +2,7 @@ import 'package:crm/Utils/AppColors.dart';
 import 'package:crm/Widgets/Drawer/DrawerItems.dart';
 import 'package:crm/Widgets/SalesScreenWidgets/AvailableCoffeeProductsDisplayScreen.dart';
 import 'package:crm/Widgets/SalesScreenWidgets/AvailableMachinesDisplayScreen.dart';
+import 'package:crm/Widgets/SalesScreenWidgets/ProductSaleScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
@@ -222,47 +223,54 @@ class _SalesScreenState extends State<SalesScreen> {
           // 
           SizedBox(height: size.height*0.016,),
           // 
-          Center(
-            child: Container(
-              height: size.height*0.18,
-              width: size.width*0.95,
-              decoration: BoxDecoration(
-                color: AppColors.contentColorCyan,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              offset: Offset(0.8, 1.0),
-                              blurRadius: 4.0,
-                              spreadRadius: 0.2,
-                            ),
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              offset: Offset(0.8, 1.0),
-                              blurRadius: 4.0,
-                              spreadRadius: 0.2,
-                            ),
-                          ],
-                          borderRadius: BorderRadius.circular(10),
-              ),
-              child: Row(
-                children: [
-                  Lottie.asset(
-                        'assets/json/performasale.json', // Path to your Lottie animation JSON file
-                        width: size.width*0.33, // Adjust width as needed
-                        height: size.height*0.16,  
-                        fit: BoxFit.fill,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: size.width*0.08) ,
-                      child: Text("perform a product sale", style: GoogleFonts.lato(
-                        fontSize: size.width*0.045,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.contentColorPurple
-                      ),),
-                    )
-                ],
-              ),
-             ),
+          InkWell(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context){
+                return ProductSaleScreen();
+              }));
+            },
+            child: Center(
+              child: Container(
+                height: size.height*0.18,
+                width: size.width*0.95,
+                decoration: BoxDecoration(
+                  color: AppColors.contentColorCyan,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                offset: Offset(0.8, 1.0),
+                                blurRadius: 4.0,
+                                spreadRadius: 0.2,
+                              ),
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                offset: Offset(0.8, 1.0),
+                                blurRadius: 4.0,
+                                spreadRadius: 0.2,
+                              ),
+                            ],
+                            borderRadius: BorderRadius.circular(10),
+                ),
+                child: Row(
+                  children: [
+                    Lottie.asset(
+                          'assets/json/performasale.json', // Path to your Lottie animation JSON file
+                          width: size.width*0.33, // Adjust width as needed
+                          height: size.height*0.16,  
+                          fit: BoxFit.fill,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: size.width*0.08) ,
+                        child: Text("perform a product sale", style: GoogleFonts.lato(
+                          fontSize: size.width*0.045,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.contentColorPurple
+                        ),),
+                      )
+                  ],
+                ),
+               ),
+            ),
           ),
           //
           SizedBox(height: size.height*0.028,),
