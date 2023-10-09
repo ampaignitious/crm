@@ -199,6 +199,24 @@ class _SalesScreenState extends State<SalesScreen> {
                           ],
                           borderRadius: BorderRadius.circular(10),
               ),
+              child: Row(
+                children: [
+                  Lottie.asset(
+                        'assets/json/reports.json', // Path to your Lottie animation JSON file
+                        width: size.width*0.33, // Adjust width as needed
+                        height: size.height*0.16,  
+                        fit: BoxFit.fill,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: size.width*0.08) ,
+                      child: Text("View all sales reports", style: GoogleFonts.lato(
+                        fontSize: size.width*0.045,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.contentColorPurple
+                      ),),
+                    )
+                ],
+              ),
              ),
           ),
           // 
@@ -225,6 +243,24 @@ class _SalesScreenState extends State<SalesScreen> {
                             ),
                           ],
                           borderRadius: BorderRadius.circular(10),
+              ),
+              child: Row(
+                children: [
+                  Lottie.asset(
+                        'assets/json/performasale.json', // Path to your Lottie animation JSON file
+                        width: size.width*0.33, // Adjust width as needed
+                        height: size.height*0.16,  
+                        fit: BoxFit.fill,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: size.width*0.08) ,
+                      child: Text("perform a product sale", style: GoogleFonts.lato(
+                        fontSize: size.width*0.045,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.contentColorPurple
+                      ),),
+                    )
+                ],
               ),
              ),
           ),
