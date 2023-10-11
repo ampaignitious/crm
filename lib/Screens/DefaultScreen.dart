@@ -1,4 +1,5 @@
 import 'package:crm/Screens/HomePage.dart';
+import 'package:crm/Screens/InventoryScreen.dart';
 import 'package:crm/Screens/MainteanceScreen.dart';
 import 'package:crm/Screens/SalesScreen.dart';
 import 'package:crm/Screens/VisitsPage.dart';
@@ -19,7 +20,9 @@ class _DefaultScreenState extends State<DefaultScreen> {
  HomePage(),
  VisitsPage(),
  SalesScreen(),
+ InventoryScreen(),
  MainteanceScreen(),
+
 
    ];
        void onItemTapped(int index) {
@@ -27,6 +30,7 @@ class _DefaultScreenState extends State<DefaultScreen> {
       _selectedIndex = index;
     });
     }
+    // bool admin = false;
   Widget build(BuildContext context) {
         return Scaffold(
       body: Page[_selectedIndex],
@@ -39,11 +43,14 @@ class _DefaultScreenState extends State<DefaultScreen> {
         unselectedItemColor: Colors.grey.withOpacity(0.5),
         // keep me this color:Color.fromARGB(255, 169, 230, 216).withOpacity(0.5),
         showUnselectedLabels: true,
-        items: const <BottomNavigationBarItem>[
+        items:  <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.home), label:'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.location_on_rounded), label: 'Visits'),
           BottomNavigationBarItem(icon: Icon(Icons.wallet_travel_rounded), label: 'Sales'),
+          // admin==true?BottomNavigationBarItem(icon: Icon(Icons.store), label: 'Inventory'):BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Mainteance'),
+          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Inventories'),
           BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Mainteance'),
+
         ],
       ),
     );
