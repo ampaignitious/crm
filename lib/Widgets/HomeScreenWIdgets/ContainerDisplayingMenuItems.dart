@@ -1,3 +1,4 @@
+import 'package:crm/Screens/ClientsScreen.dart';
 import 'package:crm/Screens/MainteanceScreen.dart';
 import 'package:crm/Screens/NotificationScreen.dart';
 import 'package:crm/Screens/SalesScreen.dart';
@@ -90,58 +91,65 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
             ),
             // 
             // first row element two
-             Container(
-                height: size.height*0.10,
-                width: size.width*0.45,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                          color: AppColors.contentColorGreen.withOpacity(0.5)
-                        ),
-                  boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.3),
-                          offset: Offset(0.8, 1.0),
-                          blurRadius: 4.0,
-                          spreadRadius: 0.2,
-                        ),
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.3),
-                          offset: Offset(-0.8, -1.0),
-                          blurRadius: 4.0,
-                          spreadRadius: 0.2,
-                        ),
-                      ],
-                ),
-                child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text("Clients", style: GoogleFonts.lato(
-                      fontSize: size.width*0.04,
-                    ),),
-                    Container(
-                      height:size.height*0.10 ,
-                      width: size.width*0.18,
-                      decoration: BoxDecoration(
-                        color: AppColors.contentColorCyan,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: AppColors.contentColorGreen
-                        )
-                       ),
-                       child: Center(
-                        child: Lottie.asset(
-                        'assets/json/client.json', // Path to your Lottie animation JSON file
-                        width: size.width*0.14, // Adjust width as needed
-                        height: size.height*0.16,  
-                        fit: BoxFit.fill,
+             InkWell(
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context){
+                  return ClientsScreen();
+                }));
+              },
+               child: Container(
+                  height: size.height*0.10,
+                  width: size.width*0.45,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                            color: AppColors.contentColorGreen.withOpacity(0.5)
                           ),
-                       ),
-                    ),
-                  ],
-                ),
-            ),
+                    boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.3),
+                            offset: Offset(0.8, 1.0),
+                            blurRadius: 4.0,
+                            spreadRadius: 0.2,
+                          ),
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.3),
+                            offset: Offset(-0.8, -1.0),
+                            blurRadius: 4.0,
+                            spreadRadius: 0.2,
+                          ),
+                        ],
+                  ),
+                  child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text("Clients", style: GoogleFonts.lato(
+                        fontSize: size.width*0.04,
+                      ),),
+                      Container(
+                        height:size.height*0.10 ,
+                        width: size.width*0.18,
+                        decoration: BoxDecoration(
+                          color: AppColors.contentColorCyan,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: AppColors.contentColorGreen
+                          )
+                         ),
+                         child: Center(
+                          child: Lottie.asset(
+                          'assets/json/client.json', // Path to your Lottie animation JSON file
+                          width: size.width*0.14, // Adjust width as needed
+                          height: size.height*0.16,  
+                          fit: BoxFit.fill,
+                            ),
+                         ),
+                      ),
+                    ],
+                  ),
+                         ),
+             ),
             
           ],
         ),

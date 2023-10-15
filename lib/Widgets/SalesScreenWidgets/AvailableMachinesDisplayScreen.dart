@@ -26,7 +26,7 @@ class _AvailableMachineDisplayScreenState extends State<AvailableMachineDisplayS
       appBar: AppBar(
         iconTheme: IconThemeData(
         color: AppColors.contentColorPurple,
-        size: size.width*0.11,
+        size: size.width*0.08,
         ),  // Change the icon color here
         elevation: 0.6,
         backgroundColor: AppColors.contentColorCyan,

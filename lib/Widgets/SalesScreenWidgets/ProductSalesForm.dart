@@ -116,7 +116,7 @@ class _ProductSalesFormState extends State<ProductSalesForm> {
                 horizontal: size.width*0.26,
                 vertical: size.height*0.028,
               ),
-              child: Text('record a visit',
+              child: Text('record a sale',
               style: GoogleFonts.lato(
                 color: AppColors.contentColorPurple,
               ),),

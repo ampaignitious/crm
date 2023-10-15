@@ -1,4 +1,5 @@
 import 'package:crm/Screens/AuthenticationSceens/LoginScreen.dart';
+import 'package:crm/Screens/ClientsScreen.dart';
 import 'package:crm/Screens/DefaultScreen.dart';
 import 'package:crm/Screens/SalesScreen.dart';
 import 'package:crm/Utils/AppColors.dart';
@@ -82,7 +83,9 @@ class _DrawerItemsState extends State<DrawerItems> {
                           ),
             title: Text('Clients'),
             onTap: () {
-              Scaffold.of(context).openDrawer();
+              Navigator.push(context, MaterialPageRoute(builder: (context){
+                return ClientsScreen();
+              }));
             },
           ),
         ),

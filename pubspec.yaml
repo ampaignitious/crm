@@ -30,7 +30,6 @@ environment:
 dependencies:
   google_fonts:
   lottie:
-  permission_handler:
   intl:
   flutter:
     sdk: flutter

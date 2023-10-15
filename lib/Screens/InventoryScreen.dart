@@ -1,5 +1,7 @@
 import 'package:crm/Utils/AppColors.dart';
 import 'package:crm/Widgets/Drawer/DrawerItems.dart';
+import 'package:crm/Widgets/InventoryWidgets/CoffeeProductRegistrationForm.dart';
+import 'package:crm/Widgets/InventoryWidgets/MachineRegistrationForm.dart';
 import 'package:crm/Widgets/SalesScreenWidgets/AvailableCoffeeProductsDisplayScreen.dart';
 import 'package:crm/Widgets/SalesScreenWidgets/AvailableMachinesDisplayScreen.dart';
 import 'package:flutter/material.dart';
@@ -477,38 +479,52 @@ class _InventoryScreenState extends State<InventoryScreen> {
               ),),
             ),
             SizedBox(height: size.height*0.016,),
-            Container(
-                // container wrapping the icon
-                margin: EdgeInsets.only(left: size.width*0.02, top: size.height*0.009),
-                height: size.height*0.084,
-                width: size.width*0.95,
-                decoration: BoxDecoration(
-                  color: AppColors.contentColorPurple,
-                  borderRadius: BorderRadius.circular(10),
+            InkWell(
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context){
+                  return MachineRegistrationScreen();
+                }));
+              },
+              child: Container(
+                  // container wrapping the icon
+                  margin: EdgeInsets.only(left: size.width*0.02, top: size.height*0.009),
+                  height: size.height*0.084,
+                  width: size.width*0.95,
+                  decoration: BoxDecoration(
+                    color: AppColors.contentColorPurple,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Center(
+                    child: Text("Register a coffee machine", style: GoogleFonts.lato(
+                      color: Colors.white
+                    ),),
+                  )
                 ),
-                child: Center(
-                  child: Text("Register a coffee machine", style: GoogleFonts.lato(
-                    color: Colors.white
-                  ),),
-                )
-              )
+            )
             ,SizedBox(height: size.height*0.020,),
             // inventory report details
-            Container(
-                // container wrapping the icon
-                margin: EdgeInsets.only(left: size.width*0.02, top: size.height*0.009),
-                height: size.height*0.084,
-                width: size.width*0.95,
-                decoration: BoxDecoration(
-                  color: AppColors.contentColorPurple,
-                  borderRadius: BorderRadius.circular(10),
+            InkWell(
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context){
+                  return CoffeeProductRegistrationFrom();
+                }));
+              },
+              child: Container(
+                  // container wrapping the icon
+                  margin: EdgeInsets.only(left: size.width*0.02, top: size.height*0.009),
+                  height: size.height*0.084,
+                  width: size.width*0.95,
+                  decoration: BoxDecoration(
+                    color: AppColors.contentColorPurple,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                   child: Center(
+                    child: Text("Register a coffee product", style: GoogleFonts.lato(
+                      color: Colors.white
+                    ),),
+                  )
                 ),
-                 child: Center(
-                  child: Text("Register a coffee product", style: GoogleFonts.lato(
-                    color: Colors.white
-                  ),),
-                )
-              ),
+            ),
             //  
             SizedBox(height: size.height*0.020,),
             Divider(),

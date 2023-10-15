@@ -21,7 +21,7 @@ class _DefaultScreenState extends State<DefaultScreen> {
  VisitsPage(),
  SalesScreen(),
  InventoryScreen(),
- MainteanceScreen(),
+//  MainteanceScreen(),
 
 
    ];
@@ -49,10 +49,13 @@ class _DefaultScreenState extends State<DefaultScreen> {
           BottomNavigationBarItem(icon: Icon(Icons.wallet_travel_rounded), label: 'Sales'),
           // admin==true?BottomNavigationBarItem(icon: Icon(Icons.store), label: 'Inventory'):BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Mainteance'),
           BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Inventories'),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Mainteance'),
+          // BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Mainteance'),
 
         ],
       ),
+      // floatingActionButton: FloatingActionButton(onPressed: (){
+
+      // }),
     );
   }
 }
