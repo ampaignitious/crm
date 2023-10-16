@@ -673,30 +673,30 @@ class _BusinessMappingFormState extends State<BusinessMappingForm> {
                   ),
                 ),
                 SizedBox(height: size.height*0.020,),
-                        Center(
-                          child: ElevatedButton(
-                          onPressed: (){
-                            // Navigator.push(context, MaterialPageRoute(builder: (context){
-                            //   // return CreateVisitScreen();
-                            // }));
-                          },
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: size.width*0.26,
-                              vertical: size.height*0.028,
-                            ),
-                            child: Text('Record the mapping',
-                            style: GoogleFonts.lato(
-                              fontSize: size.width*0.035,
-                              color: AppColors.contentColorPurple,
-                            ),),
-                          ),
-                            style: ElevatedButton.styleFrom(
-                            primary: AppColors.contentColorYellow,  // Set button color to purple
-                          ),
-                          ),
-                        ),
-                        SizedBox(height: size.height*0.025,),
+                Center(
+                  child: ElevatedButton(
+                  onPressed: (){
+                    // Navigator.push(context, MaterialPageRoute(builder: (context){
+                    //   // return CreateVisitScreen();
+                    // }));
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: size.width*0.26,
+                      vertical: size.height*0.028,
+                    ),
+                    child: Text('Record the mapping',
+                    style: GoogleFonts.lato(
+                      fontSize: size.width*0.035,
+                      color: AppColors.contentColorPurple,
+                    ),),
+                  ),
+                    style: ElevatedButton.styleFrom(
+                    primary: AppColors.contentColorYellow,  // Set button color to purple
+                  ),
+                  ),
+                ),
+                SizedBox(height: size.height*0.025,),
               ],
             ),
           ),
