@@ -1,3 +1,4 @@
+import 'package:crm/Screens/ProfileScreen.dart';
 import 'package:crm/Utils/AppColors.dart';
 import 'package:crm/Widgets/Drawer/DrawerItems.dart';
 import 'package:crm/Widgets/VisitScreenWidgets/CreateVisitScreen.dart';
@@ -15,15 +16,15 @@ class ClientsScreen extends StatefulWidget {
 class _ClientsScreenState extends State<ClientsScreen> {
   @override
     final List<VisitData> visitDataList = [
-    VisitData("1", "Mohit", "working for the best"),
-    VisitData("2", "Ankit", "working for the best"),
-    VisitData("3", "Rakhi", "working for the best"),
-    VisitData("4", "Yash", "working for the best"),
-    VisitData("300", "Pragati", "working for the best"),
-    VisitData("300", "Pragati", "working for the best"),
-    VisitData("300", "Pragati", "working for the best"),
-    VisitData("300", "Pragati", "working for the best"),
-    VisitData("300", "Pragati", "working for the best"),
+    VisitData("1", "Ignitious", "Interested"),
+    VisitData("2", "Ampa", "Maybe"),
+    VisitData("3", "Rakhi", "Interested"),
+    VisitData("4", "Yash", "Maybe"),
+    VisitData("300", "Pragati", "Interested"),
+    VisitData("300", "Pragati", "Interested"),
+    VisitData("300", "Pragati", "Maybe"),
+    VisitData("300", "Pragati", "Maybe"),
+    VisitData("300", "Pragati", "Interested"),
   ];
     late List<VisitData> filteredVisitDataList;
   TextEditingController searchController = TextEditingController();
@@ -53,15 +54,15 @@ class _ClientsScreenState extends State<ClientsScreen> {
     var descriptionwidth=size.width*0.3;
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      drawer:Drawer(
-        backgroundColor: AppColors.contentColorPurple,
-        width: size.width*0.8,
-        child: DrawerItems(),
-      ),
+      // drawer:Drawer(
+      //   backgroundColor: AppColors.contentColorPurple,
+      //   width: size.width*0.8,
+      //   child: DrawerItems(),
+      // ),
       appBar: AppBar(
         iconTheme: IconThemeData(
         color: AppColors.contentColorPurple,
-        size: size.width*0.11,
+        size: size.width*0.08,
         ),  // Change the icon color here
         elevation: 0.6,
         backgroundColor: AppColors.contentColorCyan,
@@ -89,13 +90,20 @@ class _ClientsScreenState extends State<ClientsScreen> {
                   fit: BoxFit.fill,
                     ),
                 ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    right: size.width*0.03,
+                InkWell(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context){
+                      return ProfileScreen();
+                    }));
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      right: size.width*0.03,
+                    ),
+                    child: CircleAvatar(
+                      backgroundImage: AssetImage("assets/images/userprofile.png"),
+                    radius: size.width*0.065,),
                   ),
-                  child: CircleAvatar(
-                    backgroundImage: AssetImage("assets/images/userprofile.png"),
-                  radius: size.width*0.065,),
                 )
               ],
             ),
@@ -155,7 +163,7 @@ class _ClientsScreenState extends State<ClientsScreen> {
                     decoration: BoxDecoration(
                       color: AppColors.contentColorYellow,
                     ),
-                    child: Center(child: Text("visit name", style: GoogleFonts.lato(
+                    child: Center(child: Text("client's name", style: GoogleFonts.lato(
                     ),))),
                   Container(
                     margin: EdgeInsets.only(left: size.width*0.01),
@@ -164,7 +172,7 @@ class _ClientsScreenState extends State<ClientsScreen> {
                     decoration: BoxDecoration(
                       color: AppColors.contentColorPurple,
                     ),
-                    child: Center(child: Text("Description", style: GoogleFonts.lato(
+                    child: Center(child: Text("Status", style: GoogleFonts.lato(
                       color:Colors.white
                     ),)))
                 ],

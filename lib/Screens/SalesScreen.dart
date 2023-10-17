@@ -1,3 +1,4 @@
+import 'package:crm/Screens/ProfileScreen.dart';
 import 'package:crm/Utils/AppColors.dart';
 import 'package:crm/Widgets/Drawer/DrawerItems.dart';
 import 'package:crm/Widgets/SalesScreenWidgets/AvailableCoffeeProductsDisplayScreen.dart';
@@ -56,13 +57,20 @@ class _SalesScreenState extends State<SalesScreen> {
                   fit: BoxFit.fill,
                     ),
                 ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    right: size.width*0.03,
+                InkWell(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context){
+                      return ProfileScreen();
+                    }));
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      right: size.width*0.03,
+                    ),
+                    child: CircleAvatar(
+                      backgroundImage: AssetImage("assets/images/userprofile.png"),
+                    radius: size.width*0.065,),
                   ),
-                  child: CircleAvatar(
-                    backgroundImage: AssetImage("assets/images/userprofile.png"),
-                  radius: size.width*0.065,),
                 )
               ],
             ),

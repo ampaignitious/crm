@@ -1,3 +1,4 @@
+import 'package:crm/Screens/ProfileScreen.dart';
 import 'package:crm/Utils/AppColors.dart';
 import 'package:crm/Widgets/Drawer/DrawerItems.dart';
 import 'package:crm/Widgets/VisitScreenWidgets/MenuOptions.dart';
@@ -50,7 +51,7 @@ class _VisitsPageState extends State<VisitsPage> with TickerProviderStateMixin{
           padding: EdgeInsets.only(left: size.width*0.06),
           child: Text("visits page",
            style: GoogleFonts.lato(
-            fontSize: size.width*0.062, 
+            fontSize: size.width*0.060, 
             color: AppColors.menuBackground,
             fontWeight: FontWeight.bold
           ),),
@@ -69,13 +70,20 @@ class _VisitsPageState extends State<VisitsPage> with TickerProviderStateMixin{
                   fit: BoxFit.fill,
                     ),
                 ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    right: size.width*0.03,
+                InkWell(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context){
+                      return ProfileScreen();
+                    }));
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      right: size.width*0.03,
+                    ),
+                    child: CircleAvatar(
+                      backgroundImage: AssetImage("assets/images/userprofile.png"),
+                    radius: size.width*0.065,),
                   ),
-                  child: CircleAvatar(
-                    backgroundImage: AssetImage("assets/images/userprofile.png"),
-                  radius: size.width*0.065,),
                 )
               ],
             ),
@@ -94,7 +102,7 @@ class _VisitsPageState extends State<VisitsPage> with TickerProviderStateMixin{
                     left: size.width*0.008
                   ),
                   child: Text("menu options", style: GoogleFonts.lato(
-                    fontSize: size.height*0.014,
+                    fontSize: size.height*0.0135,
                     color: AppColors.darkRoast
                   ),),
                 ),
@@ -126,7 +134,7 @@ class _VisitsPageState extends State<VisitsPage> with TickerProviderStateMixin{
                     left: size.width*0.008
                   ),
                   child: Text("view route plans", style: GoogleFonts.lato(
-                    fontSize: size.height*0.014,
+                    fontSize: size.height*0.013,
                      color: AppColors.darkRoast
                   ),),
                 ),
