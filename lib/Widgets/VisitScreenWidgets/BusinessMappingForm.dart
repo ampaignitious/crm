@@ -81,12 +81,12 @@ TextEditingController _gpsLocationController = TextEditingController();
     });
   }
   bool productOfInterestClicked=false;
-    bool showSelectedProductsOfInterest = false;
+   bool showSelectedProductsOfInterest = false;
   void _showProducts() {
     setState(() {
       productOfInterestClicked=!productOfInterestClicked;
       filteredProducts = visitDataList;
-      showSelectedProductsOfInterest = false;
+      // showSelectedProductsOfInterest = false;
     });
   } 
 // 
@@ -225,6 +225,7 @@ void _removeFromProductsOfInterest(VisitData product) {
               showBusinessForm==true?Column(
                 children: [
                  SizedBox(height: size.height*0.020,),
+                //  business name
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: size.width*0.03),
                     child: TextFormField(
@@ -241,60 +242,78 @@ void _removeFromProductsOfInterest(VisitData product) {
                             ),
                     ),
                   ),
-                   
+                  SizedBox(height: size.height*0.020,),
+                // 
+                Padding(
+                    padding: EdgeInsets.symmetric(horizontal: size.width*0.03),
+                    child: TextFormField(
+                            decoration: InputDecoration(
+                              labelText: 'Business email',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                          enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                                borderSide: BorderSide(color: AppColors.contentColorPurple), // Change the border color here
+                              ),
+                      // controller: _endDate,
+                            ),
+                    ),
+                  ), 
                   // business business contact
                   SizedBox(height: size.height*0.020,),
-                           Padding(
-                             padding: EdgeInsets.symmetric(horizontal: size.width*0.03),
-                             child: Row(
-                              children: [
-                                Expanded(
-                                  child: TextField(
-                                    decoration: InputDecoration(
-                                      labelText: 'Enter business contact',
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(20),
-                                          borderSide: BorderSide(color: AppColors.contentColorPurple), // Change the border color here
-                                        ),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(left: size.width*0.03),
-                                  height: size.height*0.08,
-                                  width: size.width*0.14,
-                                  decoration: BoxDecoration(
-                                    color:AppColors.contentColorCyan,
-                                    boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  offset: Offset(0.8, 1.0),
-                                  blurRadius: 4.0,
-                                  spreadRadius: 0.2,
-                                ),
-                                    ],
-                                border: Border.all(
-                                  color: AppColors.contentColorPurple.withOpacity(0.2)
-                                ),
-                                borderRadius: BorderRadius.circular(10)
-                                  ),
-                                  child: Icon(Icons.call, color: AppColors.contentColorPurple)),
-                              ],
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: size.width*0.03),
+                    child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          decoration: InputDecoration(
+                            labelText: 'Enter business telephone number',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                                borderSide: BorderSide(color: AppColors.contentColorPurple), // Change the border color here
                               ),
-                           ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(left: size.width*0.03),
+                        height: size.height*0.08,
+                        width: size.width*0.14,
+                        decoration: BoxDecoration(
+                          color:AppColors.contentColorCyan,
+                          boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        offset: Offset(0.8, 1.0),
+                        blurRadius: 4.0,
+                        spreadRadius: 0.2,
+                      ),
+                          ],
+                      border: Border.all(
+                        color: AppColors.contentColorPurple.withOpacity(0.2)
+                      ),
+                      borderRadius: BorderRadius.circular(10)
+                        ),
+                        child: Icon(Icons.call, color: AppColors.contentColorPurple)),
+                    ],
+                    ),
+                  ),
                           
                   // 
-                  // business location gps
-                  SizedBox(height: size.height*0.020,),
-                           Padding(
+              // business location gps
+              SizedBox(height: size.height*0.020,),
+              Padding(
                              padding: EdgeInsets.symmetric(horizontal: size.width*0.03),
                              child: Row(
                               children: [
                                 Expanded(
                                   child: TextField(
+                                    readOnly: true,
                                     controller: _gpsLocationController,
                                     decoration: InputDecoration(
                                       label: Text("Capture GPS location "),
@@ -332,9 +351,9 @@ void _removeFromProductsOfInterest(VisitData product) {
                               ],
                                                ),
                            ),
-                     SizedBox(height: size.height*0.020,),
-                     // business physical location
-                     Padding(
+              SizedBox(height: size.height*0.020,),
+              // business physical location
+              Padding(
                     padding: EdgeInsets.symmetric(horizontal: size.width*0.03),
                     child: TextFormField(
                             decoration: InputDecoration(
@@ -524,7 +543,7 @@ void _removeFromProductsOfInterest(VisitData product) {
                   ),
                 child: Center(
                   child: Text(
-                    "Products of interest",style: GoogleFonts.lato(
+                    "Pitch interest",style: GoogleFonts.lato(
                       color: AppColors.contentColorWhite
                     ),
                   ),
@@ -559,7 +578,7 @@ void _removeFromProductsOfInterest(VisitData product) {
                         onTap:(){
                           setState(() {
                             productOfInterestClicked =false;
-                            showSelectedProductsOfInterest!=showSelectedProductsOfInterest;
+                            showSelectedProductsOfInterest=!showSelectedProductsOfInterest;
                           });
                           
                         },
@@ -615,6 +634,11 @@ void _removeFromProductsOfInterest(VisitData product) {
                           onPressed: () {
                             setState(() {
                               productsOfInterest.add(product);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Product added success'),
+                                ),
+                              );
                             });
                             print(productsOfInterest.length);
                           },
@@ -627,6 +651,7 @@ void _removeFromProductsOfInterest(VisitData product) {
                 //section to show selected products from inventory with a cancel button 
                showSelectedProductsOfInterest==true? Column(
                   children: [
+                    SizedBox(height:size.height*0.004),
                     Text("Selected products"),
                     Container(
                       height: size.height*0.35,
@@ -671,7 +696,7 @@ void _removeFromProductsOfInterest(VisitData product) {
                   ),
                 child: Center(
                   child: Text(
-                    "Pitch interest",style: GoogleFonts.lato(
+                    "Product of interest",style: GoogleFonts.lato(
                       color: AppColors.contentColorWhite
                     ),
                   ),
@@ -703,7 +728,7 @@ void _removeFromProductsOfInterest(VisitData product) {
                           ),
                           child: Center(child: Icon(Icons.task_alt_rounded,
                           size: size.width*0.045,
-                          color: interestedColor==true?AppColors.contentColorPurple:Colors.white,
+                          color: interestedColor==true?AppColors.contentColorPurple:Colors.white.withOpacity(0.1),
                           )),
                         ),
                       ),
@@ -733,7 +758,7 @@ void _removeFromProductsOfInterest(VisitData product) {
                           ),
                           child: Center(child: Icon(Icons.task_alt_rounded,
                           size: size.width*0.045,
-                          color: maybeColor==true?AppColors.contentColorPurple:Colors.white,
+                          color: maybeColor==true?AppColors.contentColorPurple:Colors.white.withOpacity(0.1),
                           ))
                         ),
                       ),
@@ -763,7 +788,7 @@ void _removeFromProductsOfInterest(VisitData product) {
                         },
                           child: Center(child: Icon(Icons.task_alt_rounded,
                             size: size.width*0.045,
-                            color: notinterestedColor==true?AppColors.contentColorPurple:Colors.white,
+                            color: notinterestedColor==true?AppColors.contentColorPurple:Colors.white.withOpacity(0.1),
                             )),
                         ),
                       ),

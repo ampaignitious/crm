@@ -281,6 +281,7 @@ TextEditingController _endLocation = TextEditingController();
                           children: [
                             Expanded(
                               child: TextField(
+                                readOnly: true,
                                 controller: _startLocation,
                                 decoration: InputDecoration(
                                   labelText: 'Enter start location',
