@@ -100,6 +100,10 @@ void _removeFromProductsOfInterest(VisitData product) {
   bool showContactPersonDetailForm = false;
   bool interestedColor = false;
   bool maybeColor =false;
+  String? userGender ;
+  bool male = false;
+  bool female = false;
+  bool notStated= false;
   bool notinterestedColor =false;
   List<TextEditingController> productListControllers = [TextEditingController()];
   Widget build(BuildContext context) {
@@ -415,6 +419,7 @@ void _removeFromProductsOfInterest(VisitData product) {
               ),     
               //
               showContactPersonDetailForm==true?Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: size.height*0.020,),
                    Padding(
@@ -522,6 +527,117 @@ void _removeFromProductsOfInterest(VisitData product) {
                     ],
                                       ),
                   ),
+              SizedBox(height: size.height*0.015,) ,
+                Padding(
+                  padding: EdgeInsets.only(left:size.width*0.06 ,),
+                  child: Text("Select gender", style: GoogleFonts.lato(
+                    fontSize:size.width*0.05,
+                    fontWeight:FontWeight.bold,
+                    color:AppColors.contentColorPurple,
+                  ),),
+                ),
+              // showing interest status
+              SizedBox(height: size.height*0.015,) ,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(
+                    children: [
+                      InkWell(
+                        onTap: (){
+                          setState(() {
+                            userGender ="male";
+                            male = !male;
+                            female = false;
+                            notStated = false;
+                          });
+                        },
+                        child: Container(
+                          height: size.height*0.03,
+                          width: size.width*0.06,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                             border: Border.all(
+                              color: AppColors.contentColorPurple
+                             )
+                          ),
+                          child: Center(child: Icon(Icons.task_alt_rounded,
+                          size: size.width*0.045,
+                          color: male==true?AppColors.contentColorPurple:Colors.white.withOpacity(0.1),
+                          )),
+                        ),
+                      ),
+                      Text("Male", style: GoogleFonts.lato(
+                        fontSize:size.width*0.03
+                      ),)
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      InkWell(
+                        onTap:(){
+                          setState(() {
+                            userGender="female";
+                            male = false;
+                            female = !female;
+                            notStated = false;
+                          });
+                        },
+                        child: Container(
+                          height: size.height*0.03,
+                          width: size.width*0.06,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                             border: Border.all(
+                              color: AppColors.contentColorPurple,
+                             )
+                          ),
+                          child: Center(child: Icon(Icons.task_alt_rounded,
+                          size: size.width*0.045,
+                          color: female==true?AppColors.contentColorPurple:Colors.white.withOpacity(0.1),
+                          ))
+                        ),
+                      ),
+                      Text("Female", style: GoogleFonts.lato(
+                        fontSize:size.width*0.03
+                      ),)
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Container(
+                        height: size.height*0.03,
+                        width: size.width*0.06,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                           border: Border.all(
+                            color: AppColors.contentColorPurple
+                           )
+                        ),
+                        child: InkWell(
+                          onTap:(){
+                          setState(() {
+                            userGender="not stated";
+                            male = false;
+                            female = false;
+                            notStated = !notStated;
+                          });
+                        },
+                          child: Center(child: Icon(Icons.task_alt_rounded,
+                            size: size.width*0.045,
+                            color: notStated==true?AppColors.contentColorPurple:Colors.white.withOpacity(0.1),
+                            )),
+                        ),
+                      ),
+                      Text("Rather not to say", style: GoogleFonts.lato(
+                        fontSize:size.width*0.03
+                      ),)
+                    ],
+                  ),
+      
+                ],
+              ),
+              //
                 SizedBox(height: size.height*0.020,),
                 ],
               ):Text(""),

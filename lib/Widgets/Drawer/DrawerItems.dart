@@ -1,7 +1,10 @@
 import 'package:crm/Screens/AuthenticationSceens/LoginScreen.dart';
 import 'package:crm/Screens/ClientsScreen.dart';
 import 'package:crm/Screens/DefaultScreen.dart';
+import 'package:crm/Screens/MainteanceScreen.dart';
 import 'package:crm/Screens/SalesScreen.dart';
+import 'package:crm/Screens/Targets.dart';
+import 'package:crm/Screens/VisitsPage.dart';
 import 'package:crm/Utils/AppColors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -47,14 +50,21 @@ class _DrawerItemsState extends State<DrawerItems> {
           ),
         ),
         // 
-        Card(
-          child: ListTile(
-            leading: Icon(
-                Icons.location_on,
-                color: AppColors.contentColorPurple, // Change the color of the drawer icon here
-              ),
-            title: Text('Route plan'),
- 
+        InkWell(
+          onTap: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context){
+              return VisitsPage();
+            }));
+          },
+          child: Card(
+            child: ListTile(
+              leading: Icon(
+                  Icons.location_on,
+                  color: AppColors.contentColorPurple, // Change the color of the drawer icon here
+                ),
+              title: Text('Route plan'),
+         
+            ),
           ),
         ),
         // 
@@ -68,7 +78,9 @@ class _DrawerItemsState extends State<DrawerItems> {
                             ),
             title: Text('Visits'),
             onTap: () {
-              Scaffold.of(context).openDrawer();
+              Navigator.push(context, MaterialPageRoute(builder: (context){
+                return VisitsPage();
+              }));
             },
           ),
         ),
@@ -106,7 +118,9 @@ class _DrawerItemsState extends State<DrawerItems> {
                             ),
               title: Text('Sales'),
               onTap: () {
-                Scaffold.of(context).openDrawer();
+                Navigator.push(context, MaterialPageRoute(builder: (context){
+                  return SalesScreen();
+                }));
               },
             ),
           ),
@@ -122,7 +136,9 @@ class _DrawerItemsState extends State<DrawerItems> {
                           ),
             title: Text('Targets'),
             onTap: () {
-              Scaffold.of(context).openDrawer();
+              Navigator.push(context, MaterialPageRoute(builder: (context){
+                return Targets();
+              }));
             },
           ),
         ),
@@ -132,9 +148,11 @@ class _DrawerItemsState extends State<DrawerItems> {
                 Icons.settings,
                 color: AppColors.contentColorPurple, // Change the color of the drawer icon here
               ),
-            title: Text('Mainteance'),
+            title: Text('Mainteanance'),
             onTap: () {
-              Scaffold.of(context).openDrawer();
+              Navigator.push(context, MaterialPageRoute(builder: (context){
+                return MainteanceScreen();
+              }));
             },
           ),
         ),
