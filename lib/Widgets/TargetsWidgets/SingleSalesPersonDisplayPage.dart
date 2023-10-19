@@ -1,6 +1,7 @@
 import 'package:crm/Utils/AppColors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class SingleSalesPersonDisplayPage extends StatefulWidget {
   String? salesPersonName;
@@ -15,6 +16,8 @@ class _SingleSalesPersonDisplayPageState extends State<SingleSalesPersonDisplayP
   @override
   String? salesPersonName;
   String? salesPersonId;
+  TextEditingController _startDate = TextEditingController();
+  TextEditingController _endDate = TextEditingController();
    _SingleSalesPersonDisplayPageState(this.salesPersonId, this.salesPersonName);
   Widget build(BuildContext context) {
   final size = MediaQuery.of(context).size;
@@ -77,103 +80,107 @@ class _SingleSalesPersonDisplayPageState extends State<SingleSalesPersonDisplayP
               ),
           ),
           SizedBox(height: size.height*0.007,),
-            Form(child: Column(
-              children: [
-                //  SizedBox(height: size.height*0.018,), 
-                //   Padding(
-                //     padding: EdgeInsets.symmetric(horizontal: size.width*0.03),
-                //     child: TextFormField(
-                //       decoration: InputDecoration(
-                //         labelText: "Enter sales person name",
-                //         border: OutlineInputBorder(
-                //           borderRadius: BorderRadius.circular(10),
-                //         ),
-                //         enabledBorder: OutlineInputBorder(
-                //           borderRadius: BorderRadius.circular(10),
-                //           borderSide: BorderSide(color: AppColors.contentColorPurple), // Change the border color here
-                //         ),
-                //       // controller: _endDate,
-                //             ),
-                //     ),
-                //   ),
-                  SizedBox(height: size.height*0.018,), 
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: size.width*0.03),
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        labelText: "Number of visits to be made",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(color: AppColors.contentColorPurple), // Change the border color here
-                        ),
-                      // controller: _endDate,
-                            ),
-                    ),
-                  ),
-                  SizedBox(height: size.height*0.018,), 
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: size.width*0.03),
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        labelText: "Start date",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(color: AppColors.contentColorPurple), // Change the border color here
-                        ),
-                      // controller: _endDate,
-                            ),
-                    ),
-                  ),
-                  SizedBox(height: size.height*0.018,), 
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: size.width*0.03),
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        labelText: "End date",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(color: AppColors.contentColorPurple), // Change the border color here
-                        ),
-                      // controller: _endDate,
-                            ),
-                    ),
-                  ),
-                  SizedBox(height: size.height*0.028,),
-                  Center(
-                        child: ElevatedButton(
-                        onPressed: (){
-                           
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: size.width*0.26,
-                            vertical: size.height*0.028,
+            Form(child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Column(
+              
+                children: [
+                    SizedBox(height: size.height*0.018,), 
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: size.width*0.03),
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          labelText: "Number of visits to be made",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          child: Text('submit',
-                          style: GoogleFonts.lato(
-                            color: AppColors.contentColorPurple,
-                          ),),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: AppColors.contentColorPurple), // Change the border color here
+                          ),
+                        // controller: _endDate,
+                              ),
+                      ),
+                    ),
+                    SizedBox(height: size.height*0.018,), 
+                    Padding(
+                        padding: EdgeInsets.symmetric(horizontal: size.width*0.03),
+                        child: TextFormField(
+                               controller: _startDate,
+                                 onTap: () => _selectDate(context, _startDate),
+                                decoration: InputDecoration(
+                                  labelText: 'Start date',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                              enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                    borderSide: BorderSide(color: AppColors.contentColorPurple), // Change the border color here
+                                  ),
+                                 
+                                ),
                         ),
-                          style: ElevatedButton.styleFrom(
-                          primary: AppColors.contentColorYellow,  // Set button color to purple
+                      ),
+                    SizedBox(height: size.height*0.018,), 
+                    Padding(
+                        padding: EdgeInsets.symmetric(horizontal: size.width*0.03),
+                        child: TextFormField(
+                               controller: _endDate,
+                                 onTap: () => _selectDate(context, _endDate),
+                                decoration: InputDecoration(
+                                  labelText: 'End date',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                              enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                    borderSide: BorderSide(color: AppColors.contentColorPurple), // Change the border color here
+                                  ),
+                                 
+                                ),
                         ),
-                        ),
-                      )
-            
-              ],
+                      ),
+                    SizedBox(height: size.height*0.028,),
+                    Center(
+                          child: ElevatedButton(
+                          onPressed: (){
+                             
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: size.width*0.26,
+                              vertical: size.height*0.028,
+                            ),
+                            child: Text('submit',
+                            style: GoogleFonts.lato(
+                              color: AppColors.contentColorPurple,
+                            ),),
+                          ),
+                            style: ElevatedButton.styleFrom(
+                            primary: AppColors.contentColorYellow,  // Set button color to purple
+                          ),
+                          ),
+                        )
+              
+                ],
+              ),
             ))
           ],
         ),
       ),
     );
   }
+  Future<void> _selectDate(BuildContext context, TextEditingController controller) async {
+  final DateTime? picked = await showDatePicker(
+    context: context,
+    initialDate: DateTime.now(),
+    firstDate: DateTime(2000),
+    lastDate: DateTime(2101),
+  );
+  if (picked != null) {
+    // Update the selected date in the text field
+    final formattedDate = DateFormat('yyyy-MM-dd').format(picked);
+    controller.text = formattedDate;
+  }
+}
 }
