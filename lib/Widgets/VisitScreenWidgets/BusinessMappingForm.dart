@@ -48,6 +48,11 @@ TextEditingController _gpsLocationController = TextEditingController();
     }
   }
 // 
+  //  list to capture products and quantity
+    //texteditingcollectingcontroller for sales data
+  List<TextEditingController> productListControllers = [TextEditingController()];
+  List<TextEditingController> productQuantityControllers = [TextEditingController()];
+
   // 
     final List<VisitData> visitDataList = [
     VisitData("1", "Mohit", "working for the best"),
@@ -104,7 +109,7 @@ void _removeFromProductsOfInterest(VisitData product) {
   bool female = false;
   bool notStated= false;
   bool notinterestedColor =false;
-  List<TextEditingController> productListControllers = [TextEditingController()];
+  // List<TextEditingController> productListControllers = [TextEditingController()];
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
@@ -919,141 +924,180 @@ void _removeFromProductsOfInterest(VisitData product) {
               //end of the pitch interest container section
               interestedColor ==true?  
                 //  provision for adding items required
-              Column(
-                children: [
-                  SizedBox(height: size.height*0.020,),
-                  Container(
-                      margin: EdgeInsets.only(left: size.width*0.008),
-                      height: size.height*0.08,
-                      width: size.width*0.92,
-                      decoration: BoxDecoration(
-                        color:AppColors.contentColorPurple.withOpacity(0.5),
-                        boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      offset: Offset(0.8, 1.0),
-                      blurRadius: 4.0,
-                      spreadRadius: 0.2,
-                    ),
-                        ]
-                      ),
-                    child: Center(
-                      child: Text(
-                        "Add products required",style: GoogleFonts.lato(
-                          color: AppColors.contentColorWhite
-                        ),
-                      ),
-                    ),
+               Container(
+                margin: EdgeInsets.only(left: size.width*0.03, right: size.width*0.03,top: size.height*0.008),
+                height: size.height*0.39,
+                width: double.maxFinite,
+                decoration: BoxDecoration(
+                  border:Border.all(
+                    color: AppColors.contentColorPurple
                   ),
-                SizedBox(height: size.height*0.020,),
-                Column(
+                  borderRadius: BorderRadius.circular(10)
+                ),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: 
+                  Column(
+                    children: [
+               SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                 child: Column(
+                             children: [
+                             Column(
                   children: [
-                    // row showing click to add input and the add button
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(left:size.width*0.09),
-                          child: Text("Click to add more input field", style: GoogleFonts.lato(
-                            fontSize: size.width*0.04
-                          ),),
+                  // row showing click to add input and the add button
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(left:size.width*0.09),
+                        child: Text("Click to add more input field", style: GoogleFonts.lato(
+                          fontSize: size.width*0.04
+                        ),),
+                      ),
+                       Container(
+                        margin: EdgeInsets.only(right:size.width*0.04,
+                        top: size.height*0.004,
                         ),
-                         Container(
-                          margin: EdgeInsets.only(right:size.width*0.04),
-                            height: size.height*0.05,
-                            width: size.width*0.09,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                               border: Border.all(
-                                color: AppColors.contentColorPurple
-                               )
-                            ),
-                            child: InkWell(
-                              onTap:(){
-                              setState(() {
-                                productListControllers.add(TextEditingController());
-                              });
-                            },
-                              child: Center(child: Icon(Icons.add,
-                                size: size.width*0.045,
-                                color:  AppColors.contentColorPurple ,
-                                )),
-                            ),
+                          height: size.height*0.05,
+                          width: size.width*0.09,
+                          decoration: BoxDecoration(
+                             color:AppColors.contentColorPurple,
+                            shape: BoxShape.circle,
+                             border: Border.all(
+                              color: AppColors.contentColorPurple
+                             )
                           ),
-                      ],
-                    ),
-                    // 
-                    // container to show the added input fields
-                    SizedBox(height: size.height*0.010,),
-                    Center(
-                      child: Container(
-                        height:size.height*0.34,
-                        width:size.width*0.90,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: AppColors.contentColorPurple
-                          )
-                          // color: AppColors.contentColorPurple.withOpacity(0.3)
+                          child: InkWell(
+                            onTap:(){
+                            setState(() {
+                              productListControllers.add(TextEditingController());
+                              productQuantityControllers.add(TextEditingController());
+                            });
+                          },
+                            child: Center(child: Icon(Icons.add,
+                              size: size.width*0.045,
+                              color:  AppColors.contentColorCyan ,
+                              )),
+                          ),
                         ),
-                        child: ListView.builder(
-                          scrollDirection: Axis.vertical,
-                          itemCount: productListControllers.length,
-                          itemBuilder: (context, index){
-                            return productListControllers.length!=0? Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Padding(
-                                        padding: EdgeInsets.only(left:size.width*0.03, top: size.height*0.018),
-                                        child: TextFormField(
-                                          controller: productListControllers[index],
-                                          decoration: InputDecoration(
-                                            labelText: 'product name',
-                                            border: OutlineInputBorder(
-                                              borderRadius: BorderRadius.circular(20),
-                                            ),
-                                        enabledBorder: OutlineInputBorder(
-                                              borderRadius: BorderRadius.circular(20),
-                                              borderSide: BorderSide(color: AppColors.contentColorPurple), // Change the border color here
-                                            ),
-                                                          // controller: _endDate,
+                    ],
+                  ),
+                  // 
+                  // container to show the added input fields
+                  SizedBox(height: size.height*0.010,),
+                  Center(
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: size.width*0.01),
+                      height:size.height*0.32,
+                      width:size.width*0.90,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: AppColors.contentColorPurple.withOpacity(0.2)
+                        )
+                        // color: AppColors.contentColorPurple.withOpacity(0.3)
+                      ),
+                      child: ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        itemCount: productListControllers.length,
+                        itemBuilder: (context, index){
+                          return productListControllers.length!=0? Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(left:size.width*0.03, top: size.height*0.010),
+                                      child: TextFormField(
+                                        controller: productListControllers[index],
+                                        decoration: InputDecoration(
+                                          labelText: 'product name',
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(20),
                                           ),
+                                      enabledBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(20),
+                                            borderSide: BorderSide(color: AppColors.contentColorPurple), // Change the border color here
+                                          ),
+                                                        // controller: _endDate,
                                         ),
                                       ),
                                     ),
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: size.width*0.03),
-                                    child: InkWell(
-                                      onTap: (){
-                                        setState(() {
-                                        productListControllers[index].clear();//first clear
-                                        //then dispose the controller
-                                        productListControllers[index].dispose;
-                                        //after remove the value of the listcontroller
-                                        productListControllers.removeAt(index);
-                                        });
-                                      },
-                                      child: index!=0?Icon(Icons.delete,
-                                      size: size.width*0.09,
-                                      ):Container(),
-                                    ),
                                   ),
-                                  ],
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: size.width*0.03),
+                                  child: InkWell(
+                                    onTap: (){
+                                      setState(() {
+                                      productListControllers[index].clear();//first clear
+                                      //then dispose the controller
+                                      productListControllers[index].dispose;
+                                      //after remove the value of the listcontroller
+                                      productListControllers.removeAt(index);
+
+                                      //clearing the productQuantityController list
+
+                                      productQuantityControllers[index].clear();//first clear
+                                      //then dispose the controller
+                                      productQuantityControllers[index].dispose;
+                                      //after remove the value of the listcontroller
+                                      productQuantityControllers.removeAt(index);
+                                      });
+                                    },
+                                    child: index!=0?Icon(Icons.delete,
+                                    size: size.width*0.09,
+                                    ):Container(),
+                                  ),
                                 ),
-                                SizedBox(height: size.height*0.012,),
-                              ],
-                            ):Container();
-                        }),
-                      ),
+                                ],
+                              ),
+                              //
+                            SizedBox(height: size.height*0.02,),
+                            // to capture the quantity of entered product
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: size.width*0.03),
+                              child: TextFormField(
+                                     controller: productQuantityControllers[index],
+                                      decoration: InputDecoration(
+                                        labelText: 'quantity',
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(20),
+                                        ),
+                                    enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(20),
+                                          borderSide: BorderSide(color: AppColors.contentColorPurple), // Change the border color here
+                                        ),
+                                // controller: _endDate,
+                                      ),
+                              ),
+                            ),
+                             Divider(
+                              thickness: 1,
+                             ),
+                            ],
+                          ):Container();
+                      }),
                     ),
-                    // 
+                  ),
+                  // 
                   ],
+                             ),
+                             SizedBox(height: size.height*0.010,),
+                  ],
+                    ),
+               ) ,
+                    // in this section we have to capture also the 
+                    // user id
+                    //  business id
+                    // visit id
+                    // --- the above that to be sent to an api end point --- //
+                    //
+                    SizedBox(height: size.height*0.030,),
+                    ],
+                  ),
                 ),
-                SizedBox(height: size.height*0.010,),
-                  ],
-              ):Text(''),
+              ):Container(),
               // summary notes
               Divider(),
               SizedBox(height: size.height*0.010,),
