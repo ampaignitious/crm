@@ -54,11 +54,7 @@ class _ClientsScreenState extends State<ClientsScreen> {
     var descriptionwidth=size.width*0.3;
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      // drawer:Drawer(
-      //   backgroundColor: AppColors.contentColorPurple,
-      //   width: size.width*0.8,
-      //   child: DrawerItems(),
-      // ),
+ 
       appBar: AppBar(
         iconTheme: IconThemeData(
         color: AppColors.contentColorPurple,

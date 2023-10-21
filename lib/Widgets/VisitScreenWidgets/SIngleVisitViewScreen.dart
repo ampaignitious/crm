@@ -25,7 +25,7 @@ class _SingleVisitViewScreenState extends State<SingleVisitViewScreen> {
         backgroundColor: AppColors.contentColorCyan,
         iconTheme: IconThemeData(
         color: AppColors.contentColorPurple,
-        size: size.width*0.11,
+        size: size.width*0.08,
         ),
         elevation: 0,
         title: Padding(

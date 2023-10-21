@@ -254,7 +254,7 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Text("Mainteanance", style: GoogleFonts.lato(
-                        fontSize: size.width*0.04,
+                        fontSize: size.width*0.034,
                       ),),
                       Container(
                         height:size.height*0.10,
@@ -383,7 +383,7 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Text("Notifications", style: GoogleFonts.lato(
-                        fontSize: size.width*0.04,
+                        fontSize: size.width*0.036,
                       ),),
                       Container(
                         height:size.height*0.10,
@@ -476,7 +476,7 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
                            ),
                         ),
                         Text("Route plan", style: GoogleFonts.lato(
-                          fontSize: size.width*0.03,
+                          fontSize: size.width*0.036,
                         ),
                          
                         )
@@ -488,70 +488,6 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
             // 
             // Third row element two
              Container(
-                height: size.height*0.10,
-                width: size.width*0.45,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                          color: AppColors.mainTextColor2.withOpacity(0.3)
-                        ),
-                  boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.3),
-                          offset: Offset(0.8, 1.0),
-                          blurRadius: 4.0,
-                          spreadRadius: 0.2,
-                        ),
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.3),
-                          offset: Offset(-0.8, -1.0),
-                          blurRadius: 4.0,
-                          spreadRadius: 0.2,
-                        ),
-                      ],
-                ),
-                child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text("Feedback", style: GoogleFonts.lato(
-                      fontSize: size.width*0.04,
-                    ),),
-                    Container(
-                      height:size.height*0.10,
-                      width: size.width*0.18,
-                      decoration: BoxDecoration(
-                        color: AppColors.contentColorCyan,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: AppColors.mainTextColor2
-                        )
-                       ),
-                       child: Center(
-                        child: Lottie.asset(
-                        'assets/json/feedback.json', // Path to your Lottie animation JSON file
-                        width: size.width*0.18, // Adjust width as needed
-                        height: size.height*0.16,  
-                        fit: BoxFit.fill,
-                          ),
-                       ),
-                    ),
-                  ],
-                ),
-            ),
-            
-          ],
-        ),
-      ),
-       SizedBox(height: size.height*0.03,),
-      // fifth secction
-      Padding(
-        padding: EdgeInsets.symmetric(horizontal: size.width*0.03),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            
-            Container(
                 height: size.height*0.10,
                 width: size.width*0.45,
                 decoration: BoxDecoration(
@@ -578,6 +514,12 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
                 child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
+                    
+                    Text("Settings", style: GoogleFonts.lato(
+                      fontSize: size.width*0.036,
+                    ),
+                     
+                    ),
                     Container(
                       height:size.height*0.17 ,
                       width: size.width*0.19,
@@ -594,74 +536,15 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
                           ),
                        ),
                     ),
-                    Text("Account settings", style: GoogleFonts.lato(
-                      fontSize: size.width*0.025,
-                    ),
-                     
-                    )
                   ],
                 ),
             ),
-            // 
-            // Third row element two
-             Container(
-                height: size.height*0.10,
-                width: size.width*0.45,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                          color: AppColors.mainTextColor2.withOpacity(0.3)
-                        ),
-                  boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.3),
-                          offset: Offset(0.8, 1.0),
-                          blurRadius: 4.0,
-                          spreadRadius: 0.2,
-                        ),
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.3),
-                          offset: Offset(-0.8, -1.0),
-                          blurRadius: 4.0,
-                          spreadRadius: 0.2,
-                        ),
-                      ],
-                ),
-                child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text("Feedback", style: GoogleFonts.lato(
-                      fontSize: size.width*0.04,
-                    ),),
-                    Container(
-                      height:size.height*0.10,
-                      width: size.width*0.18,
-                      decoration: BoxDecoration(
-                        color: AppColors.contentColorCyan,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: AppColors.mainTextColor2
-                        )
-                       ),
-                       child: Center(
-                        child: Lottie.asset(
-                        'assets/json/feedback.json', // Path to your Lottie animation JSON file
-                        width: size.width*0.18, // Adjust width as needed
-                        height: size.height*0.16,  
-                        fit: BoxFit.fill,
-                          ),
-                       ),
-                    ),
-                  ],
-                ),
-            ),
-            
+            //
           ],
         ),
       ),
-      
-      SizedBox(height: size.height*0.02,),
+       SizedBox(height: size.height*0.03,),
+ 
                   
     
     ],
