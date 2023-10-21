@@ -16,7 +16,17 @@ class _CreateVisitScreenState extends State<CreateVisitScreen> {
   bool delivery = false;
   bool appointment = false;
   bool sales = false;
+
+  //texteditingcollectingcontroller for sales data
   List<TextEditingController> productListControllers = [TextEditingController()];
+  List<TextEditingController> productQuantityControllers = [TextEditingController()];
+
+  // texteditingcontorller to capture delivery products
+  List<TextEditingController> deliveryProductControllers = [TextEditingController()];
+  List<TextEditingController> deliveryProductQualityControllers = [TextEditingController()];
+  
+
+  // we shall see how we can combine the two lists into one
    TextEditingController _mainteananceDate = TextEditingController();
    TextEditingController _demoDate = TextEditingController();
    TextEditingController  _appointmentDate = TextEditingController();
@@ -480,7 +490,7 @@ class _CreateVisitScreenState extends State<CreateVisitScreen> {
               // section to capture delivery input fields on delivery section
               delivery==true?Container(
                 margin: EdgeInsets.only(left: size.width*0.03, right: size.width*0.03,top: size.height*0.008),
-                height: size.height*0.55,
+                height: size.height*0.45,
                 width: double.maxFinite,
                 decoration: BoxDecoration(
                   border:Border.all(
@@ -488,105 +498,133 @@ class _CreateVisitScreenState extends State<CreateVisitScreen> {
                   ),
                   borderRadius: BorderRadius.circular(10)
                 ),
-                child: Column(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: 
+                  Column(
+                    children: [
+               SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                 child: Column(
+                             children: [
+                             Column(
                   children: [
-                SizedBox(height:size.height*0.005),
-                Center(
-                  child: Container(
-                    margin: EdgeInsets.only(left: size.width*0.01,right: size.width*0.01),
-                    height: size.height*0.08,
-                    width: size.width*0.92,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color:AppColors.contentColorPurple.withOpacity(0.5),
-                      boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    offset: Offset(0.8, 1.0),
-                    blurRadius: 4.0,
-                    spreadRadius: 0.2,
-                  ),
-                      ]
-                    ),
-                  child: Center(
-                    child: Text(
-                      "Add items to be delivered",style: GoogleFonts.lato(
-                        color: AppColors.contentColorWhite
+                  // row showing click to add input and the add button
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(left:size.width*0.09),
+                        child: Text("Click to add more input field", style: GoogleFonts.lato(
+                          fontSize: size.width*0.04
+                        ),),
                       ),
-                    ),
-                  ),
-                  ),
-                ),
-              Column(
-              children: [
-                
-              SizedBox(height: size.height*0.020,),
-              Column(
-                children: [
-                // row showing click to add input and the add button
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(left:size.width*0.09),
-                      child: Text("Click to add more input field", style: GoogleFonts.lato(
-                        fontSize: size.width*0.04
-                      ),),
-                    ),
-                     Container(
-                      margin: EdgeInsets.only(right:size.width*0.04),
-                        height: size.height*0.05,
-                        width: size.width*0.09,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                           border: Border.all(
-                            color: AppColors.contentColorPurple
-                           )
+                       Container(
+                        margin: EdgeInsets.only(right:size.width*0.04,
+                        top: size.height*0.004,
                         ),
-                        child: InkWell(
-                          onTap:(){
-                          setState(() {
-                            productListControllers.add(TextEditingController());
-                          });
-                        },
-                          child: Center(child: Icon(Icons.add,
-                            size: size.width*0.045,
-                            color:  AppColors.contentColorPurple ,
-                            )),
+                          height: size.height*0.05,
+                          width: size.width*0.09,
+                          decoration: BoxDecoration(
+                            color: AppColors.contentColorPurple,
+                            shape: BoxShape.circle,
+                             border: Border.all(
+                              color: AppColors.contentColorPurple
+                             )
+                          ),
+                          child: InkWell(
+                            onTap:(){
+                            setState(() {
+                              deliveryProductControllers.add(TextEditingController());
+                              deliveryProductQualityControllers.add(TextEditingController());
+                            });
+                          },
+                            child: Center(child: Icon(Icons.add,
+                              size: size.width*0.045,
+                              color:  AppColors.contentColorCyan ,
+                              )),
+                          ),
                         ),
+                    ],
+                  ),
+                  // 
+                  // container to show the added input fields
+                  SizedBox(height: size.height*0.010,),
+                  Center(
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: size.width*0.01),
+                      height:size.height*0.36,
+                      width:size.width*0.90,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: AppColors.contentColorPurple.withOpacity(0.2)
+                        )
+                        // color: AppColors.contentColorPurple.withOpacity(0.3)
                       ),
-                  ],
-                ),
-                // 
-                // container to show the added input fields
-                SizedBox(height: size.height*0.010,),
-                Center(
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: size.width*0.01),
-                    height:size.height*0.24,
-                    width:size.width*0.90,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: AppColors.contentColorPurple.withOpacity(0.2)
-                      )
-                      // color: AppColors.contentColorPurple.withOpacity(0.3)
-                    ),
-                    child: ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      itemCount: productListControllers.length,
-                      itemBuilder: (context, index){
-                        return productListControllers.length!=0? Column(
-                          children: [
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Padding(
-                                    padding: EdgeInsets.only(left:size.width*0.03, top: size.height*0.010),
-                                    child: TextFormField(
-                                      controller: productListControllers[index],
+                      child: ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        itemCount: deliveryProductControllers.length,
+                        itemBuilder: (context, index){
+                          return deliveryProductControllers.length!=0? Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(left:size.width*0.03, top: size.height*0.010),
+                                      child: TextFormField(
+                                        controller: deliveryProductControllers[index],
+                                        decoration: InputDecoration(
+                                          labelText: 'product name',
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(20),
+                                          ),
+                                      enabledBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(20),
+                                            borderSide: BorderSide(color: AppColors.contentColorPurple), // Change the border color here
+                                          ),
+                                                        // controller: _endDate,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: size.width*0.03),
+                                  child: InkWell(
+                                    onTap: (){
+                                      setState(() {
+                                      deliveryProductControllers[index].clear();//first clear
+                                      //then dispose the controller
+                                      deliveryProductControllers[index].dispose;
+                                      //after remove the value of the listcontroller
+                                      deliveryProductControllers.removeAt(index);
+
+                                      //clearing the productQuantityController list
+
+                                      deliveryProductQualityControllers[index].clear();//first clear
+                                      //then dispose the controller
+                                      deliveryProductQualityControllers[index].dispose;
+                                      //after remove the value of the listcontroller
+                                      deliveryProductQualityControllers.removeAt(index);
+                                      });
+                                    },
+                                    child: index!=0?Icon(Icons.delete,
+                                    size: size.width*0.09,
+                                    ):Container(),
+                                  ),
+                                ),
+                                ],
+                              ),
+                              //
+                            SizedBox(height: size.height*0.02,),
+                            // to capture the quantity of entered product
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: size.width*0.03),
+                              child: TextFormField(
+                                     controller: deliveryProductQualityControllers[index],
                                       decoration: InputDecoration(
-                                        labelText: 'product name',
+                                        labelText: 'quantity',
                                         border: OutlineInputBorder(
                                           borderRadius: BorderRadius.circular(20),
                                         ),
@@ -594,73 +632,36 @@ class _CreateVisitScreenState extends State<CreateVisitScreen> {
                                           borderRadius: BorderRadius.circular(20),
                                           borderSide: BorderSide(color: AppColors.contentColorPurple), // Change the border color here
                                         ),
-                                                      // controller: _endDate,
+                                // controller: _endDate,
                                       ),
-                                    ),
-                                  ),
-                                ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: size.width*0.03),
-                                child: InkWell(
-                                  onTap: (){
-                                    setState(() {
-                                    productListControllers[index].clear();//first clear
-                                    //then dispose the controller
-                                    productListControllers[index].dispose;
-                                    //after remove the value of the listcontroller
-                                    productListControllers.removeAt(index);
-                                    });
-                                  },
-                                  child: index!=0?Icon(Icons.delete,
-                                  size: size.width*0.09,
-                                  ):Container(),
-                                ),
                               ),
-                              ],
                             ),
-                            SizedBox(height: size.height*0.012,),
-                          ],
-                        ):Container();
-                    }),
-                  ),
-                ),
-                // 
-                ],
-              ),
-              SizedBox(height: size.height*0.010,),
-                ],
-                  ) ,
-            
-                  //
-                  // SizedBox(height: size.height*0.030,),
-                  // capturing comment related to  mainteance
-                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: size.width*0.03),
-                    child: TextFormField(
-                            decoration: InputDecoration(
-                              labelText: 'Quantity',
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                          enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20),
-                                borderSide: BorderSide(color: AppColors.contentColorPurple), // Change the border color here
-                              ),
-                      // controller: _endDate,
-                            ),
+                             Divider(
+                              thickness: 1,
+                             ),
+                            ],
+                          ):Container();
+                      }),
                     ),
                   ),
-                  // in this section we have to capture also the 
-                  // user id
-                  //  business id
-                  // visit id
-                  // --- the above that to be sent to an api end point --- //
-                  //
-                  SizedBox(height: size.height*0.020,),
+                  // 
                   ],
+                             ),
+                             SizedBox(height: size.height*0.010,),
+                  ],
+                    ),
+               ) ,
+                    // in this section we have to capture also the 
+                    // user id
+                    //  business id
+                    // visit id
+                    // --- the above that to be sent to an api end point --- //
+                    //
+                    SizedBox(height: size.height*0.030,),
+                    ],
+                  ),
                 ),
-              ):Container(),
-              //  end of section to capture delivery input fields on delivery section
+              ):Container(),//  end of section to capture delivery input fields on delivery section
               // section to cpature appointment input fields on appointment section
               appointment==true?Container(
                 margin: EdgeInsets.only(left: size.width*0.03, right: size.width*0.03,top: size.height*0.008),
@@ -787,7 +788,8 @@ class _CreateVisitScreenState extends State<CreateVisitScreen> {
                 ),
                 child: SingleChildScrollView(
                   scrollDirection: Axis.vertical,
-                  child: Column(
+                  child: 
+                  Column(
                     children: [
                SingleChildScrollView(
                 scrollDirection: Axis.vertical,
@@ -806,10 +808,13 @@ class _CreateVisitScreenState extends State<CreateVisitScreen> {
                         ),),
                       ),
                        Container(
-                        margin: EdgeInsets.only(right:size.width*0.04),
+                        margin: EdgeInsets.only(right:size.width*0.04,
+                        top: size.height*0.004,
+                        ),
                           height: size.height*0.05,
                           width: size.width*0.09,
                           decoration: BoxDecoration(
+                             color:AppColors.contentColorPurple,
                             shape: BoxShape.circle,
                              border: Border.all(
                               color: AppColors.contentColorPurple
@@ -819,11 +824,12 @@ class _CreateVisitScreenState extends State<CreateVisitScreen> {
                             onTap:(){
                             setState(() {
                               productListControllers.add(TextEditingController());
+                              productQuantityControllers.add(TextEditingController());
                             });
                           },
                             child: Center(child: Icon(Icons.add,
                               size: size.width*0.045,
-                              color:  AppColors.contentColorPurple ,
+                              color:  AppColors.contentColorCyan ,
                               )),
                           ),
                         ),
@@ -881,6 +887,14 @@ class _CreateVisitScreenState extends State<CreateVisitScreen> {
                                       productListControllers[index].dispose;
                                       //after remove the value of the listcontroller
                                       productListControllers.removeAt(index);
+
+                                      //clearing the productQuantityController list
+
+                                      productQuantityControllers[index].clear();//first clear
+                                      //then dispose the controller
+                                      productQuantityControllers[index].dispose;
+                                      //after remove the value of the listcontroller
+                                      productQuantityControllers.removeAt(index);
                                       });
                                     },
                                     child: index!=0?Icon(Icons.delete,
@@ -896,7 +910,7 @@ class _CreateVisitScreenState extends State<CreateVisitScreen> {
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: size.width*0.03),
                               child: TextFormField(
-                                    //  controller: productListControllers[index],
+                                     controller: productQuantityControllers[index],
                                       decoration: InputDecoration(
                                         labelText: 'quantity',
                                         border: OutlineInputBorder(
@@ -965,6 +979,13 @@ class _CreateVisitScreenState extends State<CreateVisitScreen> {
                     // Navigator.push(context, MaterialPageRoute(builder: (context){
                     //   // return CreateVisitScreen();
                     // }));
+                    print("==============\n");
+                    for(int x=0; x<productQuantityControllers.length; x=x+1){
+                      
+                      print(productQuantityControllers[x].text);
+                      print("\n");
+                    }
+                    print("\n==============");
                   },
                   child: Padding(
                     padding: EdgeInsets.symmetric(
