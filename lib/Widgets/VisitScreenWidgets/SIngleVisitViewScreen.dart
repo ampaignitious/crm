@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 
+// ignore: must_be_immutable
 class SingleVisitViewScreen extends StatefulWidget {
   String? visitName;
  String? visitDescription;
@@ -13,8 +14,7 @@ class SingleVisitViewScreen extends StatefulWidget {
 }
 
 class _SingleVisitViewScreenState extends State<SingleVisitViewScreen> {
-  @override
- String? visitName;
+  String? visitName;
  String? visitDescription;
   _SingleVisitViewScreenState( this.visitDescription, this.visitName);
   Widget build(BuildContext context) {

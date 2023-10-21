@@ -12,8 +12,7 @@ class ContainerDisplayingStats extends StatefulWidget {
 }
 
 class _ContainerDisplayingStatsState extends State<ContainerDisplayingStats> {
-  @override
-    // 
+  // 
   Stream<DateTime> createTimeStream() {
   return Stream.periodic(Duration(seconds: 1), (i) {
     return DateTime.now();

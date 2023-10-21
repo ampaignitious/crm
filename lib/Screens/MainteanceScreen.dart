@@ -86,6 +86,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
       ),
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
            SizedBox(height: size.height*0.016,),
             // 
@@ -156,6 +157,14 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
             ),
             // 
             SizedBox(height: size.height*0.016,),
+            Padding(
+              padding: EdgeInsets.only(left:size.width*0.03),
+              child: Text("Mainteanance data table", style: GoogleFonts.lato(
+              color: AppColors.coffeeBean,
+              fontWeight: FontWeight.bold,
+              fontSize: size.width*0.04
+              ),),
+            ),
             // 
             Padding(
               padding: EdgeInsets.only(left:size.width*0.03, right:size.width*0.03, top:size.width*0.03, bottom:size.width*0.010),
@@ -165,7 +174,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
                   filterVisitData(value);
                 },
                 decoration: InputDecoration(
-                  labelText: 'search a mainteanance log',
+                  labelText: 'search a mainteanance record',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10)
                   ),
@@ -185,38 +194,41 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
                 color: AppColors.gridLinesColor
               ),
               child: Center(
-                child: Row(
-                  
-                  children: [
-                    Container(
-                      height: size.height*0.06,
-                      width: size.width*0.18,
-                      decoration: BoxDecoration(
-                        color: AppColors.contentColorPurple
-                      ),
-                      child: Center(child: Text("Id", style: GoogleFonts.lato(
-                     color: Colors.white
-                      ),))),
-                    Container(
-                      // margin: EdgeInsets.only(left: size.width*0.01),
-                      height: size.height*0.06,
-                      width: size.width*0.5,
-                      decoration: BoxDecoration(
-                        color: AppColors.contentColorYellow,
-                      ),
-                      child: Center(child: Text("Mainteanance purpose", style: GoogleFonts.lato(
-                      ),))),
-                    Container(
-                      margin: EdgeInsets.only(left: size.width*0.01),
-                      height: size.height*0.06,
-                      width: size.width*0.3,
-                      decoration: BoxDecoration(
-                        color: AppColors.contentColorBlack,
-                      ),
-                      child: Center(child: Text("details", style: GoogleFonts.lato(
-                        color:Colors.white
-                      ),)))
-                  ],
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: size.width*0.006),
+                  child: Row(
+                    
+                    children: [
+                      Container(
+                        height: size.height*0.06,
+                        width: size.width*0.18,
+                        decoration: BoxDecoration(
+                          color: AppColors.contentColorPurple
+                        ),
+                        child: Center(child: Text("Id", style: GoogleFonts.lato(
+                       color: Colors.white
+                        ),))),
+                      Container(
+                        // margin: EdgeInsets.only(left: size.width*0.01),
+                        height: size.height*0.06,
+                        width: size.width*0.5,
+                        decoration: BoxDecoration(
+                          color: AppColors.contentColorYellow,
+                        ),
+                        child: Center(child: Text("Mainteanance purpose", style: GoogleFonts.lato(
+                        ),))),
+                      Container(
+                        margin: EdgeInsets.only(left: size.width*0.01),
+                        height: size.height*0.06,
+                        width: size.width*0.28,
+                        decoration: BoxDecoration(
+                          color: AppColors.contentColorBlack,
+                        ),
+                        child: Center(child: Text("details", style: GoogleFonts.lato(
+                          color:Colors.white
+                        ),)))
+                    ],
+                  ),
                 ),
               ),
                       ),

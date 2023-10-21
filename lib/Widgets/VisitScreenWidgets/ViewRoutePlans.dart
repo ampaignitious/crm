@@ -11,7 +11,6 @@ class ViewRoutePlans extends StatefulWidget {
 }
 
 class _ViewRoutePlansState extends State<ViewRoutePlans> {
-  @override
   final List<VisitData> visitDataList = [
     VisitData("1", "Mohit", "working for the best"),
     VisitData("2", "Ankit", "working for the best"),

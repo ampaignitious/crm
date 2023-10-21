@@ -13,8 +13,6 @@ class CreateRoutePlan extends StatefulWidget {
 }
 
 class _CreateRoutePlanState extends State<CreateRoutePlan> {
-  @override
-
   // 
 TextEditingController _startLocation = TextEditingController();
 TextEditingController _endLocation = TextEditingController();

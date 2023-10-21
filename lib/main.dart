@@ -1,5 +1,5 @@
-import 'package:crm/Screens/DefaultScreen.dart';
 // ignore: unused_import
+import 'package:crm/Screens/DefaultScreen.dart';
 import 'package:crm/Screens/SplashScreen/FirstScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,8 +22,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const FirstScreen(),
-      // home: DefaultScreen(),
+      // home: const FirstScreen(),
+      home: DefaultScreen(),
     );
   }
 }

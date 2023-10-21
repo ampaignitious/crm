@@ -11,8 +11,7 @@ class AvailableCoffeeProductsDisplayScreen extends StatefulWidget {
 }
 
 class _AvailableCoffeeProductsDisplayScreenState extends State<AvailableCoffeeProductsDisplayScreen> with TickerProviderStateMixin{
-  @override
-      late TabController _tabController;
+  late TabController _tabController;
 
   @override
   void initState() {

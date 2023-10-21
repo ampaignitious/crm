@@ -11,8 +11,7 @@ class AvailableMachineDisplayScreen extends StatefulWidget {
 }
 
 class _AvailableMachineDisplayScreenState extends State<AvailableMachineDisplayScreen> with TickerProviderStateMixin{
-  @override
-      late TabController _tabController;
+  late TabController _tabController;
 
   @override
   void initState() {

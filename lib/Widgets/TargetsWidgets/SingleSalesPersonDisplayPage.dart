@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
+// ignore: must_be_immutable
 class SingleSalesPersonDisplayPage extends StatefulWidget {
   String? salesPersonName;
   String? salesPersonId;
@@ -13,7 +14,6 @@ class SingleSalesPersonDisplayPage extends StatefulWidget {
 }
 
 class _SingleSalesPersonDisplayPageState extends State<SingleSalesPersonDisplayPage> {
-  @override
   String? salesPersonName;
   String? salesPersonId;
   TextEditingController _startDate = TextEditingController();

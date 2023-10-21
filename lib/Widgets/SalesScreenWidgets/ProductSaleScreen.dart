@@ -13,7 +13,6 @@ class ProductSaleScreen extends StatefulWidget {
 }
 
 class _ProductSaleScreenState extends State<ProductSaleScreen> with TickerProviderStateMixin{
-  @override
   late TabController _tabController;
 
   @override

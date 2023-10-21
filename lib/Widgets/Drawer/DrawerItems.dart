@@ -7,7 +7,6 @@ import 'package:crm/Screens/Targets.dart';
 import 'package:crm/Screens/VisitsPage.dart';
 import 'package:crm/Utils/AppColors.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 
 class DrawerItems extends StatefulWidget {
