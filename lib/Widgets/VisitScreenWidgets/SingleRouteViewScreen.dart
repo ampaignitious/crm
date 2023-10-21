@@ -78,40 +78,42 @@ class _SingleRouteViewScreenState extends State<SingleRouteViewScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Visit name", style: GoogleFonts.lato(
+                Text("Route name", style: GoogleFonts.lato(
                   fontSize:size.width*0.05,
                   fontWeight: FontWeight.bold
                 ),),
                 SizedBox(height:size.height*0.008),
                 Text("${visitName}"),
                 Divider(),
-                Text("Visited business name", style: GoogleFonts.lato(
+                Text("Start location", style: GoogleFonts.lato(
                   fontSize:size.width*0.05,
                   fontWeight: FontWeight.bold
                 ),),
                 SizedBox(height:size.height*0.008),
-                Text("${visitDescription}"),
+                Text("Ntinda"),
                 Divider(),
-                Text("Business location", style: GoogleFonts.lato(
+                Text("End location", style: GoogleFonts.lato(
                   fontSize:size.width*0.05,
                   fontWeight: FontWeight.bold
                 ),),
                 SizedBox(height:size.height*0.008),
                 Text("Kampala, Makerere"),
-                Text("Contact personnel", style: GoogleFonts.lato(
-                  fontSize:size.width*0.05,
-                  fontWeight: FontWeight.bold
-                ),),
-                SizedBox(height:size.height*0.008),
-                Text("Aine Derrick"),
                 Divider(),
-                Text("Visit Description", style: GoogleFonts.lato(
+                SizedBox(height:size.height*0.008),
+                Text("Route details", style: GoogleFonts.lato(
                   fontSize:size.width*0.05,
                   fontWeight: FontWeight.bold
                 ),),
                 SizedBox(height:size.height*0.008),
                 Text("${visitDescription}"),
                 // 
+                SizedBox(height:size.height*0.008),
+                Text("Number of target visits to make", style: GoogleFonts.lato(
+                  fontSize:size.width*0.05,
+                  fontWeight: FontWeight.bold
+                ),),
+                SizedBox(height:size.height*0.008),
+                Text("10"),
                 Divider(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,

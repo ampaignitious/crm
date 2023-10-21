@@ -109,6 +109,7 @@ void _removeFromProductsOfInterest(VisitData product) {
   bool female = false;
   bool notStated= false;
   bool notinterestedColor =false;
+  bool addedIsClicked = false;
   // List<TextEditingController> productListControllers = [TextEditingController()];
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -1161,3 +1162,6 @@ class VisitData {
 
   VisitData(this.id, this.name, this.description);
 } 
+
+
+// widget to capture the quantity

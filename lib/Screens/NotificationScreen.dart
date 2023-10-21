@@ -36,19 +36,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
             fontWeight: FontWeight.bold
           ),),
         ),
-        actions: [
-          Padding(
-          padding: EdgeInsets.only(
-          right: size.width*0.03,
-          ),
-          child: Lottie.asset(
-          'assets/json/notification.json', // Path to your Lottie animation JSON file
-          width: size.width*0.16, // Adjust width as needed
-          height: size.height*0.08,  
-          fit: BoxFit.fill,
-            ),
-            ),
-        ],
       ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,

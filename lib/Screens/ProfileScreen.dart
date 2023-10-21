@@ -11,7 +11,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  @override
+  bool _editingPassword = !false;
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
@@ -110,7 +110,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ],
                 ),
               ),
-              trailing: Icon(Icons.edit),
+              trailing: InkWell(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return EditProfileDialog(); // Show the EditProfileDialog
+                    },
+                  );
+                },
+                child: Icon(Icons.edit),
+              ),
             ),
           ),
           Card(
@@ -128,7 +138,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ],
                 ),
               ),
-              trailing: Icon(Icons.edit),
+              trailing: InkWell(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return EditProfileDialog(); // Show the EditProfileDialog
+                    },
+                  );
+                },
+                child: Icon(Icons.edit),
+              ),
             ),
           ),
           Card(
@@ -146,7 +166,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ],
                 ),
               ),
-              trailing: Icon(Icons.edit),
+              trailing: InkWell(
+                onTap: () {
+                  _editingPassword = true;
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return EditProfileDialog(valueBeingEdited: true,); // Show the EditProfileDialog
+                    },
+                  );
+                },
+                child: Icon(Icons.edit),
+              ),
             ),
           ),
           SizedBox(height: size.height*0.009,),
@@ -191,6 +222,81 @@ class _ProfileScreenState extends State<ProfileScreen> {
           )
           ],
         ),
+    );
+  }
+}
+
+// widget performing the editing option 
+// ignore: must_be_immutable
+class EditProfileDialog extends StatefulWidget {
+  bool? valueBeingEdited;
+  
+   EditProfileDialog({this.valueBeingEdited});
+  State<EditProfileDialog> createState() => _EditProfileDialogState(this.valueBeingEdited);
+}
+
+class _EditProfileDialogState extends State<EditProfileDialog> {
+  bool? valueBeingEdited;
+  _EditProfileDialogState(this.valueBeingEdited);
+  TextEditingController _textEditingController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  TextEditingController _confirmPasswordController = TextEditingController();
+
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text("Edit Profile", style: GoogleFonts.lato()),
+      content: valueBeingEdited==true?Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TextField(
+            controller: _passwordController,
+            obscureText: true,
+            decoration: InputDecoration(
+              labelText: "New Password",
+            ),
+          ),
+          TextField(
+            controller: _confirmPasswordController,
+            obscureText: true,
+            decoration: InputDecoration(
+              labelText: "Confirm Password",
+            ),
+          )
+        ],
+      ): TextField(
+        controller: _textEditingController,
+        decoration: InputDecoration(
+          labelText: "New Value",
+        ),
+      ),
+      actions: <Widget>[
+        TextButton(
+          child: Text("Cancel", style: GoogleFonts.lato()),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        TextButton(
+          child: Text("Save", style: GoogleFonts.lato()),
+          onPressed: () {
+            // Handle saving the edited value here
+            String editedValue = _textEditingController.text;
+            String newPassword = _passwordController.text;
+            String confirmPassword = _confirmPasswordController.text;
+
+            if (valueBeingEdited == true) {
+              if(newPassword == confirmPassword){
+                print("passwords match");
+                confirmPassword = _passwordController.text;
+              }
+              Navigator.of(context).pop();
+            }
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
     );
   }
 }

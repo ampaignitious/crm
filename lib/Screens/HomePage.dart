@@ -1,5 +1,5 @@
+import 'package:crm/Screens/NotificationScreen.dart';
 import 'package:crm/Screens/ProfileScreen.dart';
-import 'package:crm/Utils/AppColors.dart';
 import 'package:crm/Utils/AppColors.dart';
 import 'package:crm/Widgets/Drawer/DrawerItems.dart';
 import 'package:crm/Widgets/HomeScreenWIdgets/ContainerDisplayingMenuItems.dart';
@@ -42,16 +42,23 @@ class _HomePageState extends State<HomePage> {
         actions: [
           Row(
               children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                    right: size.width*0.03,
-                  ),
-                  child: Lottie.asset(
-                  'assets/json/notification.json', // Path to your Lottie animation JSON file
-                  width: size.width*0.16, // Adjust width as needed
-                  height: size.height*0.14,  
-                  fit: BoxFit.fill,
+                InkWell(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context){
+                      return NotificationScreen();
+                    }));
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      right: size.width*0.03,
                     ),
+                    child: Lottie.asset(
+                    'assets/json/notification.json', // Path to your Lottie animation JSON file
+                    width: size.width*0.16, // Adjust width as needed
+                    height: size.height*0.14,  
+                    fit: BoxFit.fill,
+                      ),
+                  ),
                 ),
                 InkWell(
                   onTap: (){
