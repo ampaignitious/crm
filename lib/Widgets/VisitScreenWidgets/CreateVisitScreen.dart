@@ -835,7 +835,7 @@ class _CreateVisitScreenState extends State<CreateVisitScreen> {
                   Center(
                     child: Container(
                       margin: EdgeInsets.symmetric(horizontal: size.width*0.01),
-                      height:size.height*0.18,
+                      height:size.height*0.32,
                       width:size.width*0.90,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
@@ -890,7 +890,29 @@ class _CreateVisitScreenState extends State<CreateVisitScreen> {
                                 ),
                                 ],
                               ),
-                              SizedBox(height: size.height*0.012,),
+                              //
+                            SizedBox(height: size.height*0.02,),
+                            // to capture the quantity of entered product
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: size.width*0.03),
+                              child: TextFormField(
+                                    //  controller: productListControllers[index],
+                                      decoration: InputDecoration(
+                                        labelText: 'quantity',
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(20),
+                                        ),
+                                    enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(20),
+                                          borderSide: BorderSide(color: AppColors.contentColorPurple), // Change the border color here
+                                        ),
+                                // controller: _endDate,
+                                      ),
+                              ),
+                            ),
+                             Divider(
+                              thickness: 1,
+                             ),
                             ],
                           ):Container();
                       }),
@@ -903,26 +925,6 @@ class _CreateVisitScreenState extends State<CreateVisitScreen> {
                   ],
                     ),
                ) ,
-            
-                    //
-                    SizedBox(height: size.height*0.030,),
-                    // capturing comment related to  mainteance
-                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: size.width*0.03),
-                      child: TextFormField(
-                              decoration: InputDecoration(
-                                labelText: 'quantity',
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                            enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                  borderSide: BorderSide(color: AppColors.contentColorPurple), // Change the border color here
-                                ),
-                        // controller: _endDate,
-                              ),
-                      ),
-                    ),
                     // in this section we have to capture also the 
                     // user id
                     //  business id

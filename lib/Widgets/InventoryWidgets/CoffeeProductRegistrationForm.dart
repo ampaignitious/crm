@@ -24,9 +24,9 @@ class _CoffeeProductRegistrationFromState extends State<CoffeeProductRegistratio
  
         title: Padding(
           padding: EdgeInsets.only(left: size.width*0.06),
-          child: Text("coffee product registration page",
+          child: Text("Coffee product registration page",
            style: GoogleFonts.lato(
-            fontSize: size.width*0.05, 
+            fontSize: size.width*0.045, 
             color: AppColors.menuBackground,
             fontWeight: FontWeight.bold
           ),),
@@ -53,113 +53,118 @@ class _CoffeeProductRegistrationFromState extends State<CoffeeProductRegistratio
             ),
           ],
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: size.height*0.009,), 
-            Padding(
-              padding: EdgeInsets.only(left: size.width*0.03),
-              child: Text("Enter the coffee product details", style: GoogleFonts.lato(
-                fontSize: size.width*0.045,
-                color: Colors.black.withOpacity(0.5)
-              ),),
-            ),
-            Form(child: Column(
-              children: [
-                 SizedBox(height: size.height*0.018,), 
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: size.width*0.03),
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        labelText: "Enter coffee name",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(color: AppColors.contentColorPurple), // Change the border color here
-                        ),
-                      // controller: _endDate,
-                            ),
-                    ),
-                  ),
-                  SizedBox(height: size.height*0.018,), 
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: size.width*0.03),
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        labelText: "coffee product price",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(color: AppColors.contentColorPurple), // Change the border color here
-                        ),
-                      // controller: _endDate,
-                            ),
-                    ),
-                  ),
-                  SizedBox(height: size.height*0.018,), 
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: size.width*0.03),
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        labelText: "coffee product quantity",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(color: AppColors.contentColorPurple), // Change the border color here
-                        ),
-                      // controller: _endDate,
-                            ),
-                    ),
-                  ),
-                  SizedBox(height: size.height*0.018,), 
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: size.width*0.03),
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        labelText: "coffee product description",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(color: AppColors.contentColorPurple), // Change the border color here
-                        ),
-                      // controller: _endDate,
-                            ),
-                    ),
-                  ),
-                  SizedBox(height: size.height*0.028,),
-                  Center(
-                        child: ElevatedButton(
-                        onPressed: (){
-                           
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: size.width*0.24,
-                            vertical: size.height*0.029,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: size.height*0.009,), 
+              Padding(
+                padding: EdgeInsets.only(left: size.width*0.03),
+                child: Text("Enter the coffee product details", style: GoogleFonts.lato(
+                  fontSize: size.width*0.045,
+                  color: Colors.black.withOpacity(0.5)
+                ),),
+              ),
+              Form(child: Column(
+                children: [
+                   SizedBox(height: size.height*0.018,), 
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: size.width*0.03),
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          labelText: "Enter coffee name",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          child: Text('register a coffee product',
-                          style: GoogleFonts.lato(
-                            color: AppColors.contentColorPurple,
-                            fontSize: size.width*0.035
-                          ),),
-                        ),
-                          style: ElevatedButton.styleFrom(
-                          primary: AppColors.contentColorYellow,  // Set button color to purple
-                        ),
-                        ),
-                      )
-            
-              ],
-            ))
-          ],
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: AppColors.contentColorPurple), // Change the border color here
+                          ),
+                        // controller: _endDate,
+                              ),
+                      ),
+                    ),
+                    SizedBox(height: size.height*0.018,), 
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: size.width*0.03),
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          labelText: "coffee product price",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: AppColors.contentColorPurple), // Change the border color here
+                          ),
+                        // controller: _endDate,
+                              ),
+                      ),
+                    ),
+                    SizedBox(height: size.height*0.018,), 
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: size.width*0.03),
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          labelText: "coffee product quantity",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: AppColors.contentColorPurple), // Change the border color here
+                          ),
+                        // controller: _endDate,
+                              ),
+                      ),
+                    ),
+                    SizedBox(height: size.height*0.018,), 
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: size.width*0.03),
+                      child: TextFormField(
+                        maxLines: 7,
+                        minLines: 5,
+                        decoration: InputDecoration(
+                          labelText: "coffee product description",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: AppColors.contentColorPurple), // Change the border color here
+                          ),
+                        // controller: _endDate,
+                              ),
+                      ),
+                    ),
+                    SizedBox(height: size.height*0.028,),
+                    Center(
+                          child: ElevatedButton(
+                          onPressed: (){
+                             
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: size.width*0.24,
+                              vertical: size.height*0.029,
+                            ),
+                            child: Text('register a coffee product',
+                            style: GoogleFonts.lato(
+                              color: AppColors.contentColorPurple,
+                              fontSize: size.width*0.035
+                            ),),
+                          ),
+                            style: ElevatedButton.styleFrom(
+                            primary: AppColors.contentColorYellow,  // Set button color to purple
+                          ),
+                          ),
+                        )
+              
+                ],
+              ))
+            ],
+          ),
         ),
       ),
     );

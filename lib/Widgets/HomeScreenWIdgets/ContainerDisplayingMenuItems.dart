@@ -1,6 +1,7 @@
 import 'package:crm/Screens/ClientsScreen.dart';
 import 'package:crm/Screens/MainteanceScreen.dart';
 import 'package:crm/Screens/NotificationScreen.dart';
+import 'package:crm/Screens/ProfileScreen.dart';
 import 'package:crm/Screens/SalesScreen.dart';
 import 'package:crm/Screens/Targets.dart';
 import 'package:crm/Screens/VisitsPage.dart';
@@ -487,58 +488,65 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
             ),
             // 
             // Third row element two
-             Container(
-                height: size.height*0.10,
-                width: size.width*0.45,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                          color: AppColors.gridLinesColor.withOpacity(0.3)
-                        ),
-                  boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.3),
-                          offset: Offset(0.8, 1.0),
-                          blurRadius: 4.0,
-                          spreadRadius: 0.2,
-                        ),
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.3),
-                          offset: Offset(-0.8, -1.0),
-                          blurRadius: 4.0,
-                          spreadRadius: 0.2,
-                        ),
-                      ],
-                ),
-                child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    
-                    Text("Settings", style: GoogleFonts.lato(
-                      fontSize: size.width*0.036,
-                    ),
-                     
-                    ),
-                    Container(
-                      height:size.height*0.17 ,
-                      width: size.width*0.19,
-                      decoration: BoxDecoration(
-                        color: AppColors.contentColorCyan,
-                        shape: BoxShape.circle,
-                       ),
-                       child: Center(
-                        child: Lottie.asset(
-                        'assets/json/login2.json', // Path to your Lottie animation JSON file
-                        width: size.width*0.22, // Adjust width as needed
-                        height: size.height*0.85,  
-                        fit: BoxFit.fill,
+             InkWell(
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context){
+                  return ProfileScreen();
+                }));
+              },
+               child: Container(
+                  height: size.height*0.10,
+                  width: size.width*0.45,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                            color: AppColors.gridLinesColor.withOpacity(0.3)
                           ),
-                       ),
-                    ),
-                  ],
-                ),
-            ),
+                    boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.3),
+                            offset: Offset(0.8, 1.0),
+                            blurRadius: 4.0,
+                            spreadRadius: 0.2,
+                          ),
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.3),
+                            offset: Offset(-0.8, -1.0),
+                            blurRadius: 4.0,
+                            spreadRadius: 0.2,
+                          ),
+                        ],
+                  ),
+                  child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      
+                      Text("Settings", style: GoogleFonts.lato(
+                        fontSize: size.width*0.036,
+                      ),
+                       
+                      ),
+                      Container(
+                        height:size.height*0.17 ,
+                        width: size.width*0.19,
+                        decoration: BoxDecoration(
+                          color: AppColors.contentColorCyan,
+                          shape: BoxShape.circle,
+                         ),
+                         child: Center(
+                          child: Lottie.asset(
+                          'assets/json/login2.json', // Path to your Lottie animation JSON file
+                          width: size.width*0.22, // Adjust width as needed
+                          height: size.height*0.85,  
+                          fit: BoxFit.fill,
+                            ),
+                         ),
+                      ),
+                    ],
+                  ),
+                         ),
+             ),
             //
           ],
         ),

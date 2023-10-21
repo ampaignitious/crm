@@ -2,11 +2,13 @@ import 'package:crm/Screens/AuthenticationSceens/LoginScreen.dart';
 import 'package:crm/Screens/ClientsScreen.dart';
 import 'package:crm/Screens/DefaultScreen.dart';
 import 'package:crm/Screens/MainteanceScreen.dart';
+import 'package:crm/Screens/ProfileScreen.dart';
 import 'package:crm/Screens/SalesScreen.dart';
 import 'package:crm/Screens/Targets.dart';
 import 'package:crm/Screens/VisitsPage.dart';
 import 'package:crm/Utils/AppColors.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 
 class DrawerItems extends StatefulWidget {
@@ -21,14 +23,70 @@ class _DrawerItemsState extends State<DrawerItems> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
   return Drawer(
-  width: size.width * 0.8,
+  width: size.width * 0.9,
   child: Drawer(
     child: ListView(
       children: [
         DrawerHeader(
+          margin: EdgeInsets.symmetric(horizontal: size.width*0.01),
           decoration: BoxDecoration(
-            color: Colors.blue, // Adjust the background color of the drawer header
-          ), child: null,
+            border: Border.all(
+              color: AppColors.contentColorPurple.withOpacity(0.2)
+            ),
+            borderRadius: BorderRadius.circular(10),
+            color: AppColors.contentColorCyan, // Adjust the background color of the drawer header
+          ), child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  InkWell(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context){
+                        return ProfileScreen();
+                      }));
+                    },
+                    child: CircleAvatar(
+                      radius: size.width*0.08,
+                      backgroundImage: AssetImage("assets/images/userimage.jpg"),
+                    ),
+                  ),
+                  Text("Alex mugisha", style: GoogleFonts.lato(
+                    fontSize: size.width*0.04,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold
+                  ),),
+                ],
+              ),
+              
+              SizedBox(height: size.height*0.012,),
+              Row(
+                children: [
+                  Icon(Icons.email,
+                  color: AppColors.contentColorPurple,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: size.width*0.03),
+                    child: Text("alexmugisha@gmail.com"),
+                  )
+                ],
+              ),
+              Divider(),
+              Row(
+                children: [
+                  Icon(Icons.phone,
+                  color: AppColors.contentColorPurple,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: size.width*0.03),
+                    child: Text("07846740604"),
+                  )
+                ],
+              ),
+
+            ],
+          ),
           // ... other header content ...
         ),
         InkWell(

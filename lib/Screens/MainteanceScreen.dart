@@ -1,6 +1,6 @@
-import 'package:crm/Screens/ProfileScreen.dart';
+import 'package:crm/Models/Mainteanance.dart';
 import 'package:crm/Utils/AppColors.dart';
-import 'package:crm/Widgets/Drawer/DrawerItems.dart';
+import 'package:crm/Widgets/MainteananceWidgets/SingleMainteananceDisplayScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
@@ -13,29 +13,29 @@ class MainteanceScreen extends StatefulWidget {
 }
 
 class _MainteanceScreenState extends State<MainteanceScreen> {
-      final List<VisitData> visitDataList = [
-    VisitData("1", "update", "working on..."),
-    VisitData("2", "repair", "Issue was.."),
-    VisitData("3", "repair", "fixing ...."),
-    VisitData("4", "power", "working on..."),
-    VisitData("300", "Pragati", "fixing ...."),
-    VisitData("300", "update", "working on..."),
-    VisitData("300", "Pragati", "fixing ...."),
-    VisitData("300", "Pragati", "Issue was.."),
-    VisitData("300", "Pragati", "Interested"),
-  ];
-    late List<VisitData> filteredVisitDataList;
+  final List<MainteananceData> visitDataList = [
+  MainteananceData("1", "update", "Working on updating the system to improve performance and add new features."),
+  MainteananceData("2", "repair", "Issue was identified and is currently being repaired to ensure the system's functionality."),
+  MainteananceData("3", "repair", "Fixing and resolving various issues to ensure the system operates smoothly."),
+  MainteananceData("4", "power", "Working on enhancing the power management features to optimize energy consumption."),
+  MainteananceData("300", "Pragati", "Working on resolving issues and improving system performance."),
+  MainteananceData("300", "update", "Working on updates and enhancements to provide a better user experience."),
+  MainteananceData("300", "Pragati", "Addressing issues and making improvements for optimal functionality."),
+  MainteananceData("300", "Pragati", "Issue was identified, and we are working on resolving it."),
+  MainteananceData("300", "Pragati", "Showing interest and dedication to the project's success."),
+];
+    late List<MainteananceData> filteredMainteananceDataList;
   TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    filteredVisitDataList = List.from(visitDataList);
+    filteredMainteananceDataList = List.from(visitDataList);
   }
 
-  void filterVisitData(String query) {
+  void filterMainteananceData(String query) {
     setState(() {
-      filteredVisitDataList = visitDataList
+      filteredMainteananceDataList = visitDataList
           .where((visitData) =>
               visitData.name.toLowerCase().contains(query.toLowerCase()))
           .toList();
@@ -125,10 +125,30 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
                         ),),
                       ),
                     ),
-                    // defects
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Lottie.asset(
+                          'assets/json/mainteance.json', // Path to your Lottie animation JSON file
+                          width: size.width*0.32, // Adjust width as needed
+                          height: size.height*0.18,  
+                          fit: BoxFit.fill,
+                      ),
+                    Container(
+                      height: size.height*0.15,
+                      width: size.width*0.008,
+                      decoration: BoxDecoration(
+                        color: Colors.black
+                      ),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // defects
                     Padding(
                       padding: EdgeInsets.only(top: size.height*0.015, left: size.width*0.04),
                       child: Text("Defected machines: 89", style: GoogleFonts.lato(
+                        fontSize: size.width*0.03
                       ),),
                     ),
                     // 
@@ -137,7 +157,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
                     Padding(
                       padding: EdgeInsets.only(top: size.height*0.015, left: size.width*0.04),
                       child: Text("Upcoming mainteanances: 23", style: GoogleFonts.lato(
-                
+                 fontSize: size.width*0.03
                       ),),
                     ),
                     //
@@ -146,10 +166,14 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
                     Padding(
                       padding: EdgeInsets.only(top: size.height*0.015, left: size.width*0.04),
                       child: Text("Completed mainteanances: 182", style: GoogleFonts.lato(
-                
+                     fontSize: size.width*0.03
                       ),),
                     ),
                     //  
+                          ],
+                        )
+                      ],
+                    )
                 
                   ],
                 ),
@@ -171,7 +195,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
               child: TextField(
                 controller: searchController,
                 onChanged: (value) {
-                  filterVisitData(value);
+                  filterMainteananceData(value);
                 },
                 decoration: InputDecoration(
                   labelText: 'search a mainteanance record',
@@ -237,10 +261,10 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
               width: double.maxFinite,
               child: ListView.builder(
               scrollDirection: Axis.vertical,
-              itemCount: filteredVisitDataList.length,  // Use filtered data list here
+              itemCount: filteredMainteananceDataList.length,  // Use filtered data list here
               itemBuilder: (BuildContext context, int index) {
-                final VisitData visitData = filteredVisitDataList[index];  // Use filtered data list here
-                return buildTableRowWidget(visitData, spacing, spacing2, idwidth, idheight, visitwidth, descriptionwidth);
+                final MainteananceData singleData = filteredMainteananceDataList[index];  // Use filtered data list here
+                return buildTableRowWidget(singleData, spacing, spacing2, idwidth, idheight, visitwidth, descriptionwidth);
               },
                       ),
             ),
@@ -252,10 +276,12 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
     );
   }
   // 
-    Widget buildTableRowWidget(VisitData visitData, double size1, double size2, double idwidth, double idheight, double visitwidth, double descriptionwidth) {
+    Widget buildTableRowWidget(MainteananceData singleData, double size1, double size2, double idwidth, double idheight, double visitwidth, double descriptionwidth) {
     return InkWell(
       onTap: (){
-        
+        Navigator.push(context, MaterialPageRoute(builder: (context){
+          return SingleMainteananceDisplayScreen(mainteanancePurpose: singleData.name, mainteananceDetails: singleData.description,);
+        }));
       },
       child: Card(
         child: Padding(
@@ -268,7 +294,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
                     decoration: BoxDecoration(
                       // color: AppColors.contentColorWhite,
                     ),
-                    child: Center(child: Text("${visitData.id}", style: GoogleFonts.lato(
+                    child: Center(child: Text("${singleData.id}", style: GoogleFonts.lato(
                     ),),),
               ),
               Container(
@@ -277,7 +303,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
                     decoration: BoxDecoration(
                       // color: AppColors.contentColorYellow,
                     ),
-                    child: Center(child: Text("${visitData.name}", style: GoogleFonts.lato(
+                    child: Center(child: Text("${singleData.name}", style: GoogleFonts.lato(
               ),))),
               Container(
                     height: idheight,
@@ -285,7 +311,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
                     decoration: BoxDecoration(
                       // color: AppColors.contentColorPurple,
                     ),
-                    child: Center(child: Text("${visitData.description}", style: GoogleFonts.lato(
+                    child: Center(child: Text("${singleData.description}", style: GoogleFonts.lato(
                       color:Colors.black
                     ),
                     textAlign: TextAlign.center,
@@ -298,10 +324,3 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
   }
   // 
 }
-class VisitData {
-  final String id;
-  final String name;
-  final String description;
-
-  VisitData(this.id, this.name, this.description);
-} 

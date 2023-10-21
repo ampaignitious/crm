@@ -1,3 +1,4 @@
+import 'package:crm/Screens/AuthenticationSceens/LoginScreen.dart';
 import 'package:crm/Utils/AppColors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -21,9 +22,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),  
         backgroundColor: AppColors.contentColorCyan,
         elevation: 0,// Change the icon color here
-        title: Center(
+        title: Padding(
+          padding: EdgeInsets.only(left: size.width*0.04),
           child: Text("User profile screen", style: GoogleFonts.lato(
-            color: AppColors.contentColorPurple,
+            color: AppColors.darkRoast,
             fontWeight: FontWeight.bold
           ),),
         ),
@@ -57,7 +59,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             children: [
               Center(
                 child: CircleAvatar(
-                  backgroundImage: AssetImage("assets/images/userprofile.png"),
+                  backgroundImage: AssetImage("assets/images/userimage.jpg"),
                   radius: size.width*0.15,
                 ),
               ),
@@ -148,19 +150,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
           SizedBox(height: size.height*0.009,),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: size.width*0.06),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("Logout", style: GoogleFonts.lato(
-                  fontSize: size.width*0.06
-                ),),
-                Icon(Icons.arrow_circle_right_sharp,
-                color: AppColors.contentColorPurple,
-                size: size.width*0.12,
-                )
-              ],
+          InkWell(
+            onTap: (){
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
+                return LoginScreen();
+              }));
+            },
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: size.width*0.06),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Logout", style: GoogleFonts.lato(
+                    fontSize: size.width*0.06
+                  ),),
+                  Icon(Icons.arrow_circle_right_sharp,
+                  color: AppColors.contentColorPurple,
+                  size: size.width*0.12,
+                  )
+                ],
+              ),
             ),
           ),
           Divider(),

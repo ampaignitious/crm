@@ -1,6 +1,7 @@
 {
     "recommendations": [
         "christian2.autosave",
-        "codista.vscode-autosave"
+        "codista.vscode-autosave",
+        "esbenp.prettier-vscode"
     ]
 }
