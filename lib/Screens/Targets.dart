@@ -1,3 +1,4 @@
+import 'package:crm/Models/VisitData.dart';
 import 'package:crm/Utils/AppColors.dart';
 import 'package:crm/Widgets/TargetsWidgets/SingleSalesPersonDisplayPage.dart';
 import 'package:flutter/material.dart';
@@ -12,8 +13,7 @@ class Targets extends StatefulWidget {
 }
 
 class _TargetsState extends State<Targets> {
-  @override
-    final List<VisitData> visitDataList = [
+  final List<VisitData> visitDataList = [
     VisitData("1", "Mohit", "pending"),
     VisitData("2", "Ankit", "pending"),
     VisitData("3", "Rakhi", "Archieved"),
@@ -314,11 +314,3 @@ class _TargetsState extends State<Targets> {
     );
   }
 }
-
-class VisitData {
-  final String id;
-  final String name;
-  final String description;
-
-  VisitData(this.id, this.name, this.description);
-} 

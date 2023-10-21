@@ -10,8 +10,7 @@ class BusinessMappingForm extends StatefulWidget {
 }
 
 class _BusinessMappingFormState extends State<BusinessMappingForm> {
-  @override
-// 
+  // 
 TextEditingController _gpsLocationController = TextEditingController();
   Location location = Location();
 

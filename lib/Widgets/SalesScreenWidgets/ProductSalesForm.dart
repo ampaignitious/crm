@@ -51,6 +51,8 @@ class _ProductSalesFormState extends State<ProductSalesForm> {
                             Padding(
                               padding: EdgeInsets.only(left:size.width*0.09),
                               child: Text("Click to add more input field", style: GoogleFonts.lato(
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.contentColorPurple,
                                 fontSize: size.width*0.04
                               ),),
                             ),
