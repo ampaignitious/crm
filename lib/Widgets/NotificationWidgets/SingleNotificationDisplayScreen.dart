@@ -1,6 +1,7 @@
 import 'package:crm/Utils/AppColors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 
 // ignore: must_be_immutable
 class SingleNotificationDisplayScreen extends StatefulWidget {
@@ -66,9 +67,15 @@ class _SingleNotificationDisplayScreenState extends State<SingleNotificationDisp
                   ),
                   Padding(
                     padding: EdgeInsets.only(right: size.width*0.03),
-                    child: Icon(Icons.delete_forever,
-                    color: AppColors.contentColorPurple,
-                    ),
+                    // child: Icon(Icons.delete_forever,
+                    // color: AppColors.contentColorPurple,
+                    // ),
+                    child: Lottie.asset(
+                    'assets/json/delete.json', // Path to your Lottie animation JSON file
+                    width: size.width*0.13, // Adjust width as needed
+                    height: size.height*0.065,  
+                    fit: BoxFit.fill,
+                      ),
                   )
                 ],
               ),
