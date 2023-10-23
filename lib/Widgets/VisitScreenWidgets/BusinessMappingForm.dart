@@ -110,6 +110,7 @@ void _removeFromProducts(int? index) {
       products.removeAt(index!);
       quantity.removeAt(index!);
   });
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("product removed successfully")));
   }
   // 
   bool showBusinessForm = false;
@@ -1255,9 +1256,11 @@ void _removeFromProducts(int? index) {
             ElevatedButton(onPressed: (){
               setState(() {
                 products.add(productName);
-            quantity.add(quantityEntered.text);
+               quantity.add(quantityEntered.text);
               });
               // SnackBar(content: content),
+              // Scaffold.of(context).showSnackBar(SnackBar(content: Text('Your Message')));
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("product added successfully")));
               Navigator.pop(context);
             }, 
             style: ElevatedButton.styleFrom(
