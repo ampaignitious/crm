@@ -72,8 +72,27 @@ TextEditingController _gpsLocationController = TextEditingController();
 
     List<VisitData> productsOfInterest = [];
     List quantity =[];
-    TextEditingController quantityEntered = TextEditingController();
     List products =[];
+    // 
+    // List combinedList = [];
+
+    //   for (int i = 0; i < quantity.length; i++) {
+    //     combinedList.add({'product': products[i], 'quantity': quantity[i]});
+    //   }
+    // 
+    List<List<TextEditingController>> combinedControllers = [];
+     
+    //  hw to combine the two arrays , to lok at it 
+      // for (int i = 0; i < productListControllers.length; i++) {
+      //   List<TextEditingController> controllers = [
+      //     productListControllers[i],
+      //     productQuantityControllers[i],
+      //   ];
+      //   combinedControllers.add(controllers);
+      // }
+    // 
+    TextEditingController quantityEntered = TextEditingController();
+
 
 // 
  void _filterProducts(String query) {
