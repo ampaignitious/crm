@@ -105,10 +105,11 @@ void _removeFromProductsOfInterest(VisitData product) {
     });
   }
 void _removeFromProducts(int? index) {
-    setState(() {
-      products.remove(index);
-      quantity.remove(index);
-    });
+  print(index);
+  setState(() {
+      products.removeAt(index!);
+      quantity.removeAt(index!);
+  });
   }
   // 
   bool showBusinessForm = false;
@@ -823,9 +824,7 @@ void _removeFromProducts(int? index) {
                             trailing: IconButton(
                               icon: Icon(Icons.cancel),
                               onPressed: () {
-                                setState(() {
                                    _removeFromProducts(index);
-                                });
                               },
                             ),
                           );
