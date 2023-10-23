@@ -1,3 +1,4 @@
+import 'package:crm/Models/VisitData.dart';
 import 'package:crm/Utils/AppColors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -53,6 +54,7 @@ TextEditingController _gpsLocationController = TextEditingController();
   List<TextEditingController> productListControllers = [TextEditingController()];
   List<TextEditingController> productQuantityControllers = [TextEditingController()];
 
+
   // 
     final List<VisitData> visitDataList = [
     VisitData("1", "Mohit", "working for the best"),
@@ -68,7 +70,10 @@ TextEditingController _gpsLocationController = TextEditingController();
 
     List<VisitData> filteredProducts = [];
 
-  List<VisitData> productsOfInterest = [];
+    List<VisitData> productsOfInterest = [];
+    List quantity =[];
+    TextEditingController quantityEntered = TextEditingController();
+    List products =[];
 
 // 
  void _filterProducts(String query) {
@@ -97,6 +102,12 @@ TextEditingController _gpsLocationController = TextEditingController();
 void _removeFromProductsOfInterest(VisitData product) {
     setState(() {
       productsOfInterest.remove(product);
+    });
+  }
+void _removeFromProducts(int? index) {
+    setState(() {
+      products.remove(index);
+      quantity.remove(index);
     });
   }
   // 
@@ -231,6 +242,8 @@ void _removeFromProductsOfInterest(VisitData product) {
                 ),
               ),     
               //
+
+              // showing the business details input form on dropdown allow tap
               showBusinessForm==true?Column(
                 children: [
                  SizedBox(height: size.height*0.020,),
@@ -317,49 +330,49 @@ void _removeFromProductsOfInterest(VisitData product) {
               // business location gps
               SizedBox(height: size.height*0.020,),
               Padding(
-                             padding: EdgeInsets.symmetric(horizontal: size.width*0.03),
-                             child: Row(
-                              children: [
-                                Expanded(
-                                  child: TextField(
-                                    readOnly: true,
-                                    controller: _gpsLocationController,
-                                    decoration: InputDecoration(
-                                      label: Text("Capture GPS location "),
-                                      // labelText: 'Enter business GPS location',
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(20),
-                                          borderSide: BorderSide(color: AppColors.contentColorPurple), // Change the border color here
-                                        ),
-                                    ),
+                padding: EdgeInsets.symmetric(horizontal: size.width*0.03),
+                child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      readOnly: true,
+                      controller: _gpsLocationController,
+                      decoration: InputDecoration(
+                        label: Text("Capture GPS location "),
+                        // labelText: 'Enter business GPS location',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: BorderSide(color: AppColors.contentColorPurple), // Change the border color here
+                          ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(left: size.width*0.03),
+                    height: size.height*0.08,
+                    width: size.width*0.14,
+                    decoration: BoxDecoration(
+                      color:AppColors.contentColorCyan,
+                      boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    offset: Offset(0.8, 1.0),
+                    blurRadius: 4.0,
+                    spreadRadius: 0.2,
+                  ),
+                      ],
+                  border: Border.all(
+                    color: AppColors.contentColorPurple.withOpacity(0.2)
+                  ),
+                  borderRadius: BorderRadius.circular(10)
+                    ),
+                    child: Icon(Icons.location_on, color: AppColors.contentColorPurple)),
+                ],
                                   ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(left: size.width*0.03),
-                                  height: size.height*0.08,
-                                  width: size.width*0.14,
-                                  decoration: BoxDecoration(
-                                    color:AppColors.contentColorCyan,
-                                    boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  offset: Offset(0.8, 1.0),
-                                  blurRadius: 4.0,
-                                  spreadRadius: 0.2,
-                                ),
-                                    ],
-                                border: Border.all(
-                                  color: AppColors.contentColorPurple.withOpacity(0.2)
-                                ),
-                                borderRadius: BorderRadius.circular(10)
-                                  ),
-                                  child: Icon(Icons.location_on, color: AppColors.contentColorPurple)),
-                              ],
-                                               ),
-                           ),
+              ),
               SizedBox(height: size.height*0.020,),
               // business physical location
               Padding(
@@ -380,7 +393,11 @@ void _removeFromProductsOfInterest(VisitData product) {
                   ),
                   SizedBox(height: size.height*0.020,),
               ],):Text(""),
-              // business contact person name
+              // end of the section to display the business details input form on dropdown allow tap
+
+
+
+              // container section that has a dropdown that shows contact person capture form on its click
                   Container(
                   margin: EdgeInsets.only(left: size.width*0.008),
                   height: size.height*0.08,
@@ -422,7 +439,10 @@ void _removeFromProductsOfInterest(VisitData product) {
                   ),
                 ),
               ),     
-              //
+              // end of the container section that has a dropdown that shows contact person capture form on its click
+              
+
+              // section that shows the contact person capture data form on dropdowm click
               showContactPersonDetailForm==true?Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -489,9 +509,9 @@ void _removeFromProductsOfInterest(VisitData product) {
                 ),
               
                 // 
-                  // contact person email
-                  SizedBox(height: size.height*0.020,),
-                  Padding(
+              // contact person email
+              SizedBox(height: size.height*0.020,),
+              Padding(
                     padding: EdgeInsets.symmetric(horizontal: size.width*0.03),
                     child: Row(
                     children: [
@@ -646,14 +666,17 @@ void _removeFromProductsOfInterest(VisitData product) {
                 SizedBox(height: size.height*0.020,),
                 ],
               ):Text(""),
-              //  Product of interests
-                  Container(
-                  margin: EdgeInsets.only(left: size.width*0.008),
-                  height: size.height*0.08,
-                  width: size.width*0.92,
-                  decoration: BoxDecoration(
-                    color:AppColors.contentColorPurple,
-                    boxShadow: [
+               // end of the section that shows the contact person capture data form on dropdowm click
+              
+              
+              //  container displaying Product of interests title
+                Container(
+                margin: EdgeInsets.only(left: size.width*0.008),
+                height: size.height*0.08,
+                width: size.width*0.92,
+                decoration: BoxDecoration(
+                  color:AppColors.contentColorPurple,
+                  boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.5),
                   offset: Offset(0.8, 1.0),
@@ -670,106 +693,119 @@ void _removeFromProductsOfInterest(VisitData product) {
                   ),
                 ),
               ),     
-              //
+              // end of the container displaying Product of interests title
               SizedBox(height: size.height*0.020,),
-                  // business contact person name
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: size.width * 0.03),
-                        child: TextFormField(
-                          onTap: _showProducts, // Display products when tapping the text field
-                          onChanged: _filterProducts,
-                          decoration: InputDecoration(
-                            labelText: 'Select products of interest',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide(color: Colors.blue), // Change the border color here
-                            ),
+              
+              //  section showing input section for select products of interest , with a done buttone
+                Row(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: size.width * 0.03),
+                      child: TextFormField(
+                        // readOnly: true,
+                        onTap: _showProducts, // Display products when tapping the text field
+                        onChanged: _filterProducts,
+                        decoration: InputDecoration(
+                          labelText: 'Select products of interest',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
                           ),
-                        ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: BorderSide(color: Colors.blue), // Change the border color here
+                          ),
                         ),
                       ),
-                      // to track the section completion
-                      InkWell(
-                        onTap:(){
-                          setState(() {
-                            productOfInterestClicked =false;
-                            showSelectedProductsOfInterest=!showSelectedProductsOfInterest;
-                          });
-                          
-                        },
-                        child: Container(
-                          margin: EdgeInsets.only(right: size.width*0.04),
-                          height: size.height*0.08,
-                          width: size.width*0.14,
-                          decoration: BoxDecoration(
-                            color:AppColors.contentColorCyan,
-                            boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          offset: Offset(0.8, 1.0),
-                          blurRadius: 4.0,
-                          spreadRadius: 0.2,
+                      ),
+                    ),
+                    // to track the section completion
+                    InkWell(
+                      onTap:(){
+                        setState(() {
+                          productOfInterestClicked =false;
+                          showSelectedProductsOfInterest=!showSelectedProductsOfInterest;
+                        });
+                        
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(right: size.width*0.04),
+                        height: size.height*0.08,
+                        width: size.width*0.14,
+                        decoration: BoxDecoration(
+                          color:AppColors.contentColorCyan,
+                          boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        offset: Offset(0.8, 1.0),
+                        blurRadius: 4.0,
+                        spreadRadius: 0.2,
+                      ),
+                          ],
+                      border: Border.all(
+                        color: AppColors.contentColorPurple.withOpacity(0.2)
+                      ),
+                      borderRadius: BorderRadius.circular(10)
                         ),
-                            ],
-                        border: Border.all(
-                          color: AppColors.contentColorPurple.withOpacity(0.2)
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(height:size.height*0.008),
+                            Icon(Icons.done,
+                            size: size.width*0.05,
+                            ),
+                            Text("Done", style: GoogleFonts.lato(
+                              fontSize:size.width*0.03
+                            ),)
+                          ],
                         ),
-                        borderRadius: BorderRadius.circular(10)
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SizedBox(height:size.height*0.008),
-                              Icon(Icons.done,
-                              size: size.width*0.05,
-                              ),
-                              Text("Done", style: GoogleFonts.lato(
-                                fontSize:size.width*0.03
-                              ),)
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
-                    // 
-                  ),
-                // section to display the filter list of products from the database
+                      ),
+                    )
+                  ],
+                  // 
+                ),
+              //  end of the section showing input section for select products of interest , with a done buttone
+              
+              
+              // section to display the list of products from the database on tapping the select product of interest input field
                 productOfInterestClicked==true?Container(
                   height: size.height*0.35,
                   width:double.maxFinite,
                   child: ListView.builder(
-                    itemCount: filteredProducts.length,
+                    itemCount: visitDataList.length,
                     itemBuilder: (context, index) {
-                      VisitData product = filteredProducts[index];
-                      return ListTile(
-                        title: Text(product.name),
-                        subtitle: Text(product.description),
-                        trailing: IconButton(
-                          icon: Icon(Icons.add),
-                          onPressed: () {
-                            setState(() {
-                              productsOfInterest.add(product);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('Product added success'),
-                                ),
-                              );
-                            });
-                            print(productsOfInterest.length);
+                      VisitData productData = filteredProducts[index];
+                      return GestureDetector(
+                        onTap: (){
+                            String? productName = productData.name;
+                             int? productindex = index;
+                             dynamic headersize = size.width*0.04; 
+                             dynamic productnameSize = size.width*0.038;
+                             dynamic boxSize = size.width*0.02;
+                            showDialog(
+                            context: context,
+                            builder: (context) {
+                            return productQuantityCard("$productName",productindex,headersize,productnameSize,boxSize); // Show the EditProfileDialog
+                            },
+                          );
                           },
+                        child: Card(
+                          color: AppColors.contentColorCyan,
+                          child: ListTile(
+                            title: Text(productData.name),
+                            subtitle: Text(productData.description),
+                            trailing: Icon(Icons.add,),
+                          ),
                         ),
                       );
                     },
                   ),
                 ):Container() ,
-                // 
-                //section to show selected products from inventory with a cancel button 
+              // end of the section to display the list of products from the database on tapping the select product of interest input field
+              
+              
+              //section to show selected products from inventory on tapping the done button, the products are displayed with a cancle button,
+              // to allow you remove a product incase your not interested in it
                showSelectedProductsOfInterest==true? Column(
                   children: [
                     SizedBox(height:size.height*0.004),
@@ -778,16 +814,18 @@ void _removeFromProductsOfInterest(VisitData product) {
                       height: size.height*0.35,
                       width:double.maxFinite,
                        child: ListView.builder(
-                        itemCount: productsOfInterest.length,
+                        itemCount: products.length,
                         itemBuilder: (context, index) {
-                          VisitData product = productsOfInterest[index];
+                          // VisitData product = productsOfInterest[index];
                           return ListTile(
-                            title: Text(product.name),
-                            subtitle: Text(product.description),
+                            title: Text("${products[index]}"),
+                            subtitle: Text("Quantity: ${quantity[index]}"),
                             trailing: IconButton(
                               icon: Icon(Icons.cancel),
                               onPressed: () {
-                                _removeFromProductsOfInterest(product);
+                                setState(() {
+                                   _removeFromProducts(index);
+                                });
                               },
                             ),
                           );
@@ -796,10 +834,12 @@ void _removeFromProductsOfInterest(VisitData product) {
                     ),
                   ],
                 ):Container(),
-                //end of section to show selected products form inventory with a cancel button
-                SizedBox(height: size.height*0.020,),
+              //end of the section that shows selected products from inventory on tapping the done button, the products are displayed with a cancle button,
+              // to allow you remove a product incase your not interested in it.
+
+              SizedBox(height: size.height*0.020,),
                  
-                //  pitch interest container
+              //  container displaying the product of interest title
                Container(
                   margin: EdgeInsets.only(left: size.width*0.008),
                   height: size.height*0.08,
@@ -823,8 +863,11 @@ void _removeFromProductsOfInterest(VisitData product) {
                   ),
                 ),
               ),
-              SizedBox(height: size.height*0.012,) ,
-              // showing interest status
+              //  end of the container displaying the product of interest title
+                SizedBox(height: size.height*0.012,) ,
+
+              // The section that shows the selection option under product of interest container
+              // the select options include interested, maybe , not intereseted
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -922,7 +965,12 @@ void _removeFromProductsOfInterest(VisitData product) {
                 ],
               ),
               // 
-              //end of the pitch interest container section
+              // rnd of the  section that shows the selection option under product of interest container
+              // the select options include interested, maybe , not intereseted
+
+
+              // on clicking the interested option, this section shows the input forms with product name abd quantity to allow a user
+              // add product of interest.
               interestedColor ==true?  
                 //  provision for adding items required
                Container(
@@ -1099,6 +1147,9 @@ void _removeFromProductsOfInterest(VisitData product) {
                   ),
                 ),
               ):Container(),
+              // end of the section on clicking the interested option, this section shows the input forms with product name abd quantity to allow a user
+              // add product of interest.
+              
               // summary notes
               Divider(),
               SizedBox(height: size.height*0.010,),
@@ -1120,30 +1171,35 @@ void _removeFromProductsOfInterest(VisitData product) {
                             ),
                     ),
                   ),
-                  SizedBox(height: size.height*0.020,),
-                  Center(
-                    child: ElevatedButton(
-                    onPressed: (){
-                      // Navigator.push(context, MaterialPageRoute(builder: (context){
-                      //   // return CreateVisitScreen();
-                      // }));
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: size.width*0.26,
-                        vertical: size.height*0.028,
-                      ),
-                      child: Text('Record the mapping',
-                      style: GoogleFonts.lato(
-                        fontSize: size.width*0.035,
-                        color: AppColors.contentColorPurple,
-                      ),),
-                    ),
-                      style: ElevatedButton.styleFrom(
-                      primary: AppColors.contentColorYellow,  // Set button color to purple
-                    ),
-                    ),
+
+              // end of the section for capturing the record summary notes input field
+
+              SizedBox(height: size.height*0.020,),
+
+              // The button display section
+              Center(
+                child: ElevatedButton(
+                onPressed: (){
+                  // Navigator.push(context, MaterialPageRoute(builder: (context){
+                  //   // return CreateVisitScreen();
+                  // }));
+                },
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: size.width*0.26,
+                    vertical: size.height*0.028,
                   ),
+                  child: Text('Record the mapping',
+                  style: GoogleFonts.lato(
+                    fontSize: size.width*0.035,
+                    color: AppColors.contentColorPurple,
+                  ),),
+                ),
+                  style: ElevatedButton.styleFrom(
+                  primary: AppColors.contentColorYellow,  // Set button color to purple
+                ),
+                ),
+              ),
                   SizedBox(height: size.height*0.025,),
                 ],
               ),
@@ -1153,15 +1209,76 @@ void _removeFromProductsOfInterest(VisitData product) {
       ),
     );
   }
+
+
+  // widget dispklaying alert box to capture product and quantity, when you tap on pitch interest
+ Widget productQuantityCard(String? productName, int? productindex, dynamic headersize, dynamic productnameSize, dynamic boxSize){
+  return AlertDialog(
+      title: Center(
+        child: Text("Add product quuantity", style: GoogleFonts.lato(
+          color: AppColors.contentColorPurple,
+          fontWeight: FontWeight.bold,
+          fontSize: headersize,
+        )),
+      ),
+      content: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Divider(thickness: 1,),
+        Text("Product name", style: GoogleFonts.lato(
+          fontWeight:FontWeight.bold,
+          fontSize: productnameSize
+        ),),
+        Text("${productName}", style: GoogleFonts.lato(
+          color:AppColors.contentColorPurple,
+          fontWeight:FontWeight.bold
+        ),),
+        SizedBox(height: boxSize),
+        TextFormField(
+          controller: quantityEntered,
+                decoration: InputDecoration(
+                  labelText: 'Quantity',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+              enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide(color: AppColors.contentColorPurple), // Change the border color here
+                  ),
+          // controller: _endDate,
+        ),
+        ),
+        SizedBox(height: boxSize),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ElevatedButton(onPressed: (){
+              setState(() {
+                products.add(productName);
+            quantity.add(quantityEntered.text);
+              });
+              // SnackBar(content: content),
+              Navigator.pop(context);
+            }, 
+            style: ElevatedButton.styleFrom(
+              primary: AppColors.contentColorPurple,  // Set button color to purple
+            ),
+            child: Text("Add")),
+            //
+            ElevatedButton(onPressed: (){
+            Navigator.pop(context);
+            }, 
+            style: ElevatedButton.styleFrom(
+              primary: AppColors.contentColorYellow,  // Set button color to purple
+            ),
+            child: Text("Cancel")),
+          ],
+        )
+      ],
+    ));
+  
+ }
+  // 
 }
 
-class VisitData {
-  final String id;
-  final String name;
-  final String description;
-
-  VisitData(this.id, this.name, this.description);
-} 
-
-
-// widget to capture the quantity

@@ -35,57 +35,60 @@ class _DrawerItemsState extends State<DrawerItems> {
             ),
             borderRadius: BorderRadius.circular(10),
             color: AppColors.contentColorCyan, // Adjust the background color of the drawer header
-          ), child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  InkWell(
-                    onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context){
-                        return ProfileScreen();
-                      }));
-                    },
-                    child: CircleAvatar(
-                      radius: size.width*0.08,
-                      backgroundImage: AssetImage("assets/images/userimage.jpg"),
+          ), child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    InkWell(
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context){
+                          return ProfileScreen();
+                        }));
+                      },
+                      child: CircleAvatar(
+                        radius: size.width*0.08,
+                        backgroundImage: AssetImage("assets/images/userimage.jpg"),
+                      ),
                     ),
-                  ),
-                  Text("Alex mugisha", style: GoogleFonts.lato(
-                    fontSize: size.width*0.04,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold
-                  ),),
-                ],
-              ),
-              
-              SizedBox(height: size.height*0.012,),
-              Row(
-                children: [
-                  Icon(Icons.email,
-                  color: AppColors.contentColorPurple,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: size.width*0.03),
-                    child: Text("alexmugisha@gmail.com"),
-                  )
-                ],
-              ),
-              Divider(),
-              Row(
-                children: [
-                  Icon(Icons.phone,
-                  color: AppColors.contentColorPurple,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: size.width*0.03),
-                    child: Text("07846740604"),
-                  )
-                ],
-              ),
-
-            ],
+                    Text("Alex mugisha", style: GoogleFonts.lato(
+                      fontSize: size.width*0.04,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold
+                    ),),
+                  ],
+                ),
+                
+                SizedBox(height: size.height*0.012,),
+                Row(
+                  children: [
+                    Icon(Icons.email,
+                    color: AppColors.contentColorPurple,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: size.width*0.03),
+                      child: Text("alexmugisha@gmail.com"),
+                    )
+                  ],
+                ),
+                Divider(),
+                Row(
+                  children: [
+                    Icon(Icons.phone,
+                    color: AppColors.contentColorPurple,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: size.width*0.03),
+                      child: Text("07846740604"),
+                    )
+                  ],
+                ),
+                  
+              ],
+            ),
           ),
           // ... other header content ...
         ),

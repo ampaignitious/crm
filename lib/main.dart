@@ -22,8 +22,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const FirstScreen(),
-      // home: DefaultScreen(),
+      // home: const FirstScreen(),
+      home: DefaultScreen(),
     );
   }
 }
