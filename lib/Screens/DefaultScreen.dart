@@ -1,9 +1,9 @@
-import 'package:crm/Screens/HomePage.dart';
-import 'package:crm/Screens/InventoryScreen.dart';
-import 'package:crm/Screens/MainteanceScreen.dart';
-import 'package:crm/Screens/SalesScreen.dart';
-import 'package:crm/Screens/VisitsPage.dart';
-import 'package:crm/Utils/AppColors.dart';
+import 'package:aiDvantage/Screens/HomePage.dart';
+import 'package:aiDvantage/Screens/InventoryScreen.dart';
+import 'package:aiDvantage/Screens/MainteanceScreen.dart';
+import 'package:aiDvantage/Screens/SalesScreen.dart';
+import 'package:aiDvantage/Screens/VisitsPage.dart';
+import 'package:aiDvantage/Utils/AppColors.dart';
 import 'package:flutter/material.dart';
 
 class DefaultScreen extends StatefulWidget {

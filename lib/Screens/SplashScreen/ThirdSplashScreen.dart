@@ -1,6 +1,6 @@
-import 'package:crm/Screens/AuthenticationSceens/LoginScreen.dart';
-import 'package:crm/Screens/SplashScreen/SecondSplashPage.dart';
-import 'package:crm/Utils/AppColors.dart';
+import 'package:aiDvantage/Screens/AuthenticationSceens/LoginScreen.dart';
+import 'package:aiDvantage/Screens/SplashScreen/SecondSplashPage.dart';
+import 'package:aiDvantage/Utils/AppColors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';

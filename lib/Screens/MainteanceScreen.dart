@@ -1,6 +1,6 @@
-import 'package:crm/Models/Mainteanance.dart';
-import 'package:crm/Utils/AppColors.dart';
-import 'package:crm/Widgets/MainteananceWidgets/SingleMainteananceDisplayScreen.dart';
+import 'package:aiDvantage/Models/Mainteanance.dart';
+import 'package:aiDvantage/Utils/AppColors.dart';
+import 'package:aiDvantage/Widgets/MainteananceWidgets/SingleMainteananceDisplayScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';

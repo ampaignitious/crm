@@ -1,9 +1,9 @@
-import 'package:crm/Screens/NotificationScreen.dart';
-import 'package:crm/Screens/ProfileScreen.dart';
-import 'package:crm/Utils/AppColors.dart';
-import 'package:crm/Widgets/Drawer/DrawerItems.dart';
-import 'package:crm/Widgets/HomeScreenWIdgets/ContainerDisplayingMenuItems.dart';
-import 'package:crm/Widgets/HomeScreenWIdgets/ContainerDisplayingStats.dart';
+import 'package:aiDvantage/Screens/NotificationScreen.dart';
+import 'package:aiDvantage/Screens/ProfileScreen.dart';
+import 'package:aiDvantage/Utils/AppColors.dart';
+import 'package:aiDvantage/Widgets/Drawer/DrawerItems.dart';
+import 'package:aiDvantage/Widgets/HomeScreenWIdgets/ContainerDisplayingMenuItems.dart';
+import 'package:aiDvantage/Widgets/HomeScreenWIdgets/ContainerDisplayingStats.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';

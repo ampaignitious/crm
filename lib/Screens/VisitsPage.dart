@@ -1,10 +1,10 @@
-import 'package:crm/Screens/NotificationScreen.dart';
-import 'package:crm/Screens/ProfileScreen.dart';
-import 'package:crm/Utils/AppColors.dart';
-import 'package:crm/Widgets/Drawer/DrawerItems.dart';
-import 'package:crm/Widgets/VisitScreenWidgets/MenuOptions.dart';
-import 'package:crm/Widgets/VisitScreenWidgets/ViewRoutePlans.dart';
-import 'package:crm/Widgets/VisitScreenWidgets/ViewVisits.dart';
+import 'package:aiDvantage/Screens/NotificationScreen.dart';
+import 'package:aiDvantage/Screens/ProfileScreen.dart';
+import 'package:aiDvantage/Utils/AppColors.dart';
+import 'package:aiDvantage/Widgets/Drawer/DrawerItems.dart';
+import 'package:aiDvantage/Widgets/VisitScreenWidgets/MenuOptions.dart';
+import 'package:aiDvantage/Widgets/VisitScreenWidgets/ViewRoutePlans.dart';
+import 'package:aiDvantage/Widgets/VisitScreenWidgets/ViewVisits.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';

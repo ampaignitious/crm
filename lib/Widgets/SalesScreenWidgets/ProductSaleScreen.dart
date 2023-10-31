@@ -1,6 +1,6 @@
-import 'package:crm/Utils/AppColors.dart';
-import 'package:crm/Widgets/SalesScreenWidgets/ProductSalesForm.dart';
-import 'package:crm/Widgets/SalesScreenWidgets/SalesProcedure.dart';
+import 'package:aiDvantage/Utils/AppColors.dart';
+import 'package:aiDvantage/Widgets/SalesScreenWidgets/ProductSalesForm.dart';
+import 'package:aiDvantage/Widgets/SalesScreenWidgets/SalesProcedure.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';

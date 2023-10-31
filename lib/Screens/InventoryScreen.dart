@@ -1,9 +1,9 @@
-import 'package:crm/Utils/AppColors.dart';
-import 'package:crm/Widgets/Drawer/DrawerItems.dart';
-import 'package:crm/Widgets/InventoryWidgets/CoffeeProductRegistrationForm.dart';
-import 'package:crm/Widgets/InventoryWidgets/MachineRegistrationForm.dart';
-import 'package:crm/Widgets/SalesScreenWidgets/AvailableCoffeeProductsDisplayScreen.dart';
-import 'package:crm/Widgets/SalesScreenWidgets/AvailableMachinesDisplayScreen.dart';
+import 'package:aiDvantage/Utils/AppColors.dart';
+import 'package:aiDvantage/Widgets/Drawer/DrawerItems.dart';
+import 'package:aiDvantage/Widgets/InventoryWidgets/CoffeeProductRegistrationForm.dart';
+import 'package:aiDvantage/Widgets/InventoryWidgets/MachineRegistrationForm.dart';
+import 'package:aiDvantage/Widgets/SalesScreenWidgets/AvailableCoffeeProductsDisplayScreen.dart';
+import 'package:aiDvantage/Widgets/SalesScreenWidgets/AvailableMachinesDisplayScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';

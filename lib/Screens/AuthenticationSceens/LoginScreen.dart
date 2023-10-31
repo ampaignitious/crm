@@ -1,5 +1,6 @@
-import 'package:crm/Screens/DefaultScreen.dart';
-import 'package:crm/Utils/AppColors.dart';
+import 'package:aiDvantage/Controllers/services.dart';
+import 'package:aiDvantage/Screens/DefaultScreen.dart';
+import 'package:aiDvantage/Utils/AppColors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
@@ -13,8 +14,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   @override
-  // 
-    final _emailController = TextEditingController();
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
@@ -34,17 +34,51 @@ class _LoginScreenState extends State<LoginScreen> {
     return null;
   }
 
-  void _handleLogin() {
+  Future<void> _handleLogin() async {
     if (_formKey.currentState?.validate() ?? false) {
-      // Perform login logic here
-      print("data processing to be done here");
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
-        return  DefaultScreen();
-      }));
-      // You can access the email and password using _emailController.text and _passwordController.text
+      // Form is valid, perform login operation here
+      // For example, you can send a request to your API for authentication
+      String email = _emailController.text;
+      String password = _passwordController.text;
+
+      print('Email: $email---Password: $password');
+
+      try {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          },
+        );
+
+        AuthController authController = AuthController();
+        final authResponse = await authController.signIn(email, password);
+
+        Navigator.pop(context);
+
+        if (authResponse.containsKey('error')) {
+          // Handle authentication error
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text(
+                "Invalid credentials, check your email and password and try again!"),
+          ));
+        } else {
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) {
+            return DefaultScreen();
+          }));
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Something went wrong. Please try again later."),
+        ));
+      }
     }
   }
-  // 
+
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
@@ -58,8 +92,8 @@ class _LoginScreenState extends State<LoginScreen> {
               height: size.height*0.40,
               width: double.maxFinite,
               decoration: BoxDecoration(
-                color: Color.fromARGB(255, 253, 245, 229),
-                borderRadius: BorderRadius.only(
+                color: const Color.fromARGB(255, 253, 245, 229),
+                borderRadius: const BorderRadius.only(
                   bottomLeft:Radius.circular(20),
                   bottomRight: Radius.circular(20),
                 ),
@@ -83,7 +117,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
         // textfield section
         Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: Column(
@@ -93,7 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     fontWeight: FontWeight.bold
           ))),
           SizedBox(height: size.height*0.016),
-          Divider(
+          const Divider(
             thickness: 0.3,
             color: AppColors.contentColorPurple,
           ),
