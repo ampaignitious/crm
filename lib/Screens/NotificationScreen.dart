@@ -2,7 +2,6 @@ import 'package:aiDvantage/Utils/AppColors.dart';
 import 'package:aiDvantage/Widgets/NotificationWidgets/SingleNotificationDisplayScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:lottie/lottie.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
@@ -42,7 +41,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Divider(
+            const Divider(
               color: AppColors.contentColorPurple,
             ),
             SizedBox(height: size.height*0.01,),
@@ -101,7 +100,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                   child: ListTile(
                                   leading: CircleAvatar(
                                     radius: size.width*0.073,
-                                    child: Icon(Icons.notifications_active),
+                                    child: const Icon(Icons.notifications_active),
                                   ),
                                   title: Row(
                                     children: [

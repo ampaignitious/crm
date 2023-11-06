@@ -66,4 +66,202 @@ class AuthController {
     }
   }
 
+  Future<Map<String, dynamic>> getMappings() async {
+    final dio = Dio();
+    final client = RestClient(dio);
+    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
+    try {
+      final response = await client.getMappings();
+      return response;
+    } catch (e) {
+      return {
+        "error": "Failed to get mappings",
+        "status": "error",
+      };
+    }
+  }
+
+  Future<Map<String, dynamic>> addMapping(
+      Map<String, String> businessDetails) async {
+    final dio = Dio();
+    final client = RestClient(dio);
+    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
+    try {
+      final response = await client.addMapping(body: businessDetails);
+      return response;
+    } catch (e) {
+      return {
+        "error": "Failed to add mapping",
+        "status": "error",
+      };
+    }
+  }
+
+  Future<Map<String, dynamic>> getRoutePlan() async {
+    final dio = Dio();
+    final client = RestClient(dio);
+    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
+    try {
+      final response = await client.getRoutePlan();
+      return response;
+    } catch (e) {
+      return {
+        "error": "Failed to get route plan",
+        "status": "error",
+      };
+    }
+  }
+
+  Future<Map<String, dynamic>> addRoutePlan(
+      String name, String email, String password, String role) async {
+    final dio = Dio();
+    final client = RestClient(dio);
+    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
+    try {
+      Map<String, String> user = {
+        "name": name,
+        "email": email,
+        "password": password,
+        "role": role
+      };
+      final response = await client.addRoutePlan(body: user);
+      return response;
+    } catch (e) {
+      return {
+        "error": "Failed to add route plan",
+        "status": "error",
+      };
+    }
+  }
+
+  Future<Map<String, dynamic>> getSales() async {
+    final dio = Dio();
+    final client = RestClient(dio);
+    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
+    try {
+      final response = await client.getSales();
+      return response;
+    } catch (e) {
+      return {
+        "error": "Failed to get sales",
+        "status": "error",
+      };
+    }
+  }
+
+  Future<Map<String, dynamic>> getProducts() async {
+    final dio = Dio();
+    final client = RestClient(dio);
+    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
+    try {
+      final response = await client.getProducts();
+      return response;
+    } catch (e) {
+      return {
+        "error": "Failed to get products",
+        "status": "error",
+      };
+    }
+  }
+
+  Future<Map<String, dynamic>> getVisits() async {
+    final dio = Dio();
+    final client = RestClient(dio);
+    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
+    try {
+      final response = await client.getVisits();
+      return response;
+    } catch (e) {
+      return {
+        "error": "Failed to get visits",
+        "status": "error",
+      };
+    }
+  }
+
+  Future<Map<String, dynamic>> addVisit(
+      String name, String email, String password, String role) async {
+    final dio = Dio();
+    final client = RestClient(dio);
+    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
+    try {
+      Map<String, String> user = {
+        "name": name,
+        "email": email,
+        "password": password,
+        "role": role
+      };
+      final response = await client.addVisit(body: user);
+      return response;
+    } catch (e) {
+      return {
+        "error": "Failed to add visit",
+        "status": "error",
+      };
+    }
+  }
+
+  Future<Map<String, dynamic>> getDeliveries() async {
+    final dio = Dio();
+    final client = RestClient(dio);
+    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
+
+    try {
+      final response = await client.getDeliveries();
+      return response;
+    } catch (e) {
+      return {
+        "error": "Failed to get deliveries",
+        "status": "error",
+      };
+    }
+  }
+
+  Future<Map<String, dynamic>> getAppointments() async {
+    final dio = Dio();
+    final client = RestClient(dio);
+    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
+
+    try {
+      final response = await client.getAppointments();
+      return response;
+    } catch (e) {
+      return {
+        "error": "Failed to get appointments",
+        "status": "error",
+      };
+    }
+  }
+
+  Future<Map<String, dynamic>> getMaintenance() async {
+    final dio = Dio();
+    final client = RestClient(dio);
+    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
+
+    try {
+      final response = await client.getMaintenance();
+      return response;
+    } catch (e) {
+      return {
+        "error": "Failed to get maintenance",
+        "status": "error",
+      };
+    }
+  }
+
+  Future<Map<String, dynamic>> getDemos() async {
+    final dio = Dio();
+    final client = RestClient(dio);
+    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
+
+    try {
+      final response = await client.getDemos();
+      return response;
+    } catch (e) {
+      return {
+        "error": "Failed to get demos",
+        "status": "error",
+      };
+    }
+  }
 }

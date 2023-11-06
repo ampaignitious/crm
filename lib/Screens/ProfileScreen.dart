@@ -11,7 +11,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  bool _editingPassword = !false;
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
@@ -168,7 +168,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               trailing: InkWell(
                 onTap: () {
-                  _editingPassword = true;
                   showDialog(
                     context: context,
                     builder: (context) {
@@ -282,7 +281,6 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
           child: Text("Save", style: GoogleFonts.lato()),
           onPressed: () {
             // Handle saving the edited value here
-            String editedValue = _textEditingController.text;
             String newPassword = _passwordController.text;
             String confirmPassword = _confirmPasswordController.text;
 

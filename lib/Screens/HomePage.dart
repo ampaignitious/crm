@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
       drawer:Drawer(
         backgroundColor: AppColors.contentColorPurple,
         width: size.width*0.8,
-        child: DrawerItems(),
+        child: const DrawerItems(),
       ),
       appBar: AppBar(
         iconTheme: IconThemeData(
@@ -45,7 +45,7 @@ class _HomePageState extends State<HomePage> {
                 InkWell(
                   onTap: (){
                     Navigator.push(context, MaterialPageRoute(builder: (context){
-                      return NotificationScreen();
+                      return const NotificationScreen();
                     }));
                   },
                   child: Padding(
@@ -63,7 +63,7 @@ class _HomePageState extends State<HomePage> {
                 InkWell(
                   onTap: (){
                     Navigator.push(context, MaterialPageRoute(builder: (context){
-                      return ProfileScreen();
+                      return const ProfileScreen();
                     }));
                   },
                   child: Padding(
@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> {
                       right: size.width*0.03,
                     ),
                     child: CircleAvatar(
-                      backgroundImage: AssetImage("assets/images/userprofile.png"),
+                      backgroundImage: const AssetImage("assets/images/userprofile.png"),
                     radius: size.width*0.065,),
                   ),
                 )
@@ -105,13 +105,13 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         // container displaying statistics 
                         SizedBox(height: size.height*0.02,),
-                        ContainerDisplayingStats(),
+                        const ContainerDisplayingStats(),
                         // Container displaying dashboard menu items
                         SizedBox(height: size.height*0.02,),
-                        Container(
+                        SizedBox(
                           height: size.height*0.478,
                           width: double.maxFinite,
-                          child: SingleChildScrollView(
+                          child: const SingleChildScrollView(
                             scrollDirection: Axis.vertical,
                             child: ContainerDisplayingMenuItems()),
                         ),
