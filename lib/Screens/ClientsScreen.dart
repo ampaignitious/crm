@@ -1,6 +1,5 @@
 import 'package:aiDvantage/Screens/ProfileScreen.dart';
 import 'package:aiDvantage/Utils/AppColors.dart';
-import 'package:aiDvantage/Widgets/Drawer/DrawerItems.dart';
 import 'package:aiDvantage/Widgets/VisitScreenWidgets/CreateVisitScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,7 +13,6 @@ class ClientsScreen extends StatefulWidget {
 }
 
 class _ClientsScreenState extends State<ClientsScreen> {
-  @override
     final List<VisitData> visitDataList = [
     VisitData("1", "Ignitious", "Interested"),
     VisitData("2", "Ampa", "Maybe"),

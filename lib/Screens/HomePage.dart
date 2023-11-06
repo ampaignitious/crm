@@ -79,48 +79,50 @@ class _HomePageState extends State<HomePage> {
             ),
         ],
       ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Stack(
-              children: [
-                // 
-                Positioned.fill(
-                  child: ColorFiltered(
-                    colorFilter: ColorFilter.mode(
-                      Colors.black.withOpacity(0.05), // Adjust opacity here
-                      BlendMode.dstATop,
-                    ),
-                    child: Image.asset(
-                      'assets/images/image1.jpg',
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                // 
-                Center(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // container displaying statistics 
-                      SizedBox(height: size.height*0.02,),
-                      ContainerDisplayingStats(),
-                      // Container displaying dashboard menu items
-                      SizedBox(height: size.height*0.02,),
-                      Container(
-                        height: size.height*0.478,
-                        width: double.maxFinite,
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.vertical,
-                          child: ContainerDisplayingMenuItems()),
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: Column(
+            children: [
+              Stack(
+                children: [
+                  // 
+                  Positioned.fill(
+                    child: ColorFiltered(
+                      colorFilter: ColorFilter.mode(
+                        Colors.black.withOpacity(0.05), // Adjust opacity here
+                        BlendMode.dstATop,
                       ),
-
-                    ],
+                      child: Image.asset(
+                        'assets/images/image1.jpg',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
-                )
-              ],
-            ),
-          ],
+                  // 
+                  Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // container displaying statistics 
+                        SizedBox(height: size.height*0.02,),
+                        ContainerDisplayingStats(),
+                        // Container displaying dashboard menu items
+                        SizedBox(height: size.height*0.02,),
+                        Container(
+                          height: size.height*0.478,
+                          width: double.maxFinite,
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.vertical,
+                            child: ContainerDisplayingMenuItems()),
+                        ),
+      
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

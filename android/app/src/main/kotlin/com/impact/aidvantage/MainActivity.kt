@@ -1,4 +1,4 @@
-package com.example.crm
+package com.impact.aidvantage
 
 import io.flutter.embedding.android.FlutterActivity
 
