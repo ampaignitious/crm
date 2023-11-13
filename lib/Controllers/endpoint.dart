@@ -12,6 +12,9 @@ abstract class RestClient {
   @POST(AppEndPoints.loginEndPoint)
   Future<dynamic> signIn({@Body() required Map<String, String> body});
 
+  @GET(AppEndPoints.profile)
+  Future<dynamic> getProfile();
+
   @POST(AppEndPoints.registerEndPoint)
   Future<dynamic> signUp({@Body() required Map<String, String> body});
 

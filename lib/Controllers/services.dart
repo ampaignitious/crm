@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'endpoint.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class AuthController {
   static String ACCESS_TOKEN = "access_token";
 
@@ -25,6 +24,29 @@ class AuthController {
           "status": "error",
         };
       } // Handle the case when the access token is not present in the response
+    } catch (e) {
+      return {
+        "error": "Invalid credentials",
+        "status": "error",
+      };
+    }
+  }
+
+  Future<Map<String, dynamic>> getProfile() async {
+    final dio = Dio();
+    final client = RestClient(dio);
+    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
+    try {
+      final response = await client.getProfile();
+      //check if the response contains message key
+      if (response.containsKey('message')) {
+        return response;
+      } else {
+        return {
+          "error": "Invalid credentials",
+          "status": "error",
+        };
+      }
     } catch (e) {
       return {
         "error": "Invalid credentials",
@@ -69,11 +91,6 @@ class AuthController {
     await prefs.setString(ACCESS_TOKEN, accessToken);
   }
 
-  saveUserData(String userData) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString("userData", userData);
-  }
-
   getAccessToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey(ACCESS_TOKEN)) {
@@ -81,11 +98,14 @@ class AuthController {
     }
     return prefs.getString(ACCESS_TOKEN);
   }
-
+  
   removeAccessToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove(ACCESS_TOKEN);
   }
+
+
+
 
   Future<Map<String, dynamic>> signOut() async {
     final dio = Dio();
@@ -186,8 +206,7 @@ class AuthController {
     }
   }
 
-  Future<Map<String, dynamic>> addRoutePlan(
-      Map<String, dynamic> body) async {
+  Future<Map<String, dynamic>> addRoutePlan(Map<String, dynamic> body) async {
     final dio = Dio();
     final client = RestClient(dio);
     dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
@@ -258,7 +277,7 @@ class AuthController {
   }
 
   Future<Map<String, dynamic>> addVisit(
-      Map<String, dynamic> visitDetails ) async {
+      Map<String, dynamic> visitDetails) async {
     final dio = Dio();
     final client = RestClient(dio);
     dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
