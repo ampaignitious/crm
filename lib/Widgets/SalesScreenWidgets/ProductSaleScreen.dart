@@ -1,6 +1,6 @@
-import 'package:aiDvantage/Utils/AppColors.dart';
-import 'package:aiDvantage/Widgets/SalesScreenWidgets/ProductSalesForm.dart';
-import 'package:aiDvantage/Widgets/SalesScreenWidgets/SalesProcedure.dart';
+import 'package:valour/Utils/AppColors.dart';
+import 'package:valour/Widgets/SalesScreenWidgets/ProductSalesForm.dart';
+import 'package:valour/Widgets/SalesScreenWidgets/SalesProcedure.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';

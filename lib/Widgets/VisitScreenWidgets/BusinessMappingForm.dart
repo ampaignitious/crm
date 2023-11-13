@@ -1,19 +1,57 @@
-import 'package:aiDvantage/Models/VisitData.dart';
-import 'package:aiDvantage/Utils/AppColors.dart';
+import 'package:valour/Controllers/services.dart';
+import 'package:valour/Models/Product.dart';
+import 'package:valour/Utils/AppColors.dart';
+import 'package:valour/Utils/components/modal_util.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:location/location.dart';
 
 class BusinessMappingForm extends StatefulWidget {
   const BusinessMappingForm({super.key});
-
   @override
   State<BusinessMappingForm> createState() => _BusinessMappingFormState();
 }
 
 class _BusinessMappingFormState extends State<BusinessMappingForm> {
+  List<Product> productList = [
+    Product(
+      id: 1,
+      product_name: 'Product 1',
+      product_price: 100,
+      product_quantity: 0,
+    ),
+    Product(
+      id: 2,
+      product_name: 'Product 2',
+      product_price: 200,
+      product_quantity: 0,
+    ),
+  ];
+
+  bool showBusinessForm = false;
+  bool showContactPersonDetailForm = false;
+  bool interestedColor = false;
+  bool maybeColor = false;
+  String? userGender;
+  bool male = false;
+  bool female = false;
+  bool notStated = false;
+  bool notinterestedColor = false;
+  String? pitch_interest;
+
+  TextEditingController businessName = TextEditingController();
+  TextEditingController businessEmail = TextEditingController();
+  TextEditingController businessTelNo = TextEditingController();
+  TextEditingController businessPhysicalLocation = TextEditingController();
+  TextEditingController personName = TextEditingController();
+  TextEditingController personTelNo = TextEditingController();
+  TextEditingController personEmail = TextEditingController();
+  TextEditingController personGender = TextEditingController();
+  TextEditingController summaryNote = TextEditingController();
   final TextEditingController _gpsLocationController = TextEditingController();
   Location location = Location();
+  //get selected products
+  List<Product> selectedProducts = [];
 
   @override
   void initState() {
@@ -42,95 +80,95 @@ class _BusinessMappingFormState extends State<BusinessMappingForm> {
       LocationData locationData = await location.getLocation();
       setState(() {
         _gpsLocationController.text =
-            '${locationData.latitude}, ${locationData.longitude}';
+            '${locationData.latitude},${locationData.longitude}';
       });
     } catch (e) {
       print('Error getting GPS location: $e');
     }
   }
 
-  List<TextEditingController> productListControllers = [
-    TextEditingController()
-  ];
-  List<TextEditingController> productQuantityControllers = [
-    TextEditingController()
-  ];
-
-  final List<VisitData> visitDataList = [
-    VisitData("1", "Mohit", "working for the best"),
-    VisitData("2", "Ankit", "working for the best"),
-    VisitData("3", "Rakhi", "working for the best"),
-    VisitData("4", "Yash", "working for the best"),
-    VisitData("300", "Pragati", "working for the best"),
-    VisitData("300", "Pragati", "working for the best"),
-    VisitData("300", "Pragati", "working for the best"),
-    VisitData("300", "Pragati", "working for the best"),
-    VisitData("300", "Pragati", "working for the best"),
-  ];
-
-  List<VisitData> filteredProducts = [];
-
-  List<VisitData> productsOfInterest = [];
-  List quantity = [];
-  List products = [];
-
-  List<List<TextEditingController>> combinedControllers = [];
-
-  TextEditingController quantityEntered = TextEditingController();
-
-  void _filterProducts(String query) {
-    setState(() {
-      if (query.isEmpty) {
-        filteredProducts.clear();
-        return;
+  //extract selected products from the list
+  List<Map<String, dynamic>> getSelectedProducts() {
+    List<Map<String, dynamic>> selectedProducts = [];
+    for (Product product in productList) {
+      if (product.product_quantity > 0) {
+        //make a json object of the product
+        selectedProducts.add({
+          "product_id": product.id,
+        });
       }
-
-      filteredProducts = visitDataList
-          .where((product) =>
-              product.name.toLowerCase().contains(query.toLowerCase()))
-          .toList();
-    });
+    }
+    return selectedProducts;
   }
 
-  bool productOfInterestClicked = false;
-  bool showSelectedProductsOfInterest = false;
-  void _showProducts() {
-    setState(() {
-      productOfInterestClicked = !productOfInterestClicked;
-      filteredProducts = visitDataList;
-      // showSelectedProductsOfInterest = false;
-    });
+  //extract ordered products from the list
+  List<Map<String, dynamic>> getOrderedProducts() {
+  List<Map<String, dynamic>> orderedProducts = [];
+    for (Product product in productList) {
+      if (product.isOrdered == true) {
+        //make a json object of the product
+        orderedProducts.add({
+          "product_id": product.id,
+          "quantity": product.product_quantity,
+      });
+      }
+    }
+    return orderedProducts;
   }
 
-//
-  void _removeFromProductsOfInterest(VisitData product) {
-    setState(() {
-      productsOfInterest.remove(product);
-    });
+  Future<void> submitForm() async {
+    Map<String, dynamic> businessDetails = {
+      "business_name": businessName.text,
+      "business_telephone_contact": businessTelNo.text,
+      "business_email_contact": businessEmail.text,
+      "business_location": _gpsLocationController.text,
+      "physical_address": businessPhysicalLocation.text,
+      "contact_person_name": personName.text,
+      "contact_person_telephone": personTelNo.text,
+      "contact_person_email": personEmail.text,
+      "contact_person_gender": userGender.toString(),
+      "pitch_interest": pitch_interest.toString(),
+      "notes": summaryNote.text,
+      "products_of_interest": getSelectedProducts(),
+      "items_of_interest": getOrderedProducts(),
+    };
+    AuthController authController = AuthController();
+
+    Map<String, dynamic> response =
+        await authController.addMapping(businessDetails);
+    //check if response does not contain error key
+    if (response.containsKey("error")) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Business registration failed"),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } else {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Business registration successful"),
+            backgroundColor: AppColors.contentColorYellow,
+          ),
+        );
+
+        businessName.clear();
+        businessEmail.clear();
+        businessTelNo.clear();
+        businessPhysicalLocation.clear();
+        personName.clear();
+        personTelNo.clear();
+        personEmail.clear();
+        personGender.clear();
+        summaryNote.clear();
+      }
+    }
   }
 
-  void _removeFromProducts(int? index) {
-    print(index);
-    setState(() {
-      products.removeAt(index!);
-      quantity.removeAt(index);
-    });
-    ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("product removed successfully")));
-  }
-
-  //
-  bool showBusinessForm = false;
-  bool showContactPersonDetailForm = false;
-  bool interestedColor = false;
-  bool maybeColor = false;
-  String? userGender;
-  bool male = false;
-  bool female = false;
-  bool notStated = false;
-  bool notinterestedColor = false;
-  bool addedIsClicked = false;
-  // List<TextEditingController> productListControllers = [TextEditingController()];
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
@@ -145,7 +183,7 @@ class _BusinessMappingFormState extends State<BusinessMappingForm> {
         title: Padding(
           padding: EdgeInsets.only(left: size.width * 0.09),
           child: Text(
-            "Business mapping form",
+            "Add Business Information",
             style: GoogleFonts.lato(
                 fontSize: size.width * 0.05,
                 color: AppColors.menuBackground,
@@ -174,19 +212,19 @@ class _BusinessMappingFormState extends State<BusinessMappingForm> {
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.5),
-                  offset: Offset(0.8, 1.0),
+                  offset: const Offset(0.8, 1.0),
                   blurRadius: 4.0,
                   spreadRadius: 0.2,
                 ),
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.5),
-                  offset: Offset(0.8, 1.0),
+                  offset: const Offset(0.8, 1.0),
                   blurRadius: 4.0,
                   spreadRadius: 0.2,
                 ),
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.5),
-                  offset: Offset(0.8, 1.0),
+                  offset: const Offset(0.8, 1.0),
                   blurRadius: 4.0,
                   spreadRadius: 0.2,
                 ),
@@ -212,7 +250,6 @@ class _BusinessMappingFormState extends State<BusinessMappingForm> {
                   const Divider(
                     thickness: 1,
                   ),
-                  // section for capturing business details
                   Container(
                     margin: EdgeInsets.only(left: size.width * 0.008),
                     height: size.height * 0.08,
@@ -254,9 +291,6 @@ class _BusinessMappingFormState extends State<BusinessMappingForm> {
                       ),
                     ),
                   ),
-                  //
-
-                  // showing the business details input form on dropdown allow tap
                   showBusinessForm == true
                       ? Column(
                           children: [
@@ -268,6 +302,7 @@ class _BusinessMappingFormState extends State<BusinessMappingForm> {
                               padding: EdgeInsets.symmetric(
                                   horizontal: size.width * 0.03),
                               child: TextFormField(
+                                controller: businessName,
                                 decoration: InputDecoration(
                                   labelText: 'Enter business name',
                                   border: OutlineInputBorder(
@@ -291,6 +326,7 @@ class _BusinessMappingFormState extends State<BusinessMappingForm> {
                               padding: EdgeInsets.symmetric(
                                   horizontal: size.width * 0.03),
                               child: TextFormField(
+                                controller: businessEmail,
                                 decoration: InputDecoration(
                                   labelText: 'Business email',
                                   border: OutlineInputBorder(
@@ -317,6 +353,7 @@ class _BusinessMappingFormState extends State<BusinessMappingForm> {
                                 children: [
                                   Expanded(
                                     child: TextField(
+                                      controller: businessTelNo,
                                       decoration: InputDecoration(
                                         labelText:
                                             'Enter business telephone number',
@@ -361,9 +398,6 @@ class _BusinessMappingFormState extends State<BusinessMappingForm> {
                                 ],
                               ),
                             ),
-
-                            //
-                            // business location gps
                             SizedBox(
                               height: size.height * 0.020,
                             ),
@@ -377,8 +411,7 @@ class _BusinessMappingFormState extends State<BusinessMappingForm> {
                                       readOnly: true,
                                       controller: _gpsLocationController,
                                       decoration: InputDecoration(
-                                        label:
-                                            const Text("Capture GPS location "),
+                                        label: const Text("Location "),
                                         // labelText: 'Enter business GPS location',
                                         border: OutlineInputBorder(
                                           borderRadius:
@@ -429,6 +462,7 @@ class _BusinessMappingFormState extends State<BusinessMappingForm> {
                               padding: EdgeInsets.symmetric(
                                   horizontal: size.width * 0.03),
                               child: TextFormField(
+                                controller: businessPhysicalLocation,
                                 decoration: InputDecoration(
                                   labelText: 'Enter business physical location',
                                   border: OutlineInputBorder(
@@ -449,10 +483,10 @@ class _BusinessMappingFormState extends State<BusinessMappingForm> {
                             ),
                           ],
                         )
-                      : const Text(""),
-                  // end of the section to display the business details input form on dropdown allow tap
+                      : Text(""),
+// end of the section to display the business details input form on dropdown allow tap
 
-                  // container section that has a dropdown that shows contact person capture form on its click
+// container section that has a dropdown that shows contact person capture form on its click
                   Container(
                     margin: EdgeInsets.only(left: size.width * 0.008),
                     height: size.height * 0.08,
@@ -495,9 +529,9 @@ class _BusinessMappingFormState extends State<BusinessMappingForm> {
                       ),
                     ),
                   ),
-                  // end of the container section that has a dropdown that shows contact person capture form on its click
+// end of the container section that has a dropdown that shows contact person capture form on its click
 
-                  // section that shows the contact person capture data form on dropdowm click
+// section that shows the contact person capture data form on dropdowm click
                   showContactPersonDetailForm == true
                       ? Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -509,6 +543,7 @@ class _BusinessMappingFormState extends State<BusinessMappingForm> {
                               padding: EdgeInsets.symmetric(
                                   horizontal: size.width * 0.03),
                               child: TextFormField(
+                                controller: personName,
                                 decoration: InputDecoration(
                                   labelText: 'Contact person name',
                                   border: OutlineInputBorder(
@@ -536,6 +571,7 @@ class _BusinessMappingFormState extends State<BusinessMappingForm> {
                                 children: [
                                   Expanded(
                                     child: TextField(
+                                      controller: personTelNo,
                                       decoration: InputDecoration(
                                         labelText: 'Contact person Tel.No',
                                         border: OutlineInputBorder(
@@ -579,8 +615,6 @@ class _BusinessMappingFormState extends State<BusinessMappingForm> {
                                 ],
                               ),
                             ),
-
-                            //
                             // contact person email
                             SizedBox(
                               height: size.height * 0.020,
@@ -592,6 +626,7 @@ class _BusinessMappingFormState extends State<BusinessMappingForm> {
                                 children: [
                                   Expanded(
                                     child: TextField(
+                                      controller: personEmail,
                                       decoration: InputDecoration(
                                         labelText: 'Contact person email',
                                         border: OutlineInputBorder(
@@ -774,10 +809,10 @@ class _BusinessMappingFormState extends State<BusinessMappingForm> {
                             ),
                           ],
                         )
-                      : Text(""),
-                  // end of the section that shows the contact person capture data form on dropdowm click
+                      : const Text(""),
+// end of the section that shows the contact person capture data form on dropdowm click
 
-                  //  container displaying Product of interests title
+//  container displaying Product of interests title
                   Container(
                     margin: EdgeInsets.only(left: size.width * 0.008),
                     height: size.height * 0.08,
@@ -792,179 +827,43 @@ class _BusinessMappingFormState extends State<BusinessMappingForm> {
                             spreadRadius: 0.2,
                           ),
                         ]),
-                    child: Center(
-                      child: Text(
-                        "Pitch interest",
-                        style: GoogleFonts.lato(
-                            color: AppColors.contentColorWhite),
-                      ),
-                    ),
-                  ),
-                  // end of the container displaying Product of interests title
-                  SizedBox(
-                    height: size.height * 0.020,
-                  ),
-
-                  //  section showing input section for select products of interest , with a done buttone
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: size.width * 0.03),
-                          child: TextFormField(
-                            // readOnly: true,
-                            onTap:
-                                _showProducts, // Display products when tapping the text field
-                            onChanged: _filterProducts,
-                            decoration: InputDecoration(
-                              labelText: 'Select products of interest',
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20),
-                                borderSide: BorderSide(
-                                    color: Colors
-                                        .blue), // Change the border color here
-                              ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("Products of interest",
+                                style: GoogleFonts.lato(
+                                    color: AppColors.contentColorWhite)),
+                            SizedBox(
+                              width: size.width * 0.02,
                             ),
-                          ),
-                        ),
-                      ),
-                      // to track the section completion
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            productOfInterestClicked = false;
-                            showSelectedProductsOfInterest =
-                                !showSelectedProductsOfInterest;
-                          });
-                        },
-                        child: Container(
-                          margin: EdgeInsets.only(right: size.width * 0.04),
-                          height: size.height * 0.08,
-                          width: size.width * 0.14,
-                          decoration: BoxDecoration(
-                              color: AppColors.contentColorCyan,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  offset: Offset(0.8, 1.0),
-                                  blurRadius: 4.0,
-                                  spreadRadius: 0.2,
-                                ),
-                              ],
-                              border: Border.all(
-                                  color: AppColors.contentColorPurple
-                                      .withOpacity(0.2)),
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SizedBox(height: size.height * 0.008),
-                              Icon(
-                                Icons.done,
+                            IconButton(
+                              //add a plus icon
+                              icon: Icon(
+                                Icons.add,
+                                color: AppColors.contentColorCyan,
                                 size: size.width * 0.05,
                               ),
-                              Text(
-                                "Done",
-                                style: GoogleFonts.lato(
-                                    fontSize: size.width * 0.03),
-                              )
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
-                    //
-                  ),
-                  //  end of the section showing input section for select products of interest , with a done buttone
-
-                  // section to display the list of products from the database on tapping the select product of interest input field
-                  productOfInterestClicked == true
-                      ? Container(
-                          height: size.height * 0.35,
-                          width: double.maxFinite,
-                          child: ListView.builder(
-                            itemCount: visitDataList.length,
-                            itemBuilder: (context, index) {
-                              VisitData productData = filteredProducts[index];
-                              return GestureDetector(
-                                onTap: () {
-                                  String? productName = productData.name;
-                                  int? productindex = index;
-                                  dynamic headersize = size.width * 0.04;
-                                  dynamic productnameSize = size.width * 0.038;
-                                  dynamic boxSize = size.width * 0.02;
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return productQuantityCard(
-                                          "$productName",
-                                          productindex,
-                                          headersize,
-                                          productnameSize,
-                                          boxSize); // Show the EditProfileDialog
-                                    },
-                                  );
-                                },
-                                child: Card(
-                                  color: AppColors.contentColorCyan,
-                                  child: ListTile(
-                                    title: Text(productData.name),
-                                    subtitle: Text(productData.description),
-                                    trailing: Icon(
-                                      Icons.add,
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        )
-                      : Container(),
-                  // end of the section to display the list of products from the database on tapping the select product of interest input field
-
-                  //section to show selected products from inventory on tapping the done button, the products are displayed with a cancle button,
-                  // to allow you remove a product incase your not interested in it
-                  showSelectedProductsOfInterest == true
-                      ? Column(
-                          children: [
-                            SizedBox(height: size.height * 0.004),
-                            Text("Selected products"),
-                            Container(
-                              height: size.height * 0.35,
-                              width: double.maxFinite,
-                              child: ListView.builder(
-                                itemCount: products.length,
-                                itemBuilder: (context, index) {
-                                  // VisitData product = productsOfInterest[index];
-                                  return ListTile(
-                                    title: Text("${products[index]}"),
-                                    subtitle:
-                                        Text("Quantity: ${quantity[index]}"),
-                                    trailing: IconButton(
-                                      icon: Icon(Icons.cancel),
-                                      onPressed: () {
-                                        _removeFromProducts(index);
-                                      },
-                                    ),
-                                  );
-                                },
-                              ),
+                              onPressed: () {
+                                ModalUtils.showSimpleModalDialog(
+                                    context, productList,
+                                    isOrder: false);
+                              },
                             ),
-                          ],
-                        )
-                      : Container(),
-                  //end of the section that shows selected products from inventory on tapping the done button, the products are displayed with a cancle button,
-                  // to allow you remove a product incase your not interested in it.
+                          ]),
+                    ),
+                  ),
+// end of the container displaying Product of interests title
+                  SizedBox(
+                    height: size.height * 0.020,
+                  ),
 
                   SizedBox(
                     height: size.height * 0.020,
                   ),
 
-                  //  container displaying the product of interest title
+//  container displaying the product of interest title
                   Container(
                     margin: EdgeInsets.only(left: size.width * 0.008),
                     height: size.height * 0.08,
@@ -981,19 +880,15 @@ class _BusinessMappingFormState extends State<BusinessMappingForm> {
                         ]),
                     child: Center(
                       child: Text(
-                        "Product of interest",
+                        "Business Intereseted?",
                         style: GoogleFonts.lato(
                             color: AppColors.contentColorWhite),
                       ),
                     ),
                   ),
-                  //  end of the container displaying the product of interest title
                   SizedBox(
                     height: size.height * 0.012,
                   ),
-
-                  // The section that shows the selection option under product of interest container
-                  // the select options include interested, maybe , not intereseted
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -1005,6 +900,7 @@ class _BusinessMappingFormState extends State<BusinessMappingForm> {
                                 interestedColor = !interestedColor;
                                 notinterestedColor = false;
                                 maybeColor = false;
+                                pitch_interest = "Interested";
                               });
                             },
                             child: Container(
@@ -1039,6 +935,7 @@ class _BusinessMappingFormState extends State<BusinessMappingForm> {
                                 interestedColor = false;
                                 notinterestedColor = false;
                                 maybeColor = !maybeColor;
+                                pitch_interest = "May be";
                               });
                             },
                             child: Container(
@@ -1080,6 +977,7 @@ class _BusinessMappingFormState extends State<BusinessMappingForm> {
                                   interestedColor = false;
                                   notinterestedColor = !notinterestedColor;
                                   maybeColor = false;
+                                  pitch_interest = "Not interested";
                                 });
                               },
                               child: Center(
@@ -1101,274 +999,37 @@ class _BusinessMappingFormState extends State<BusinessMappingForm> {
                       ),
                     ],
                   ),
-                  //
-                  // rnd of the  section that shows the selection option under product of interest container
-                  // the select options include interested, maybe , not intereseted
-
-                  // on clicking the interested option, this section shows the input forms with product name abd quantity to allow a user
-                  // add product of interest.
                   interestedColor == true
-                      ?
-                      //  provision for adding items required
-                      Container(
-                          margin: EdgeInsets.only(
-                              left: size.width * 0.03,
-                              right: size.width * 0.03,
-                              top: size.height * 0.008),
-                          height: size.height * 0.39,
-                          width: double.maxFinite,
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: AppColors.contentColorPurple),
-                              borderRadius: BorderRadius.circular(10)),
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.vertical,
-                            child: Column(
+                      ? Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                SingleChildScrollView(
-                                  scrollDirection: Axis.vertical,
-                                  child: Column(
-                                    children: [
-                                      Column(
-                                        children: [
-                                          // row showing click to add input and the add button
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Padding(
-                                                padding: EdgeInsets.only(
-                                                    left: size.width * 0.09),
-                                                child: Text(
-                                                  "Click to add more input field",
-                                                  style: GoogleFonts.lato(
-                                                      fontSize:
-                                                          size.width * 0.04),
-                                                ),
-                                              ),
-                                              Container(
-                                                margin: EdgeInsets.only(
-                                                  right: size.width * 0.04,
-                                                  top: size.height * 0.004,
-                                                ),
-                                                height: size.height * 0.05,
-                                                width: size.width * 0.09,
-                                                decoration: BoxDecoration(
-                                                    color: AppColors
-                                                        .contentColorPurple,
-                                                    shape: BoxShape.circle,
-                                                    border: Border.all(
-                                                        color: AppColors
-                                                            .contentColorPurple)),
-                                                child: InkWell(
-                                                  onTap: () {
-                                                    setState(() {
-                                                      productListControllers.add(
-                                                          TextEditingController());
-                                                      productQuantityControllers
-                                                          .add(
-                                                              TextEditingController());
-                                                    });
-                                                  },
-                                                  child: Center(
-                                                      child: Icon(
-                                                    Icons.add,
-                                                    size: size.width * 0.045,
-                                                    color: AppColors
-                                                        .contentColorCyan,
-                                                  )),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          //
-                                          // container to show the added input fields
-                                          SizedBox(
-                                            height: size.height * 0.010,
-                                          ),
-                                          Center(
-                                            child: Container(
-                                              margin: EdgeInsets.symmetric(
-                                                  horizontal:
-                                                      size.width * 0.01),
-                                              height: size.height * 0.32,
-                                              width: size.width * 0.90,
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  border: Border.all(
-                                                      color: AppColors
-                                                          .contentColorPurple
-                                                          .withOpacity(0.2))
-                                                  // color: AppColors.contentColorPurple.withOpacity(0.3)
-                                                  ),
-                                              child: ListView.builder(
-                                                  scrollDirection:
-                                                      Axis.vertical,
-                                                  itemCount:
-                                                      productListControllers
-                                                          .length,
-                                                  itemBuilder:
-                                                      (context, index) {
-                                                    return productListControllers
-                                                                .length !=
-                                                            0
-                                                        ? Column(
-                                                            children: [
-                                                              Row(
-                                                                children: [
-                                                                  Expanded(
-                                                                    child:
-                                                                        Padding(
-                                                                      padding: EdgeInsets.only(
-                                                                          left: size.width *
-                                                                              0.03,
-                                                                          top: size.height *
-                                                                              0.010),
-                                                                      child:
-                                                                          TextFormField(
-                                                                        controller:
-                                                                            productListControllers[index],
-                                                                        decoration:
-                                                                            InputDecoration(
-                                                                          labelText:
-                                                                              'product name',
-                                                                          border:
-                                                                              OutlineInputBorder(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(20),
-                                                                          ),
-                                                                          enabledBorder:
-                                                                              OutlineInputBorder(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(20),
-                                                                            borderSide:
-                                                                                BorderSide(color: AppColors.contentColorPurple), // Change the border color here
-                                                                          ),
-                                                                          // controller: _endDate,
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  Padding(
-                                                                    padding: EdgeInsets.symmetric(
-                                                                        horizontal:
-                                                                            size.width *
-                                                                                0.03),
-                                                                    child:
-                                                                        InkWell(
-                                                                      onTap:
-                                                                          () {
-                                                                        setState(
-                                                                            () {
-                                                                          productListControllers[index]
-                                                                              .clear(); //first clear
-                                                                          //then dispose the controller
-                                                                          productListControllers[index]
-                                                                              .dispose;
-                                                                          //after remove the value of the listcontroller
-                                                                          productListControllers
-                                                                              .removeAt(index);
-
-                                                                          //clearing the productQuantityController list
-
-                                                                          productQuantityControllers[index]
-                                                                              .clear(); //first clear
-                                                                          //then dispose the controller
-                                                                          productQuantityControllers[index]
-                                                                              .dispose;
-                                                                          //after remove the value of the listcontroller
-                                                                          productQuantityControllers
-                                                                              .removeAt(index);
-                                                                        });
-                                                                      },
-                                                                      child: index !=
-                                                                              0
-                                                                          ? Icon(
-                                                                              Icons.delete,
-                                                                              size: size.width * 0.09,
-                                                                            )
-                                                                          : Container(),
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              //
-                                                              SizedBox(
-                                                                height:
-                                                                    size.height *
-                                                                        0.02,
-                                                              ),
-                                                              // to capture the quantity of entered product
-                                                              Padding(
-                                                                padding: EdgeInsets.symmetric(
-                                                                    horizontal:
-                                                                        size.width *
-                                                                            0.03),
-                                                                child:
-                                                                    TextFormField(
-                                                                  controller:
-                                                                      productQuantityControllers[
-                                                                          index],
-                                                                  decoration:
-                                                                      InputDecoration(
-                                                                    labelText:
-                                                                        'quantity',
-                                                                    border:
-                                                                        OutlineInputBorder(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              20),
-                                                                    ),
-                                                                    enabledBorder:
-                                                                        OutlineInputBorder(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              20),
-                                                                      borderSide:
-                                                                          BorderSide(
-                                                                              color: AppColors.contentColorPurple), // Change the border color here
-                                                                    ),
-                                                                    // controller: _endDate,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              Divider(
-                                                                thickness: 1,
-                                                              ),
-                                                            ],
-                                                          )
-                                                        : Container();
-                                                  }),
-                                            ),
-                                          ),
-                                          //
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: size.height * 0.010,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                // in this section we have to capture also the
-                                // user id
-                                //  business id
-                                // visit id
-                                // --- the above that to be sent to an api end point --- //
-                                //
+                                Text("Select the products to order:",
+                                    style: GoogleFonts.lato(
+                                        color: AppColors.contentColorPurple)),
                                 SizedBox(
-                                  height: size.height * 0.030,
+                                  width: size.width * 0.02,
                                 ),
-                              ],
-                            ),
-                          ),
+                                IconButton(
+                                  //add a plus icon
+                                  icon: Icon(
+                                    Icons.add,
+                                    color: AppColors.contentColorPurple,
+                                    size: size.width * 0.05,
+                                  ),
+                                  onPressed: () {
+                                    ModalUtils.showSimpleModalDialog(
+                                        context, productList);
+                                  },
+                                ),
+                              ]),
                         )
-                      : Container(),
-                  // end of the section on clicking the interested option, this section shows the input forms with product name abd quantity to allow a user
-                  // add product of interest.
+                      : const Text(""),
+// end of the section on clicking the interested option, this section shows the input forms with product name abd quantity to allow a user
+// add product of interest.
 
-                  // summary notes
+// summary notes
                   Divider(),
                   SizedBox(
                     height: size.height * 0.010,
@@ -1377,6 +1038,7 @@ class _BusinessMappingFormState extends State<BusinessMappingForm> {
                     padding:
                         EdgeInsets.symmetric(horizontal: size.width * 0.03),
                     child: TextFormField(
+                      controller: summaryNote,
                       maxLines: 7, // Set the maximum number of lines
                       minLines: 5,
                       decoration: InputDecoration(
@@ -1386,7 +1048,7 @@ class _BusinessMappingFormState extends State<BusinessMappingForm> {
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                               color: AppColors
                                   .contentColorPurple), // Change the border color here
                         ),
@@ -1395,36 +1057,34 @@ class _BusinessMappingFormState extends State<BusinessMappingForm> {
                     ),
                   ),
 
-                  // end of the section for capturing the record summary notes input field
+// end of the section for capturing the record summary notes input field
 
                   SizedBox(
                     height: size.height * 0.020,
                   ),
 
-                  // The button display section
+// The button display section
                   Center(
                     child: ElevatedButton(
                       onPressed: () {
-                        // Navigator.push(context, MaterialPageRoute(builder: (context){
-                        //   // return CreateVisitScreen();
-                        // }));
+                        submitForm();
                       },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors
+                            .contentColorYellow, // Set button color to purple
+                      ),
                       child: Padding(
                         padding: EdgeInsets.symmetric(
                           horizontal: size.width * 0.26,
                           vertical: size.height * 0.028,
                         ),
                         child: Text(
-                          'Record the mapping',
+                          'Add Business',
                           style: GoogleFonts.lato(
                             fontSize: size.width * 0.035,
                             color: AppColors.contentColorPurple,
                           ),
                         ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        primary: AppColors
-                            .contentColorYellow, // Set button color to purple
                       ),
                     ),
                   ),
@@ -1439,89 +1099,4 @@ class _BusinessMappingFormState extends State<BusinessMappingForm> {
       ),
     );
   }
-
-  // widget dispklaying alert box to capture product and quantity, when you tap on pitch interest
-  Widget productQuantityCard(String? productName, int? productindex,
-      dynamic headersize, dynamic productnameSize, dynamic boxSize) {
-    return AlertDialog(
-        title: Center(
-          child: Text("Add product quuantity",
-              style: GoogleFonts.lato(
-                color: AppColors.contentColorPurple,
-                fontWeight: FontWeight.bold,
-                fontSize: headersize,
-              )),
-        ),
-        content: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Divider(
-              thickness: 1,
-            ),
-            Text(
-              "Product name",
-              style: GoogleFonts.lato(
-                  fontWeight: FontWeight.bold, fontSize: productnameSize),
-            ),
-            Text(
-              "${productName}",
-              style: GoogleFonts.lato(
-                  color: AppColors.contentColorPurple,
-                  fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: boxSize),
-            TextFormField(
-              controller: quantityEntered,
-              decoration: InputDecoration(
-                labelText: 'Quantity',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(
-                      color: AppColors
-                          .contentColorPurple), // Change the border color here
-                ),
-                // controller: _endDate,
-              ),
-            ),
-            SizedBox(height: boxSize),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        products.add(productName);
-                        quantity.add(quantityEntered.text);
-                      });
-                      // SnackBar(content: content),
-                      // Scaffold.of(context).showSnackBar(SnackBar(content: Text('Your Message')));
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text("product added successfully")));
-                      Navigator.pop(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: AppColors
-                          .contentColorPurple, // Set button color to purple
-                    ),
-                    child: Text("Add")),
-                //
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: AppColors
-                          .contentColorYellow, // Set button color to purple
-                    ),
-                    child: Text("Cancel")),
-              ],
-            )
-          ],
-        ));
-  }
-  //
 }

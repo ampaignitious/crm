@@ -1,6 +1,7 @@
 // ignore: unused_import
-import 'package:aiDvantage/Screens/AuthenticationSceens/LoginScreen.dart';
-import 'package:aiDvantage/Screens/SplashScreen/FirstScreen.dart';
+import 'package:valour/Screens/AuthenticationSceens/LoginScreen.dart';
+import 'package:valour/Screens/AuthenticationSceens/Register.dart';
+import 'package:valour/Screens/SplashScreen/FirstScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -71,6 +72,10 @@ class _MyAppState extends State<MyApp> {
           : isFirstLaunch
               ? const FirstScreen()
               : const LoginScreen(),
+      routes: {
+        '/register': (context) => const Register(),
+        '/login': (context) => const LoginScreen(),
+      },
     );
   }
 }

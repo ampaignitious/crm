@@ -3,6 +3,7 @@ class AppEndPoints {
   //auth endpoints
   static const String loginEndPoint = "/login";
   static const String logoutEndPoint = "/logout";
+  static const String registerEndPoint = "/register";
 
   //mapping endpoints
   static const String mappings = "/mappings";

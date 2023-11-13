@@ -1,5 +1,5 @@
-import 'package:aiDvantage/Screens/SplashScreen/SecondSplashPage.dart';
-import 'package:aiDvantage/Utils/AppColors.dart';
+import 'package:valour/Screens/SplashScreen/SecondSplashPage.dart';
+import 'package:valour/Utils/AppColors.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:google_fonts/google_fonts.dart';

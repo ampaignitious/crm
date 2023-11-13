@@ -48,6 +48,33 @@ class _RestClient implements RestClient {
   }
 
   @override
+  Future<dynamic> signUp({required Map<String, String> body}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(body);
+    final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/register',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
+    final value = _result.data;
+    return value;
+  }
+
+  @override
   Future<dynamic> signOut() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -100,7 +127,7 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<dynamic> addMapping({required Map<String, String> body}) async {
+  Future<dynamic> addMapping({required Map<String, dynamic> body}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -127,7 +154,7 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<dynamic> getRoutePlan() async {
+  Future<dynamic> getRoutePlans() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -153,7 +180,7 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<dynamic> addRoutePlan({required Map<String, String> body}) async {
+  Future<dynamic> addRoutePlan({required Map<String, dynamic> body}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -258,7 +285,7 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<dynamic> addVisit({required Map<String, String> body}) async {
+  Future<dynamic> addVisit({required Map<String, dynamic> body}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};

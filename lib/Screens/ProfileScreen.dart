@@ -1,5 +1,5 @@
-import 'package:aiDvantage/Screens/AuthenticationSceens/LoginScreen.dart';
-import 'package:aiDvantage/Utils/AppColors.dart';
+import 'package:valour/Screens/AuthenticationSceens/LoginScreen.dart';
+import 'package:valour/Utils/AppColors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -24,7 +24,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         elevation: 0,// Change the icon color here
         title: Padding(
           padding: EdgeInsets.only(left: size.width*0.04),
-          child: Text("User profile screen", style: GoogleFonts.lato(
+          child: Text("Profile Settings", style: GoogleFonts.lato(
             color: AppColors.darkRoast,
             fontWeight: FontWeight.bold
           ),),

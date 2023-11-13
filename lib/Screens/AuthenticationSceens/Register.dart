@@ -1,20 +1,22 @@
 import 'package:valour/Controllers/services.dart';
-import 'package:valour/Screens/DefaultScreen.dart';
 import 'package:valour/Utils/AppColors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class Register extends StatefulWidget {
+  const Register({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<Register> createState() => _RegisterState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterState extends State<Register> {
+  final nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
+
   final _formKey = GlobalKey<FormState>();
 
   String? _validateEmail(String? value) {
@@ -33,15 +35,23 @@ class _LoginScreenState extends State<LoginScreen> {
     return null;
   }
 
-  Future<void> _handleLogin() async {
+  String? _validateConfirmPassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please confirm your password';
+    }
+    if (value != _passwordController.text) {
+      return 'Passwords do not match';
+    }
+    // Add more password validation logic if needed
+    return null;
+  }
+
+  Future<void> _handleRegister() async {
     if (_formKey.currentState?.validate() ?? false) {
-      // Form is valid, perform login operation here
-      // For example, you can send a request to your API for authentication
       String email = _emailController.text;
       String password = _passwordController.text;
-
-      print('Email: $email---Password: $password');
-
+      String name = nameController.text;
+            
       try {
         showDialog(
           context: context,
@@ -54,7 +64,8 @@ class _LoginScreenState extends State<LoginScreen> {
         );
 
         AuthController authController = AuthController();
-        final authResponse = await authController.signIn(email, password);
+
+        final authResponse = await authController.signUp(name, email, password);
 
         Navigator.pop(context);
 
@@ -65,10 +76,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 "Invalid credentials, check your email and password and try again!"),
           ));
         } else {
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) {
-            return DefaultScreen();
-          }));
+           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            backgroundColor: AppColors.contentColorPurple,
+            content: Text(
+                "Account Created successfully", style: TextStyle(color: Colors.white)),
+          ));
+          Navigator.pushNamed(context, '/login');
         }
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -78,6 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
@@ -99,7 +113,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 boxShadow: [
                   BoxShadow(
                     color: Colors.grey.withOpacity(0.5),
-                    offset: Offset(0.8, 1.0),
+                    offset: const Offset(0.8, 1.0),
                     blurRadius: 4.0,
                     spreadRadius: 0.2,
                   ),
@@ -121,7 +135,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   children: <Widget>[
                     Center(
-                        child: Text("Login to continue",
+                        child: Text("Create an Account",
                             style: GoogleFonts.lato(
                                 fontSize: size.width * 0.06,
                                 fontWeight: FontWeight.bold))),
@@ -129,6 +143,18 @@ class _LoginScreenState extends State<LoginScreen> {
                     const Divider(
                       thickness: 0.3,
                       color: AppColors.contentColorPurple,
+                    ),
+                    SizedBox(height: size.height * 0.02),
+                    TextFormField(
+                      controller: nameController,
+                      keyboardType: TextInputType.name,
+                      decoration: InputDecoration(
+                        labelText: 'Full Name',
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(
+                                15)), // Border for the name field
+                      ),
+                      validator: _validateEmail,
                     ),
                     SizedBox(height: size.height * 0.02),
                     TextFormField(
@@ -144,7 +170,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     SizedBox(
                         height:
-                            size.height * 0.035), // Add spacing between fields
+                            size.height * 0.02), // Add spacing between fields
                     TextFormField(
                       controller: _passwordController,
                       obscureText: true,
@@ -156,11 +182,23 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       validator: _validatePassword,
                     ),
-                    SizedBox(height: size.height * 0.015),
-                    Text("Forgot password ?", style: GoogleFonts.lato()),
-                    SizedBox(height: size.height * 0.055),
+                    SizedBox(
+                        height:
+                            size.height * 0.02), // Add spacing between fields
+                    TextFormField(
+                      controller: confirmPasswordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        labelText: 'Confirm Password',
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(
+                                15)), // Border for the password field
+                      ),
+                      validator: _validateConfirmPassword,
+                    ),
+                    SizedBox(height: size.height * 0.02),
                     ElevatedButton(
-                      onPressed: _handleLogin,
+                      onPressed: _handleRegister,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors
                             .contentColorPurple, // Set button color to purple
@@ -170,20 +208,20 @@ class _LoginScreenState extends State<LoginScreen> {
                           horizontal: size.width * 0.26,
                           vertical: size.height * 0.032,
                         ),
-                        child: Text('Login'),
+                        child: const Text('Register'),
                       ),
                     ),
-                    SizedBox(height: size.height * 0.055),
+                    SizedBox(height: size.height * 0.01),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Don't have an account ? ",
+                        Text("Already have an account ? ",
                             style: GoogleFonts.lato()),
                         TextButton(
                           onPressed: () {
-                            Navigator.pushNamed(context, '/register');
+                            Navigator.pushNamed(context, '/login');
                           },
-                          child: Text("Sign up",
+                          child: Text("Login",
                               style: GoogleFonts.lato(
                                   color: AppColors.contentColorPurple)),
                         ),

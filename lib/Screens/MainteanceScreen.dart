@@ -1,6 +1,6 @@
-import 'package:aiDvantage/Models/Mainteanance.dart';
-import 'package:aiDvantage/Utils/AppColors.dart';
-import 'package:aiDvantage/Widgets/MainteananceWidgets/SingleMainteananceDisplayScreen.dart';
+import 'package:valour/Models/Mainteanance.dart';
+import 'package:valour/Utils/AppColors.dart';
+import 'package:valour/Widgets/MainteananceWidgets/SingleMainteananceDisplayScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
@@ -62,7 +62,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
  
         title: Padding(
           padding: EdgeInsets.only(left: size.width*0.03),
-          child: Text("Mainteanance page",
+          child: Text("Machine Maintenance",
            style: GoogleFonts.lato(
             fontSize: size.width*0.05, 
             color: AppColors.menuBackground,
@@ -183,7 +183,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
             SizedBox(height: size.height*0.016,),
             Padding(
               padding: EdgeInsets.only(left:size.width*0.03),
-              child: Text("Mainteanance data table", style: GoogleFonts.lato(
+              child: Text("Mainteanance reccords", style: GoogleFonts.lato(
               color: AppColors.coffeeBean,
               fontWeight: FontWeight.bold,
               fontSize: size.width*0.04

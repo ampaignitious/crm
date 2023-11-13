@@ -1,12 +1,13 @@
-import 'package:aiDvantage/Screens/AuthenticationSceens/LoginScreen.dart';
-import 'package:aiDvantage/Screens/ClientsScreen.dart';
-import 'package:aiDvantage/Screens/DefaultScreen.dart';
-import 'package:aiDvantage/Screens/MainteanceScreen.dart';
-import 'package:aiDvantage/Screens/ProfileScreen.dart';
-import 'package:aiDvantage/Screens/SalesScreen.dart';
-import 'package:aiDvantage/Screens/Targets.dart';
-import 'package:aiDvantage/Screens/VisitsPage.dart';
-import 'package:aiDvantage/Utils/AppColors.dart';
+import 'package:valour/Controllers/services.dart';
+import 'package:valour/Screens/AuthenticationSceens/LoginScreen.dart';
+import 'package:valour/Screens/ClientsScreen.dart';
+import 'package:valour/Screens/DefaultScreen.dart';
+import 'package:valour/Screens/MainteanceScreen.dart';
+import 'package:valour/Screens/ProfileScreen.dart';
+import 'package:valour/Screens/SalesScreen.dart';
+import 'package:valour/Screens/Targets.dart';
+import 'package:valour/Screens/VisitsPage.dart';
+import 'package:valour/Utils/AppColors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
@@ -19,6 +20,26 @@ class DrawerItems extends StatefulWidget {
 }
 
 class _DrawerItemsState extends State<DrawerItems> {
+
+  Future<void> signOut() async{
+    AuthController authController = AuthController();
+
+    final response = await authController.signOut();
+
+    if(response['status'] == 'success'){
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
+        return LoginScreen();
+      }));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Logout Failed"),
+          backgroundColor: Colors.red,
+        ),
+      );
+    
+    }
+  }
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -208,7 +229,7 @@ class _DrawerItemsState extends State<DrawerItems> {
                 Icons.settings,
                 color: AppColors.contentColorPurple, // Change the color of the drawer icon here
               ),
-            title: Text('Mainteanance'),
+            title: Text('Maintenance'),
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context){
                 return MainteanceScreen();
@@ -224,10 +245,7 @@ class _DrawerItemsState extends State<DrawerItems> {
               ),
             title: Text('Logout'),
             onTap: () {
-             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
-              
-              return const LoginScreen();
-             }));
+              signOut();
             },
           ),
         ),

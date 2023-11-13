@@ -1,6 +1,6 @@
-import 'package:aiDvantage/Screens/SplashScreen/FirstSplashPage.dart';
-import 'package:aiDvantage/Screens/SplashScreen/ThirdSplashScreen.dart';
-import 'package:aiDvantage/Utils/AppColors.dart';
+import 'package:valour/Screens/SplashScreen/FirstSplashPage.dart';
+import 'package:valour/Screens/SplashScreen/ThirdSplashScreen.dart';
+import 'package:valour/Utils/AppColors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';

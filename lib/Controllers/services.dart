@@ -33,6 +33,37 @@ class AuthController {
     }
   }
 
+  Future<Map<String, dynamic>> signUp(
+      String name, String email, String password) async {
+    final dio = Dio();
+    final client = RestClient(dio);
+    dio.options.headers['Accept'] = "application/json";
+    try {
+      Map<String, String> user = {
+        "name": name,
+        "email": email,
+        "password": password
+      };
+      final response = await client.signUp(body: user);
+
+      //check if the response contains message key
+      if (response.containsKey('message')) {
+        return response;
+      } else {
+        return {
+          "error": "Invalid credentials",
+          "status": "error",
+        };
+      }
+    } catch (e) {
+      print("save error: $e");
+      return {
+        "error": "Invalid credentials",
+        "status": "error",
+      };
+    }
+  }
+
   saveAccessToken(String accessToken) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString(ACCESS_TOKEN, accessToken);
@@ -51,13 +82,29 @@ class AuthController {
     return prefs.getString(ACCESS_TOKEN);
   }
 
+  removeAccessToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove(ACCESS_TOKEN);
+  }
+
   Future<Map<String, dynamic>> signOut() async {
     final dio = Dio();
     final client = RestClient(dio);
     dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
+    //accept application/json
+    dio.options.headers['Accept'] = "application/json";
     try {
       final response = await client.signOut();
-      return response;
+      //check if response contains message
+      if (response.containsKey('message')) {
+        await removeAccessToken();
+        return response;
+      } else {
+        return {
+          "error": "Failed to sign out",
+          "status": "error",
+        };
+      }
     } catch (e) {
       return {
         "error": "Failed to sign out",
@@ -72,7 +119,15 @@ class AuthController {
     dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
     try {
       final response = await client.getMappings();
-      return response;
+      //check if response contains message
+      if (response.containsKey('message')) {
+        return response;
+      } else {
+        return {
+          "error": "Failed to get mappings",
+          "status": "error",
+        };
+      }
     } catch (e) {
       return {
         "error": "Failed to get mappings",
@@ -82,14 +137,26 @@ class AuthController {
   }
 
   Future<Map<String, dynamic>> addMapping(
-      Map<String, String> businessDetails) async {
+      Map<String, dynamic> businessDetails) async {
     final dio = Dio();
     final client = RestClient(dio);
     dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
+    dio.options.headers['Accept'] = "application/json";
     try {
       final response = await client.addMapping(body: businessDetails);
-      return response;
+      if (response.containsKey('message')) {
+        return {
+          "message": "Mapping added successfully",
+          "status": "success",
+        };
+      } else {
+        return {
+          "error": "Failed to add mapping",
+          "status": "error",
+        };
+      }
     } catch (e) {
+      print("posting error: $e");
       return {
         "error": "Failed to add mapping",
         "status": "error",
@@ -97,13 +164,20 @@ class AuthController {
     }
   }
 
-  Future<Map<String, dynamic>> getRoutePlan() async {
+  Future<Map<String, dynamic>> getRoutePlans() async {
     final dio = Dio();
     final client = RestClient(dio);
     dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
     try {
-      final response = await client.getRoutePlan();
-      return response;
+      final response = await client.getRoutePlans();
+      if (response.containsKey('message')) {
+        return response;
+      } else {
+        return {
+          "error": "Failed to get route plans",
+          "status": "error",
+        };
+      }
     } catch (e) {
       return {
         "error": "Failed to get route plan",
@@ -113,19 +187,23 @@ class AuthController {
   }
 
   Future<Map<String, dynamic>> addRoutePlan(
-      String name, String email, String password, String role) async {
+      Map<String, dynamic> body) async {
     final dio = Dio();
     final client = RestClient(dio);
     dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
     try {
-      Map<String, String> user = {
-        "name": name,
-        "email": email,
-        "password": password,
-        "role": role
-      };
-      final response = await client.addRoutePlan(body: user);
-      return response;
+      final response = await client.addRoutePlan(body: body);
+      if (response.containsKey('message')) {
+        return {
+          "message": "Route plan added successfully",
+          "status": "success",
+        };
+      } else {
+        return {
+          "error": "Failed to add route plan",
+          "status": "error",
+        };
+      }
     } catch (e) {
       return {
         "error": "Failed to add route plan",
@@ -180,22 +258,27 @@ class AuthController {
   }
 
   Future<Map<String, dynamic>> addVisit(
-      String name, String email, String password, String role) async {
+      Map<String, dynamic> visitDetails ) async {
     final dio = Dio();
     final client = RestClient(dio);
     dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
+    dio.options.headers['Accept'] = "application/json";
     try {
-      Map<String, String> user = {
-        "name": name,
-        "email": email,
-        "password": password,
-        "role": role
-      };
-      final response = await client.addVisit(body: user);
-      return response;
+      final response = await client.addVisit(body: visitDetails);
+      if (response.containsKey('message')) {
+        return {
+          "message": "Visit added successfully",
+          "status": "success",
+        };
+      } else {
+        return {
+          "error": "Failed to add vsit",
+          "status": "error",
+        };
+      }
     } catch (e) {
       return {
-        "error": "Failed to add visit",
+        "error": "Failed to add mapping",
         "status": "error",
       };
     }

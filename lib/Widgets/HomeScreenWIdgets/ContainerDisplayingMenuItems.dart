@@ -1,12 +1,12 @@
-import 'package:aiDvantage/Screens/ClientsScreen.dart';
-import 'package:aiDvantage/Screens/MainteanceScreen.dart';
-import 'package:aiDvantage/Screens/NotificationScreen.dart';
-import 'package:aiDvantage/Screens/ProfileScreen.dart';
-import 'package:aiDvantage/Screens/SalesScreen.dart';
-import 'package:aiDvantage/Screens/Targets.dart';
-import 'package:aiDvantage/Screens/VisitsPage.dart';
-import 'package:aiDvantage/Utils/AppColors.dart';
-import 'package:aiDvantage/Widgets/VisitScreenWidgets/CreateRoutePlan.dart';
+import 'package:valour/Screens/ClientsScreen.dart';
+import 'package:valour/Screens/MainteanceScreen.dart';
+import 'package:valour/Screens/NotificationScreen.dart';
+import 'package:valour/Screens/ProfileScreen.dart';
+import 'package:valour/Screens/SalesScreen.dart';
+import 'package:valour/Screens/Targets.dart';
+import 'package:valour/Screens/VisitsPage.dart';
+import 'package:valour/Utils/AppColors.dart';
+import 'package:valour/Widgets/VisitScreenWidgets/CreateRoutePlan.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
@@ -254,7 +254,7 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
                   child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text("Mainteanance", style: GoogleFonts.lato(
+                      Text("Maintenance", style: GoogleFonts.lato(
                         fontSize: size.width*0.034,
                       ),),
                       Container(

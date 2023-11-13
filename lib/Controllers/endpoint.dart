@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:aiDvantage/Util/AppEndPoints.dart';
+import 'package:valour/Util/AppEndPoints.dart';
 import 'package:retrofit/retrofit.dart';
 
 
@@ -12,6 +12,9 @@ abstract class RestClient {
   @POST(AppEndPoints.loginEndPoint)
   Future<dynamic> signIn({@Body() required Map<String, String> body});
 
+  @POST(AppEndPoints.registerEndPoint)
+  Future<dynamic> signUp({@Body() required Map<String, String> body});
+
   @POST(AppEndPoints.logoutEndPoint)
   Future<dynamic> signOut();
 
@@ -19,13 +22,13 @@ abstract class RestClient {
   Future<dynamic> getMappings();
 
   @POST(AppEndPoints.mappings)
-  Future<dynamic> addMapping({@Body() required Map<String, String> body});
+  Future<dynamic> addMapping({@Body() required Map<String, dynamic> body});
 
   @GET(AppEndPoints.routePlan)
-  Future<dynamic> getRoutePlan();
+  Future<dynamic> getRoutePlans();
 
   @POST(AppEndPoints.routePlan)
-  Future<dynamic> addRoutePlan({@Body() required Map<String, String> body});
+  Future<dynamic> addRoutePlan({@Body() required Map<String, dynamic> body});
 
   @GET(AppEndPoints.sales)
   Future<dynamic> getSales();
@@ -37,7 +40,7 @@ abstract class RestClient {
   Future<dynamic> getVisits();
 
   @POST(AppEndPoints.visits)
-  Future<dynamic> addVisit({@Body() required Map<String, String> body});
+  Future<dynamic> addVisit({@Body() required Map<String, dynamic> body});
 
   @GET(AppEndPoints.deliveries)
   Future<dynamic> getDeliveries();

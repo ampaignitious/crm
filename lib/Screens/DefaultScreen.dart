@@ -1,8 +1,8 @@
-import 'package:aiDvantage/Screens/HomePage.dart';
-import 'package:aiDvantage/Screens/InventoryScreen.dart';
-import 'package:aiDvantage/Screens/SalesScreen.dart';
-import 'package:aiDvantage/Screens/VisitsPage.dart';
-import 'package:aiDvantage/Utils/AppColors.dart';
+import 'package:valour/Screens/HomePage.dart';
+import 'package:valour/Screens/InventoryScreen.dart';
+import 'package:valour/Screens/SalesScreen.dart';
+import 'package:valour/Screens/VisitsPage.dart';
+import 'package:valour/Utils/AppColors.dart';
 import 'package:flutter/material.dart';
 
 class DefaultScreen extends StatefulWidget {

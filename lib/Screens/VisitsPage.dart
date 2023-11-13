@@ -1,10 +1,10 @@
-import 'package:aiDvantage/Screens/NotificationScreen.dart';
-import 'package:aiDvantage/Screens/ProfileScreen.dart';
-import 'package:aiDvantage/Utils/AppColors.dart';
-import 'package:aiDvantage/Widgets/Drawer/DrawerItems.dart';
-import 'package:aiDvantage/Widgets/VisitScreenWidgets/MenuOptions.dart';
-import 'package:aiDvantage/Widgets/VisitScreenWidgets/ViewRoutePlans.dart';
-import 'package:aiDvantage/Widgets/VisitScreenWidgets/ViewVisits.dart';
+import 'package:valour/Screens/NotificationScreen.dart';
+import 'package:valour/Screens/ProfileScreen.dart';
+import 'package:valour/Utils/AppColors.dart';
+import 'package:valour/Widgets/Drawer/DrawerItems.dart';
+import 'package:valour/Widgets/VisitScreenWidgets/MenuOptions.dart';
+import 'package:valour/Widgets/VisitScreenWidgets/ViewRoutePlans.dart';
+import 'package:valour/Widgets/VisitScreenWidgets/ViewVisits.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
@@ -38,7 +38,7 @@ class _VisitsPageState extends State<VisitsPage> with TickerProviderStateMixin{
       drawer:Drawer(
         backgroundColor: AppColors.contentColorPurple,
         width: size.width*0.8,
-        child: DrawerItems(),
+        child: const DrawerItems(),
       ),
       appBar: AppBar(
         iconTheme: IconThemeData(
@@ -50,7 +50,7 @@ class _VisitsPageState extends State<VisitsPage> with TickerProviderStateMixin{
  
         title: Padding(
           padding: EdgeInsets.only(left: size.width*0.09),
-          child: Text("visits page",
+          child: Text("Visits",
            style: GoogleFonts.lato(
             fontSize: size.width*0.055, 
             color: AppColors.menuBackground,
@@ -163,6 +163,3 @@ class _VisitsPageState extends State<VisitsPage> with TickerProviderStateMixin{
     );
   }
 }
-
-
-//  a class showing menu options and some statistics on them

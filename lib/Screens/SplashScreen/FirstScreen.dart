@@ -1,4 +1,4 @@
-import 'package:aiDvantage/Screens/SplashScreen/FirstSplashPage.dart';
+import 'package:valour/Screens/SplashScreen/FirstSplashPage.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 

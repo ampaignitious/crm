@@ -1,9 +1,9 @@
-import 'package:aiDvantage/Utils/AppColors.dart';
-import 'package:aiDvantage/Widgets/Drawer/DrawerItems.dart';
-import 'package:aiDvantage/Widgets/InventoryWidgets/CoffeeProductRegistrationForm.dart';
-import 'package:aiDvantage/Widgets/InventoryWidgets/MachineRegistrationForm.dart';
-import 'package:aiDvantage/Widgets/SalesScreenWidgets/AvailableCoffeeProductsDisplayScreen.dart';
-import 'package:aiDvantage/Widgets/SalesScreenWidgets/AvailableMachinesDisplayScreen.dart';
+import 'package:valour/Utils/AppColors.dart';
+import 'package:valour/Widgets/Drawer/DrawerItems.dart';
+import 'package:valour/Widgets/InventoryWidgets/CoffeeProductRegistrationForm.dart';
+import 'package:valour/Widgets/InventoryWidgets/MachineRegistrationForm.dart';
+import 'package:valour/Widgets/SalesScreenWidgets/AvailableCoffeeProductsDisplayScreen.dart';
+import 'package:valour/Widgets/SalesScreenWidgets/AvailableMachinesDisplayScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';

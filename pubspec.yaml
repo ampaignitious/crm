@@ -1,4 +1,4 @@
-name: aiDvantage
+name: valour
 description: Know your customers better with aiDvantage.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -38,12 +38,6 @@ dependencies:
   logger: any  #for logging purpose
   json_annotation: ^4.8.1
   shared_preferences: ^2.2.1
-
-    
-
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
 
 dev_dependencies:

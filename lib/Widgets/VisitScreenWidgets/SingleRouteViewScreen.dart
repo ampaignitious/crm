@@ -1,22 +1,24 @@
-import 'package:aiDvantage/Utils/AppColors.dart';
+import 'package:valour/Utils/AppColors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 
-// ignore: must_be_immutable
 class SingleRouteViewScreen extends StatefulWidget {
-  String? visitName;
- String? visitDescription;
-  SingleRouteViewScreen({super.key, this.visitDescription, this.visitName});
+  final String routeName;
+  final String routeDescription;
+  final String routeStartLocation;
+  final String routeEndLocation;
+  const SingleRouteViewScreen({super.key, required this.routeDescription, required this.routeName, required this.routeStartLocation, required this.routeEndLocation});
 
   @override
-  State<SingleRouteViewScreen> createState() => _SingleRouteViewScreenState( this.visitDescription, this.visitName);
+  SingleRouteViewScreenState createState() => SingleRouteViewScreenState();
+
 }
 
-class _SingleRouteViewScreenState extends State<SingleRouteViewScreen> {
+class SingleRouteViewScreenState extends State<SingleRouteViewScreen> {
   String? visitName;
  String? visitDescription;
-  _SingleRouteViewScreenState( this.visitDescription, this.visitName);
+  @override
   Widget build(BuildContext context) {
   final size = MediaQuery.of(context).size;
     return Scaffold(
@@ -83,21 +85,21 @@ class _SingleRouteViewScreenState extends State<SingleRouteViewScreen> {
                   fontWeight: FontWeight.bold
                 ),),
                 SizedBox(height:size.height*0.008),
-                Text("${visitName}"),
+                Text(widget.routeName),
                 Divider(),
                 Text("Start location", style: GoogleFonts.lato(
                   fontSize:size.width*0.05,
                   fontWeight: FontWeight.bold
                 ),),
                 SizedBox(height:size.height*0.008),
-                Text("Ntinda"),
+                Text(widget.routeStartLocation),
                 Divider(),
                 Text("End location", style: GoogleFonts.lato(
                   fontSize:size.width*0.05,
                   fontWeight: FontWeight.bold
                 ),),
                 SizedBox(height:size.height*0.008),
-                Text("Kampala, Makerere"),
+                Text(widget.routeEndLocation),
                 Divider(),
                 SizedBox(height:size.height*0.008),
                 Text("Route details", style: GoogleFonts.lato(
@@ -105,7 +107,7 @@ class _SingleRouteViewScreenState extends State<SingleRouteViewScreen> {
                   fontWeight: FontWeight.bold
                 ),),
                 SizedBox(height:size.height*0.008),
-                Text("${visitDescription}"),
+                Text(widget.routeDescription),
                 // 
                 SizedBox(height:size.height*0.008),
                 Text("Number of target visits to make", style: GoogleFonts.lato(

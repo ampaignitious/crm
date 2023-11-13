@@ -1,9 +1,9 @@
-import 'package:aiDvantage/Screens/NotificationScreen.dart';
-import 'package:aiDvantage/Screens/ProfileScreen.dart';
-import 'package:aiDvantage/Utils/AppColors.dart';
-import 'package:aiDvantage/Widgets/Drawer/DrawerItems.dart';
-import 'package:aiDvantage/Widgets/HomeScreenWIdgets/ContainerDisplayingMenuItems.dart';
-import 'package:aiDvantage/Widgets/HomeScreenWIdgets/ContainerDisplayingStats.dart';
+import 'package:valour/Screens/NotificationScreen.dart';
+import 'package:valour/Screens/ProfileScreen.dart';
+import 'package:valour/Utils/AppColors.dart';
+import 'package:valour/Widgets/Drawer/DrawerItems.dart';
+import 'package:valour/Widgets/HomeScreenWIdgets/ContainerDisplayingMenuItems.dart';
+import 'package:valour/Widgets/HomeScreenWIdgets/ContainerDisplayingStats.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';

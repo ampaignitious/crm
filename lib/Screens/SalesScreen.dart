@@ -1,9 +1,9 @@
-import 'package:aiDvantage/Screens/ProfileScreen.dart';
-import 'package:aiDvantage/Utils/AppColors.dart';
-import 'package:aiDvantage/Widgets/Drawer/DrawerItems.dart';
-import 'package:aiDvantage/Widgets/SalesScreenWidgets/AvailableCoffeeProductsDisplayScreen.dart';
-import 'package:aiDvantage/Widgets/SalesScreenWidgets/AvailableMachinesDisplayScreen.dart';
-import 'package:aiDvantage/Widgets/SalesScreenWidgets/ProductSaleScreen.dart';
+import 'package:valour/Screens/ProfileScreen.dart';
+import 'package:valour/Utils/AppColors.dart';
+import 'package:valour/Widgets/Drawer/DrawerItems.dart';
+import 'package:valour/Widgets/SalesScreenWidgets/AvailableCoffeeProductsDisplayScreen.dart';
+import 'package:valour/Widgets/SalesScreenWidgets/AvailableMachinesDisplayScreen.dart';
+import 'package:valour/Widgets/SalesScreenWidgets/ProductSaleScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
@@ -24,7 +24,7 @@ class _SalesScreenState extends State<SalesScreen> {
       drawer:Drawer(
         backgroundColor: AppColors.contentColorPurple,
         width: size.width*0.8,
-        child: DrawerItems(),
+        child: const DrawerItems(),
       ),
       appBar: AppBar(
         iconTheme: IconThemeData(
@@ -36,7 +36,7 @@ class _SalesScreenState extends State<SalesScreen> {
  
         title: Padding(
           padding: EdgeInsets.only(left: size.width*0.06),
-          child: Text("sales page",
+          child: Text("Sales",
            style: GoogleFonts.lato(
             fontSize: size.width*0.062, 
             color: AppColors.menuBackground,
