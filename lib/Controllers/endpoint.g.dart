@@ -13,7 +13,7 @@ class _RestClient implements RestClient {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://10.0.2.2:8000/api/';
+    baseUrl ??= 'https://aidvantage.impact-outsourcing.com/api/';
   }
 
   final Dio _dio;
@@ -114,6 +114,32 @@ class _RestClient implements RestClient {
         .compose(
           _dio.options,
           '/logout',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
+    final value = _result.data;
+    return value;
+  }
+
+  @override
+  Future<dynamic> deleteProfile() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
+      method: 'DELETE',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/delete-profile',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -390,7 +416,7 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<dynamic> getMaintenance() async {
+  Future<dynamic> getMaintenances() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -402,7 +428,7 @@ class _RestClient implements RestClient {
     )
         .compose(
           _dio.options,
-          '/maintenance',
+          '/maintenances',
           queryParameters: queryParameters,
           data: _data,
         )

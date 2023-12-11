@@ -1,15 +1,15 @@
-import 'package:valour/Screens/ClientsScreen.dart';
 import 'package:valour/Screens/MainteanceScreen.dart';
-import 'package:valour/Screens/NotificationScreen.dart';
 import 'package:valour/Screens/ProfileScreen.dart';
 import 'package:valour/Screens/SalesScreen.dart';
-import 'package:valour/Screens/Targets.dart';
 import 'package:valour/Screens/VisitsPage.dart';
+import 'package:valour/Screens/appointments/index.dart';
+import 'package:valour/Screens/deliveries/index.dart';
+import 'package:valour/Screens/demos/index.dart';
 import 'package:valour/Utils/AppColors.dart';
-import 'package:valour/Widgets/VisitScreenWidgets/CreateRoutePlan.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+import 'package:valour/Widgets/VisitScreenWidgets/RoutePlan.dart';
 
 class ContainerDisplayingMenuItems extends StatefulWidget {
   const ContainerDisplayingMenuItems({super.key});
@@ -83,7 +83,7 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
                             ),
                          ),
                       ),
-                      Text("Visits", style: GoogleFonts.lato(
+                      Text("Clients", style: GoogleFonts.lato(
                         fontSize: size.width*0.04,
                       ),)
                     ],
@@ -94,9 +94,9 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
             // first row element two
              InkWell(
               onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context){
-                  return ClientsScreen();
-                }));
+                  Navigator.push(context, MaterialPageRoute(builder: (context){
+                      return MainteanceScreen();
+                    }));
               },
                child: Container(
                   height: size.height*0.10,
@@ -125,7 +125,7 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
                   child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text("Clients", style: GoogleFonts.lato(
+                      Text("Maintenances", style: GoogleFonts.lato(
                         fontSize: size.width*0.04,
                       ),),
                       Container(
@@ -190,7 +190,7 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
                 child: InkWell(
                   onTap: (){
                     Navigator.push(context, MaterialPageRoute(builder: (context){
-                      return SalesScreen();
+                      return const Demo();
                     }));
                   },
                   child: Row(
@@ -212,7 +212,7 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
                             ),
                          ),
                       ),
-                      Text("Sales", style: GoogleFonts.lato(
+                      Text("Demos", style: GoogleFonts.lato(
                         fontSize: size.width*0.04,
                       ),)
                     ],
@@ -248,13 +248,13 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
                 child: InkWell(
                   onTap: (){
                     Navigator.push(context, MaterialPageRoute(builder: (context){
-                      return MainteanceScreen();
+                      return const Delivery();
                     }));
                   },
                   child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text("Maintenance", style: GoogleFonts.lato(
+                      Text("Deliveries", style: GoogleFonts.lato(
                         fontSize: size.width*0.034,
                       ),),
                       Container(
@@ -319,7 +319,7 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
                 child: InkWell(
                   onTap: (){
                     Navigator.push(context, MaterialPageRoute(builder: (context){
-                      return Targets();
+                      return const Appointment();
                     }));
                   },
                   child: Row(
@@ -341,7 +341,7 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
                             ),
                          ),
                       ),
-                      Text("Targets", style: GoogleFonts.lato(
+                      Text("Appointments", style: GoogleFonts.lato(
                         fontSize: size.width*0.04,
                       ),)
                     ],
@@ -376,14 +376,14 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
                 ),
                 child: InkWell(
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context){
-                      return NotificationScreen();
+                     Navigator.push(context, MaterialPageRoute(builder: (context){
+                      return SalesScreen();
                     }));
                   },
                   child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text("Notifications", style: GoogleFonts.lato(
+                      Text("Sales", style: GoogleFonts.lato(
                         fontSize: size.width*0.036,
                       ),),
                       Container(
@@ -424,7 +424,7 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
             InkWell(
               onTap: (){
                 Navigator.push(context, MaterialPageRoute(builder: (context){
-                  return CreateRoutePlan();
+                  return const RoutePlan();
                 }));
               },
               child: Container(
@@ -454,7 +454,7 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
                   child: InkWell(
                     onTap: (){
                       Navigator.push(context, MaterialPageRoute(builder: (context){
-                        return CreateRoutePlan();
+                        return const RoutePlan();
                       }));
                     },
                     child: Row(
@@ -522,7 +522,7 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       
-                      Text("Settings", style: GoogleFonts.lato(
+                      Text("Contacts", style: GoogleFonts.lato(
                         fontSize: size.width*0.036,
                       ),
                        

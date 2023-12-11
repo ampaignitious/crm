@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:location/location.dart';
-import 'package:lottie/lottie.dart';
 
 class CreateRoutePlan extends StatefulWidget {
   const CreateRoutePlan({super.key});
@@ -81,7 +80,7 @@ class _CreateRoutePlanState extends State<CreateRoutePlan> {
         title: Padding(
           padding: EdgeInsets.only(left: size.width * 0.06),
           child: Text(
-            "Route Management",
+            "Add Route Plan",
             style: GoogleFonts.lato(
                 fontSize: size.width * 0.052,
                 color: AppColors.contentColorPurple,
@@ -89,480 +88,344 @@ class _CreateRoutePlanState extends State<CreateRoutePlan> {
           ),
         ),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            height: size.height * 0.28,
-            width: double.maxFinite,
-            decoration: BoxDecoration(
-              color: AppColors.contentColorCyan,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  offset: const Offset(0.8, 1.0),
-                  blurRadius: 4.0,
-                  spreadRadius: 0.2,
-                ),
-              ],
-              // borderRadius: BorderRadius.circular(10),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+           
+            SizedBox(
+              height: size.height * 0.01,
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(left: size.width * 0.03),
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(right: size.width * 0.03),
-                        child: const Icon(
-                          Icons.location_on,
-                          color: Colors.red,
-                        ),
+            Center(
+              child: Container(
+                  width: size.width * 0.95,
+                  decoration: BoxDecoration(
+                    color: AppColors.contentColorCyan,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        offset: const Offset(0.8, 1.0),
+                        blurRadius: 4.0,
+                        spreadRadius: 0.2,
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Current location",
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        offset: const Offset(0.8, 1.0),
+                        blurRadius: 4.0,
+                        spreadRadius: 0.2,
+                      ),
+                    ],
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(
+                              left: size.width * 0.03, top: size.height * 0.006),
+                          child: Text(
+                            "Create a route plan",
                             style: GoogleFonts.lato(
-                                color: AppColors.darkRoast,
-                                fontWeight: FontWeight.bold,
-                                fontSize: size.width * 0.03),
-                          ),
-                          Text(
-                            "Acacia mall, 14-18 Copper Rd, Kampala",
-                            style: GoogleFonts.lato(
-                                color: AppColors.contentColorPurple,
-                                fontWeight: FontWeight.bold,
-                                fontSize: size.width * 0.03),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                const Divider(),
-                Center(
-                    child: Text(
-                  "Summary route plan statistics",
-                  style: GoogleFonts.lato(fontSize: size.width * 0.04),
-                )),
-                SizedBox(
-                  height: size.height * 0.012,
-                ),
-                Card(
-                  color: AppColors.contentColorBlue.withOpacity(0.3),
-                  margin: EdgeInsets.symmetric(horizontal: size.width * 0.03),
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(left: size.width * 0.06),
-                        child: Lottie.asset(
-                          'assets/json/completed.json', // Path to your Lottie animation JSON file
-                          width: size.width * 0.13, // Adjust width as needed
-                          height: size.height * 0.08,
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: size.width * 0.12),
-                        child: Text(
-                          "Completed road plans:",
-                          style: GoogleFonts.lato(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            fontSize: size.width * 0.04,
+                              color:
+                                  AppColors.contentColorPurple.withOpacity(0.4),
+                            ),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: size.width * 0.01),
-                        child: Text(
-                          "234",
-                          style: GoogleFonts.lato(
-                              color: AppColors.contentColorPurple),
+                        const Divider(
+                          thickness: 1,
                         ),
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: size.height * 0.01,
-                ),
-                Card(
-                  color: AppColors.contentColorBlue.withOpacity(0.3),
-                  margin: EdgeInsets.symmetric(horizontal: size.width * 0.03),
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(left: size.width * 0.06),
-                        child: Lottie.asset(
-                          'assets/json/pending.json', // Path to your Lottie animation JSON file
-                          width: size.width * 0.15, // Adjust width as needed
-                          height: size.height * 0.09,
-                          fit: BoxFit.fill,
+                        // the form field
+                        SizedBox(
+                          height: size.height * 0.015,
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: size.width * 0.12),
-                        child: Text(
-                          "Pending road plans:",
-                          style: GoogleFonts.lato(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            fontSize: size.width * 0.04,
+                        Padding(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: size.width * 0.03),
+                          child: TextFormField(
+                            controller: routeName,
+                            decoration: InputDecoration(
+                              labelText: 'Route name',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                                borderSide: const BorderSide(
+                                    color: AppColors
+                                        .contentColorPurple), // Change the border color here
+                              ),
+                              // controller: _endDate,
+                            ),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: size.width * 0.01),
-                        child: Text(
-                          "234",
-                          style: GoogleFonts.lato(
-                              color: AppColors.contentColorPurple),
+                        SizedBox(
+                          height: size.height * 0.015,
                         ),
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: size.height * 0.01,
-          ),
-          Center(
-            child: Container(
-                height: size.height * 0.58,
-                width: size.width * 0.95,
-                decoration: BoxDecoration(
-                  color: AppColors.contentColorCyan,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      offset: const Offset(0.8, 1.0),
-                      blurRadius: 4.0,
-                      spreadRadius: 0.2,
+                        Padding(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: size.width * 0.03),
+                          child: TextFormField(
+                            controller: routeDescription,
+                            maxLines: 7, // Set the maximum number of lines
+                            minLines: 5,
+                            decoration: InputDecoration(
+                              labelText: 'Description about the route',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                                borderSide: const BorderSide(
+                                    color: AppColors
+                                        .contentColorPurple), // Change the border color here
+                              ),
+                              // controller: _endDate,
+                            ),
+                          ),
+                        ),
+                        //
+                        SizedBox(
+                          height: size.height * 0.020,
+                        ),
+                        Padding(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: size.width * 0.03),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: TextField(
+                                  controller: startLocation,
+                                  decoration: InputDecoration(
+                                    labelText: 'Enter start location',
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: const BorderSide(
+                                          color: AppColors
+                                              .contentColorPurple), // Change the border color here
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                  margin:
+                                      EdgeInsets.only(left: size.width * 0.03),
+                                  height: size.height * 0.08,
+                                  width: size.width * 0.14,
+                                  decoration: BoxDecoration(
+                                      color: AppColors.contentColorCyan,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.5),
+                                          offset: const Offset(0.8, 1.0),
+                                          blurRadius: 4.0,
+                                          spreadRadius: 0.2,
+                                        ),
+                                      ],
+                                      border: Border.all(
+                                          color: AppColors.contentColorPurple
+                                              .withOpacity(0.2)),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: const Icon(Icons.location_on,
+                                      color: AppColors.contentColorPurple)),
+                            ],
+                          ),
+                        ),
+                        //
+                        //
+                        SizedBox(
+                          height: size.height * 0.020,
+                        ),
+                        Padding(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: size.width * 0.03),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: TextField(
+                                  controller: endLocation,
+                                  decoration: InputDecoration(
+                                    labelText: 'Enter destination location',
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: const BorderSide(
+                                          color: AppColors
+                                              .contentColorPurple), // Change the border color here
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                  margin:
+                                      EdgeInsets.only(left: size.width * 0.03),
+                                  height: size.height * 0.08,
+                                  width: size.width * 0.14,
+                                  decoration: BoxDecoration(
+                                      color: AppColors.contentColorCyan,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.5),
+                                          offset: const Offset(0.8, 1.0),
+                                          blurRadius: 4.0,
+                                          spreadRadius: 0.2,
+                                        ),
+                                      ],
+                                      border: Border.all(
+                                          color: AppColors.contentColorPurple
+                                              .withOpacity(0.2)),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: const Icon(Icons.location_on,
+                                      color: AppColors.contentColorPurple)),
+                            ],
+                          ),
+                        ),
+                        //
+                        //
+                        SizedBox(
+                          height: size.height * 0.020,
+                        ),
+                        Padding(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: size.width * 0.03),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: TextFormField(
+                                  controller: startDate,
+                                  onTap: () => _selectDate(context, startDate),
+                                  decoration: InputDecoration(
+                                    labelText: 'start date',
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: const BorderSide(
+                                          color: AppColors
+                                              .contentColorPurple), // Change the border color here
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                  margin:
+                                      EdgeInsets.only(left: size.width * 0.03),
+                                  height: size.height * 0.08,
+                                  width: size.width * 0.14,
+                                  decoration: BoxDecoration(
+                                      color: AppColors.contentColorCyan,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.5),
+                                          offset: const Offset(0.8, 1.0),
+                                          blurRadius: 4.0,
+                                          spreadRadius: 0.2,
+                                        ),
+                                      ],
+                                      border: Border.all(
+                                          color: AppColors.contentColorPurple
+                                              .withOpacity(0.2)),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: const Icon(Icons.date_range,
+                                      color: AppColors.contentColorPurple)),
+                            ],
+                          ),
+                        ),
+                        //
+                        //
+                        SizedBox(
+                          height: size.height * 0.020,
+                        ),
+                        Padding(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: size.width * 0.03),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: TextFormField(
+                                  controller: endDate,
+                                  onTap: () => _selectDate(context, endDate),
+                                  decoration: InputDecoration(
+                                    labelText: 'end date',
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: const BorderSide(
+                                          color: AppColors
+                                              .contentColorPurple), // Change the border color here
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                  margin:
+                                      EdgeInsets.only(left: size.width * 0.03),
+                                  height: size.height * 0.08,
+                                  width: size.width * 0.14,
+                                  decoration: BoxDecoration(
+                                      color: AppColors.contentColorCyan,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.5),
+                                          offset: const Offset(0.8, 1.0),
+                                          blurRadius: 4.0,
+                                          spreadRadius: 0.2,
+                                        ),
+                                      ],
+                                      border: Border.all(
+                                          color: AppColors.contentColorPurple
+                                              .withOpacity(0.2)),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: const Icon(Icons.date_range,
+                                      color: AppColors.contentColorPurple)),
+                            ],
+                          ),
+                        ),
+                        //
+                        SizedBox(
+                          height: size.height * 0.020,
+                        ),
+                        Center(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              submitForm();
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors
+                                  .contentColorYellow, // Set button color to purple
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: size.width * 0.26,
+                                vertical: size.height * 0.028,
+                              ),
+                              child: Text(
+                                'Add route plan',
+                                style: GoogleFonts.lato(
+                                  color: AppColors.contentColorPurple,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: size.height * 0.025,
+                        ),
+                      ],
                     ),
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      offset: const Offset(0.8, 1.0),
-                      blurRadius: 4.0,
-                      spreadRadius: 0.2,
-                    ),
-                  ],
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: size.width * 0.03, top: size.height * 0.006),
-                        child: Text(
-                          "Create a route plan",
-                          style: GoogleFonts.lato(
-                            color:
-                                AppColors.contentColorPurple.withOpacity(0.4),
-                          ),
-                        ),
-                      ),
-                      const Divider(
-                        thickness: 1,
-                      ),
-                      // the form field
-                      SizedBox(
-                        height: size.height * 0.015,
-                      ),
-                      Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: size.width * 0.03),
-                        child: TextFormField(
-                          controller: routeName,
-                          decoration: InputDecoration(
-                            labelText: 'Route name',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: const BorderSide(
-                                  color: AppColors
-                                      .contentColorPurple), // Change the border color here
-                            ),
-                            // controller: _endDate,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: size.height * 0.015,
-                      ),
-                      Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: size.width * 0.03),
-                        child: TextFormField(
-                          controller: routeDescription,
-                          maxLines: 7, // Set the maximum number of lines
-                          minLines: 5,
-                          decoration: InputDecoration(
-                            labelText: 'Description about the route',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: const BorderSide(
-                                  color: AppColors
-                                      .contentColorPurple), // Change the border color here
-                            ),
-                            // controller: _endDate,
-                          ),
-                        ),
-                      ),
-                      //
-                      SizedBox(
-                        height: size.height * 0.020,
-                      ),
-                      Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: size.width * 0.03),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: TextField(
-                                controller: startLocation,
-                                decoration: InputDecoration(
-                                  labelText: 'Enter start location',
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                    borderSide: const BorderSide(
-                                        color: AppColors
-                                            .contentColorPurple), // Change the border color here
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                                margin:
-                                    EdgeInsets.only(left: size.width * 0.03),
-                                height: size.height * 0.08,
-                                width: size.width * 0.14,
-                                decoration: BoxDecoration(
-                                    color: AppColors.contentColorCyan,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.5),
-                                        offset: const Offset(0.8, 1.0),
-                                        blurRadius: 4.0,
-                                        spreadRadius: 0.2,
-                                      ),
-                                    ],
-                                    border: Border.all(
-                                        color: AppColors.contentColorPurple
-                                            .withOpacity(0.2)),
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: const Icon(Icons.location_on,
-                                    color: AppColors.contentColorPurple)),
-                          ],
-                        ),
-                      ),
-                      //
-                      //
-                      SizedBox(
-                        height: size.height * 0.020,
-                      ),
-                      Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: size.width * 0.03),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: TextField(
-                                controller: endLocation,
-                                decoration: InputDecoration(
-                                  labelText: 'Enter destination location',
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                    borderSide: const BorderSide(
-                                        color: AppColors
-                                            .contentColorPurple), // Change the border color here
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                                margin:
-                                    EdgeInsets.only(left: size.width * 0.03),
-                                height: size.height * 0.08,
-                                width: size.width * 0.14,
-                                decoration: BoxDecoration(
-                                    color: AppColors.contentColorCyan,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.5),
-                                        offset: const Offset(0.8, 1.0),
-                                        blurRadius: 4.0,
-                                        spreadRadius: 0.2,
-                                      ),
-                                    ],
-                                    border: Border.all(
-                                        color: AppColors.contentColorPurple
-                                            .withOpacity(0.2)),
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: const Icon(Icons.location_on,
-                                    color: AppColors.contentColorPurple)),
-                          ],
-                        ),
-                      ),
-                      //
-                      //
-                      SizedBox(
-                        height: size.height * 0.020,
-                      ),
-                      Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: size.width * 0.03),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: TextFormField(
-                                controller: startDate,
-                                onTap: () => _selectDate(context, startDate),
-                                decoration: InputDecoration(
-                                  labelText: 'start date',
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                    borderSide: const BorderSide(
-                                        color: AppColors
-                                            .contentColorPurple), // Change the border color here
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                                margin:
-                                    EdgeInsets.only(left: size.width * 0.03),
-                                height: size.height * 0.08,
-                                width: size.width * 0.14,
-                                decoration: BoxDecoration(
-                                    color: AppColors.contentColorCyan,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.5),
-                                        offset: const Offset(0.8, 1.0),
-                                        blurRadius: 4.0,
-                                        spreadRadius: 0.2,
-                                      ),
-                                    ],
-                                    border: Border.all(
-                                        color: AppColors.contentColorPurple
-                                            .withOpacity(0.2)),
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: const Icon(Icons.date_range,
-                                    color: AppColors.contentColorPurple)),
-                          ],
-                        ),
-                      ),
-                      //
-                      //
-                      SizedBox(
-                        height: size.height * 0.020,
-                      ),
-                      Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: size.width * 0.03),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: TextFormField(
-                                controller: endDate,
-                                onTap: () => _selectDate(context, endDate),
-                                decoration: InputDecoration(
-                                  labelText: 'end date',
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                    borderSide: const BorderSide(
-                                        color: AppColors
-                                            .contentColorPurple), // Change the border color here
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                                margin:
-                                    EdgeInsets.only(left: size.width * 0.03),
-                                height: size.height * 0.08,
-                                width: size.width * 0.14,
-                                decoration: BoxDecoration(
-                                    color: AppColors.contentColorCyan,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.5),
-                                        offset: const Offset(0.8, 1.0),
-                                        blurRadius: 4.0,
-                                        spreadRadius: 0.2,
-                                      ),
-                                    ],
-                                    border: Border.all(
-                                        color: AppColors.contentColorPurple
-                                            .withOpacity(0.2)),
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: const Icon(Icons.date_range,
-                                    color: AppColors.contentColorPurple)),
-                          ],
-                        ),
-                      ),
-                      //
-                      SizedBox(
-                        height: size.height * 0.020,
-                      ),
-                      Center(
-                        child: ElevatedButton(
-                          onPressed: () {
-                            submitForm();
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors
-                                .contentColorYellow, // Set button color to purple
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: size.width * 0.26,
-                              vertical: size.height * 0.028,
-                            ),
-                            child: Text(
-                              'Add route plan',
-                              style: GoogleFonts.lato(
-                                color: AppColors.contentColorPurple,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: size.height * 0.025,
-                      ),
-                    ],
-                  ),
-                )),
-          )
-        ],
+                  )),
+            )
+          ],
+        ),
       ),
     );
   }

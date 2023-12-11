@@ -1,18 +1,18 @@
-import 'package:valour/Models/Maintenance.dart';
+import 'package:valour/Models/Delivery.dart';
 import 'package:valour/Models/Product.dart';
 import 'package:valour/Utils/AppColors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class SingleMainteananceDisplayScreen extends StatefulWidget {
-  final Maintenance? maintenance;
-  const SingleMainteananceDisplayScreen({super.key, required this.maintenance});
+class DeliveryDetails extends StatefulWidget {
+  final DeliveryData? delivery;
+  const DeliveryDetails({super.key, required this.delivery});
 
   @override
-  SingleMainteananceDisplayScreenState createState() => SingleMainteananceDisplayScreenState();
+  DeliveryDetailsState createState() => DeliveryDetailsState();
 }
 
-class SingleMainteananceDisplayScreenState extends State<SingleMainteananceDisplayScreen> {
+class DeliveryDetailsState extends State<DeliveryDetails> {
   @override
   void initState() {
     super.initState();
@@ -31,7 +31,7 @@ class SingleMainteananceDisplayScreenState extends State<SingleMainteananceDispl
  
         title: Padding(
           padding: EdgeInsets.only(left: size.width*0.03),
-          child: Text("Maintenance Details",
+          child: Text("Delivery Details",
            style: GoogleFonts.lato(
             fontSize: size.width*0.038,
             color: AppColors.menuBackground,
@@ -61,33 +61,15 @@ class SingleMainteananceDisplayScreenState extends State<SingleMainteananceDispl
         children: [
           _buildSectionHeader("BUSINESS INFORMATION", size),
           SizedBox(height: size.height * 0.02),
-          _buildInfoRow("Business Name", widget.maintenance?.businessName ?? '',
+          _buildInfoRow("Business Name", widget.delivery?.businessName ?? '',
               size, Icons.business),
           SizedBox(height: size.height * 0.02),
-          _buildSectionHeader("ABOUT MAINTENANCE", size),
-          SizedBox(height: size.height * 0.02),
-          _buildInfoRow(
-              "Date of Last Maintenance",
-              widget.maintenance?.dateOfMaintenance ?? '',
-              size,
-              Icons.calendar_today_outlined),
-                        SizedBox(height: size.height * 0.02),
-          _buildSectionHeader("MAINTENANCE PRODUCTS", size),
-        _buildMaintenanceProducts(size), // Display maintenance products here
-          SizedBox(height: size.height * 0.02),
-          _buildSectionHeader("MAINTENANCE COMMENT", size),
-          SizedBox(height: size.height * 0.02),
-          _buildInfoRow(
-              "Comment",
-              widget.maintenance?.comment ?? '',
-              size,
-              Icons.comment_outlined),
-                        SizedBox(height: size.height * 0.02),
-          _buildSectionHeader("VISIT REMARKS", size),
+          _buildSectionHeader("DELIVERY PRODUCTS", size),
+        _buildDeliveryProducts(size), // Display Delivery products here
           SizedBox(height: size.height * 0.02),
           _buildInfoRow(
               "Visit Notes",
-              widget.maintenance?.dateOfMaintenance ?? '',
+              widget.delivery?.visitNotes ?? '',
               size,
               Icons.notes_outlined),
         ],
@@ -139,15 +121,15 @@ class SingleMainteananceDisplayScreenState extends State<SingleMainteananceDispl
     );
   }
 
-  Widget _buildMaintenanceProducts(Size size) {
-  final List<Product> maintenanceProducts =
-      widget.maintenance?.maintenanceProducts ?? [];
+  Widget _buildDeliveryProducts(Size size) {
+  final List<Product> deliveryProducts =
+      widget.delivery?.deliveryProducts ?? [];
 
-      print("Maintenance Products: $maintenanceProducts");
+      print("Delivery Products: $deliveryProducts");
 
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
-    children: maintenanceProducts.map((product) {
+    children: deliveryProducts.map((product) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

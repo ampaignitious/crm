@@ -21,6 +21,9 @@ abstract class RestClient {
   @POST(AppEndPoints.logoutEndPoint)
   Future<dynamic> signOut();
 
+  @DELETE(AppEndPoints.deleteProfile)
+  Future<dynamic> deleteProfile();
+
   @GET(AppEndPoints.mappings)
   Future<dynamic> getMappings();
 
@@ -51,8 +54,8 @@ abstract class RestClient {
   @GET(AppEndPoints.appointments)
   Future<dynamic> getAppointments();
 
-  @GET(AppEndPoints.maintenance)
-  Future<dynamic> getMaintenance();
+  @GET(AppEndPoints.maintenances)
+  Future<dynamic> getMaintenances();
 
   @GET(AppEndPoints.demos)
   Future<dynamic> getDemos();

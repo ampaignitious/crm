@@ -1,10 +1,11 @@
 class AppEndPoints {
-  static const String baseUrl = "http://10.0.2.2:8000/api/";
+  static const String baseUrl = "https://aidvantage.impact-outsourcing.com/api/";
   //auth endpoints
   static const String loginEndPoint = "/login";
   static const String logoutEndPoint = "/logout";
   static const String registerEndPoint = "/register";
   static const String profile = "/profile";
+  static const String deleteProfile = "/delete-profile";
 
   //mapping endpoints
   static const String mappings = "/mappings";
@@ -28,7 +29,7 @@ class AppEndPoints {
   static const String appointments = "/appointments";
 
   //maintenance end points
-  static const String maintenance = "/maintenance";
+  static const String maintenances = "/maintenances";
 
   //demos end points
   static const String demos = "/demos";

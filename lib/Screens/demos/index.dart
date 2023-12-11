@@ -1,64 +1,48 @@
-import 'package:valour/Controllers/services.dart';
-import 'package:valour/Models/Maintenance.dart';
-import 'package:valour/Models/Product.dart';
-import 'package:valour/Utils/AppColors.dart';
-import 'package:valour/Widgets/MainteananceWidgets/SingleMainteananceDisplayScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+import 'package:valour/Controllers/services.dart';
+import 'package:valour/Screens/demos/DemoDetails.dart';
+import 'package:valour/Utils/AppColors.dart';
+import 'package:valour/Models/Demo.dart';
 
-class MainteanceScreen extends StatefulWidget {
-  const MainteanceScreen({super.key});
+class Demo extends StatefulWidget {
+  const Demo({super.key});
 
   @override
-  State<MainteanceScreen> createState() => _MainteanceScreenState();
+  State<Demo> createState() => DemoState();
 }
 
-class _MainteanceScreenState extends State<MainteanceScreen> {
-    late Future<List<Maintenance>> maintenances;
-  TextEditingController searchController = TextEditingController();
+class DemoState extends State<Demo> {
+  late Future<List<DemoData>> demos;
+    TextEditingController searchController = TextEditingController();
+
 
   @override
   void initState() {
     super.initState();
-            maintenances = getMaintenances();
-
+    demos = getDemos();
   }
 
-   Future<List<Maintenance>> getMaintenances() async {
+  Future<List<DemoData>> getDemos() async {
     AuthController authController = AuthController();
     try {
-      final response = await authController.getMaintenances();
+      final response = await authController.getDemos();
       if (response.containsKey("error")) {
         throw Exception("The return is an error");
       } else {
         if (response['data'] != null) {
-          List<dynamic> eventsData = response['data'];
-          List<Maintenance> events = eventsData.map((contactData) {
-
-            List<dynamic> productsData = contactData['maintenance_products'];
-            List<Product> products = productsData.map((productData) {
-              return Product(
-                id: productData['id'],
-                product_name: productData['product']['product_name'],
-                product_price: 0,
-                product_quantity: 0,
-                isSelected: false,
-                isOrdered: false,
-              );
-            }).toList();
-
-            return Maintenance(
-              id: contactData['id'],
-              dateOfMaintenance: contactData['date_of_maintenance'],
-              comment: contactData['comment'],
-              businessName: contactData['visit']['visit']['business_name'],
-              visitNotes: contactData['visit']['visit_notes'],
-              maintenanceProducts: products,
+          List<dynamic> demoData = response['data'];
+          List<DemoData> demos = demoData.map((item) {
+            return DemoData(
+              id: item['id'],
+              demoDate: item['demo_date'],
+              demoNotes: item['demo_notes'],
+              businessName: item['visit']['visit']['business_name'],
+              visitNotes: item['visit']['visit_notes'],
             );
           }).toList();
-          print("Events: ${events.toString()}");
-          return events;
+          return demos;
         } else {
           // Handle the case where the 'contacts' field in the API response is null
           throw Exception("No data found");
@@ -71,7 +55,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
     }
   }
 
-  @override
+ @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
      var spacing =size.width*0.14;
@@ -93,7 +77,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
  
         title: Padding(
           padding: EdgeInsets.only(left: size.width*0.03),
-          child: Text("Machine Maintenance",
+          child: Text("Demos",
            style: GoogleFonts.lato(
             fontSize: size.width*0.05, 
             color: AppColors.menuBackground,
@@ -149,7 +133,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
                     Padding(
                       padding: EdgeInsets.only(top: size.height*0.015 ),
                       child: Center(
-                        child: Text("Maintenance Status", style: GoogleFonts.lato(
+                        child: Text("Demo Status", style: GoogleFonts.lato(
                           fontSize:size.width*0.050,
                           color: AppColors.contentColorPurple,
                           fontWeight: FontWeight.bold
@@ -187,7 +171,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
                     // Upcoming
                     Padding(
                       padding: EdgeInsets.only(top: size.height*0.015, left: size.width*0.04),
-                      child: Text("Upcoming Maintenances: 23", style: GoogleFonts.lato(
+                      child: Text("Upcoming Demos: 23", style: GoogleFonts.lato(
                  fontSize: size.width*0.03
                       ),),
                     ),
@@ -196,7 +180,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
                     //// Completed
                     Padding(
                       padding: EdgeInsets.only(top: size.height*0.015, left: size.width*0.04),
-                      child: Text("Completed Maintenances: 182", style: GoogleFonts.lato(
+                      child: Text("Completed Demos: 182", style: GoogleFonts.lato(
                      fontSize: size.width*0.03
                       ),),
                     ),
@@ -214,7 +198,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
             SizedBox(height: size.height*0.016,),
             Padding(
               padding: EdgeInsets.only(left:size.width*0.03),
-              child: Text("Maintenance reccords", style: GoogleFonts.lato(
+              child: Text("Demo reccords", style: GoogleFonts.lato(
               color: AppColors.coffeeBean,
               fontWeight: FontWeight.bold,
               fontSize: size.width*0.04
@@ -228,7 +212,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
                 onChanged: (value) {
                 },
                 decoration: InputDecoration(
-                  labelText: 'search a Maintenance record',
+                  labelText: 'search a Demo record',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10)
                   ),
@@ -287,7 +271,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
               ),
                       ),
            FutureBuilder(
-            future: maintenances,
+            future: demos,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasError) {
@@ -295,7 +279,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
                     child: Text("An error occurred"),
                   );
                 } else if (snapshot.hasData) {
-                  final data = snapshot.data as List<Maintenance>;
+                  final data = snapshot.data as List<DemoData>;
                   return SingleChildScrollView(
                     child: Column(
                       children: [
@@ -323,12 +307,12 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
       ),
     );
   }
-  // 
-  Widget buildTableRowWidget(Maintenance maintenanceData, double size1, double size2, double idwidth, double idheight, double visitwidth, double descriptionwidth) {
+
+  Widget buildTableRowWidget(DemoData demoData, double size1, double size2, double idwidth, double idheight, double visitwidth, double descriptionwidth) {
     return InkWell(
       onTap: (){
         Navigator.push(context, MaterialPageRoute(builder: (context){
-        return SingleMainteananceDisplayScreen(maintenance: maintenanceData);
+        return DemoDetails(demo: demoData);
       }));
       },
       child: Card(
@@ -342,7 +326,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
                     decoration: const BoxDecoration(
                       // color: AppColors.contentColorWhite,
                     ),
-                    child: Center(child: Text("${maintenanceData.id}", style: GoogleFonts.lato(
+                    child: Center(child: Text("${demoData.id}", style: GoogleFonts.lato(
                     ),),),
               ),
               Container(
@@ -351,7 +335,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
                     decoration: const BoxDecoration(
                       // color: AppColors.contentColorYellow,
                     ),
-                    child: Center(child: Text(maintenanceData.businessName, style: GoogleFonts.lato(
+                    child: Center(child: Text(demoData.businessName, style: GoogleFonts.lato(
               ),))),
               Container(
                     height: idheight,
@@ -359,7 +343,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
                     decoration: const BoxDecoration(
                       // color: AppColors.contentColorPurple,
                     ),
-                    child: Center(child: Text(maintenanceData.dateOfMaintenance, style: GoogleFonts.lato(
+                    child: Center(child: Text(demoData.demoDate, style: GoogleFonts.lato(
                       color:Colors.black
                     ),
                     textAlign: TextAlign.center,
@@ -370,5 +354,5 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
       ),
     );
   }
-  // 
+
 }

@@ -15,26 +15,14 @@ class CreateVisitScreen extends StatefulWidget {
 }
 
 class _CreateVisitScreenState extends State<CreateVisitScreen> {
+  List<Product> productList = [];
+
   bool maintenance = true;
   bool demo = false;
   bool delivery = false;
   bool appointment = false;
   bool sales = false;
 
-  List<Product> productList = [
-    Product(
-      id: 1,
-      product_name: 'Product 1',
-      product_price: 100,
-      product_quantity: 0,
-    ),
-    Product(
-      id: 2,
-      product_name: 'Product 2',
-      product_price: 200,
-      product_quantity: 0,
-    ),
-  ];
   //maintenance
   TextEditingController maintenanceDate = TextEditingController();
   TextEditingController maintenanceComment = TextEditingController();
@@ -51,6 +39,19 @@ class _CreateVisitScreenState extends State<CreateVisitScreen> {
 
   //common visit notes controller
   TextEditingController visitNotesController = TextEditingController();
+
+    @override
+  void initState() {
+    super.initState();
+    _fetchProducts();
+  }
+
+  Future<void> _fetchProducts() async {
+    List<Product> products = await ModalUtils.getProducts();
+    setState(() {
+      productList = products;
+    });
+  }
 
   //extract ordered products from the list
   List<Map<String, dynamic>> getOrderedProducts() {
@@ -1185,42 +1186,44 @@ class _CreateVisitScreenState extends State<CreateVisitScreen> {
                           SizedBox(
                             height: size.height * 0.020,
                           ),
-                          showRecordButton()?Center(
-                            child: ElevatedButton(
-                              onPressed: () {
-                                submitForm();
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors
-                                    .contentColorYellow, // Set button color to purple
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: size.width * 0.26,
-                                  vertical: size.height * 0.028,
-                                ),
-                                child: Text(
-                                  'Record a visit',
-                                  style: GoogleFonts.lato(
-                                    fontSize: size.width * 0.035,
-                                    color: AppColors.contentColorPurple,
+                          showRecordButton()
+                              ? Center(
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      submitForm();
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppColors
+                                          .contentColorYellow, // Set button color to purple
+                                    ),
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: size.width * 0.26,
+                                        vertical: size.height * 0.028,
+                                      ),
+                                      child: Text(
+                                        'Record a visit',
+                                        style: GoogleFonts.lato(
+                                          fontSize: size.width * 0.035,
+                                          color: AppColors.contentColorPurple,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : Container(
+                                  margin:
+                                      EdgeInsets.only(top: size.height * 0.02),
+                                  child: Center(
+                                    child: Text(
+                                      "Select a visit purpose to record a visit",
+                                      style: GoogleFonts.lato(
+                                        fontSize: size.width * 0.035,
+                                        color: AppColors.contentColorPurple,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
-                          ):Container(
-                            margin: EdgeInsets.only(top: size.height*0.02),
-                            child: Center(
-                              child: Text(
-                                "Select a visit purpose to record a visit",
-                                style: GoogleFonts.lato(
-                                  fontSize: size.width * 0.035,
-                                  color: AppColors.contentColorPurple,
-                                ),
-                              ),
-                            ),
-                          )
-                          ,
                           SizedBox(
                             height: size.height * 0.025,
                           ),
@@ -1271,20 +1274,20 @@ class _CreateVisitScreenState extends State<CreateVisitScreen> {
     }
   }
 
-  bool showRecordButton(){
-    if(maintenance == true){
+  bool showRecordButton() {
+    if (maintenance == true) {
       return true;
     }
-    if(demo == true){
+    if (demo == true) {
       return true;
     }
-    if(delivery == true){
+    if (delivery == true) {
       return true;
     }
-    if(appointment == true){
+    if (appointment == true) {
       return true;
     }
-    if(sales == true){
+    if (sales == true) {
       return true;
     }
     return false;

@@ -158,23 +158,13 @@ class _ViewRoutePlansState extends State<ViewRoutePlans> {
                   );
                 } else if (snapshot.hasData) {
                   final data = snapshot.data as List<SalesRoute>;
-                  return SizedBox(
-                    height: size.height * 0.62,
-                    width: double.maxFinite,
-                    child: ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      itemCount: data.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final SalesRoute businessData = data[index];
-                        return buildTableRowWidget(
-                            businessData,
-                            spacing,
-                            spacing2,
-                            idwidth,
-                            idheight,
-                            visitwidth,
-                            descriptionwidth);
-                      },
+                  return SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        for (var i = 0; i < data.length; i++)
+                          buildTableRowWidget(data[i], spacing, spacing2,
+                              idwidth, idheight, visitwidth, descriptionwidth)
+                      ],
                     ),
                   );
                 } else {

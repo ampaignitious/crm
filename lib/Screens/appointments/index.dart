@@ -1,64 +1,50 @@
-import 'package:valour/Controllers/services.dart';
-import 'package:valour/Models/Maintenance.dart';
-import 'package:valour/Models/Product.dart';
-import 'package:valour/Utils/AppColors.dart';
-import 'package:valour/Widgets/MainteananceWidgets/SingleMainteananceDisplayScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+import 'package:valour/Controllers/services.dart';
+import 'package:valour/Models/Appointment.dart';
+import 'package:valour/Screens/appointments/AppointmentDetails.dart';
+import 'package:valour/Utils/AppColors.dart';
 
-class MainteanceScreen extends StatefulWidget {
-  const MainteanceScreen({super.key});
+class Appointment extends StatefulWidget {
+  const Appointment({super.key});
 
   @override
-  State<MainteanceScreen> createState() => _MainteanceScreenState();
+  State<Appointment> createState() => AppointmentState();
 }
 
-class _MainteanceScreenState extends State<MainteanceScreen> {
-    late Future<List<Maintenance>> maintenances;
-  TextEditingController searchController = TextEditingController();
+class AppointmentState extends State<Appointment> {
+  late Future<List<AppointmentData>> appointments;
+    TextEditingController searchController = TextEditingController();
+
 
   @override
   void initState() {
     super.initState();
-            maintenances = getMaintenances();
-
+    appointments = getAppointments();
   }
 
-   Future<List<Maintenance>> getMaintenances() async {
+  Future<List<AppointmentData>> getAppointments() async {
     AuthController authController = AuthController();
     try {
-      final response = await authController.getMaintenances();
+      final response = await authController.getAppointments();
       if (response.containsKey("error")) {
         throw Exception("The return is an error");
       } else {
         if (response['data'] != null) {
-          List<dynamic> eventsData = response['data'];
-          List<Maintenance> events = eventsData.map((contactData) {
-
-            List<dynamic> productsData = contactData['maintenance_products'];
-            List<Product> products = productsData.map((productData) {
-              return Product(
-                id: productData['id'],
-                product_name: productData['product']['product_name'],
-                product_price: 0,
-                product_quantity: 0,
-                isSelected: false,
-                isOrdered: false,
-              );
-            }).toList();
-
-            return Maintenance(
-              id: contactData['id'],
-              dateOfMaintenance: contactData['date_of_maintenance'],
-              comment: contactData['comment'],
-              businessName: contactData['visit']['visit']['business_name'],
-              visitNotes: contactData['visit']['visit_notes'],
-              maintenanceProducts: products,
+          List<dynamic> appointmentData = response['data'];
+          List<AppointmentData> appointments = appointmentData.map((item) {
+            return AppointmentData(
+              id: item['id'],
+              businessName: item['visit']['visit']['business_name'],
+              meetingDate: item['meeting_date'],
+              meetingStartTime: item['meeting_start_time'],
+              meetingEndTime: item['meeting_end_time'],
+              meetingNotes: item['meeting_notes'],
+              visitNotes: item['visit']['visit_notes'],
             );
           }).toList();
-          print("Events: ${events.toString()}");
-          return events;
+          return appointments;
         } else {
           // Handle the case where the 'contacts' field in the API response is null
           throw Exception("No data found");
@@ -71,7 +57,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
     }
   }
 
-  @override
+ @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
      var spacing =size.width*0.14;
@@ -93,7 +79,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
  
         title: Padding(
           padding: EdgeInsets.only(left: size.width*0.03),
-          child: Text("Machine Maintenance",
+          child: Text("Meetings",
            style: GoogleFonts.lato(
             fontSize: size.width*0.05, 
             color: AppColors.menuBackground,
@@ -149,7 +135,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
                     Padding(
                       padding: EdgeInsets.only(top: size.height*0.015 ),
                       child: Center(
-                        child: Text("Maintenance Status", style: GoogleFonts.lato(
+                        child: Text("Appointment Status", style: GoogleFonts.lato(
                           fontSize:size.width*0.050,
                           color: AppColors.contentColorPurple,
                           fontWeight: FontWeight.bold
@@ -187,7 +173,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
                     // Upcoming
                     Padding(
                       padding: EdgeInsets.only(top: size.height*0.015, left: size.width*0.04),
-                      child: Text("Upcoming Maintenances: 23", style: GoogleFonts.lato(
+                      child: Text("Upcoming Appointments: 23", style: GoogleFonts.lato(
                  fontSize: size.width*0.03
                       ),),
                     ),
@@ -196,7 +182,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
                     //// Completed
                     Padding(
                       padding: EdgeInsets.only(top: size.height*0.015, left: size.width*0.04),
-                      child: Text("Completed Maintenances: 182", style: GoogleFonts.lato(
+                      child: Text("Completed Appointments: 182", style: GoogleFonts.lato(
                      fontSize: size.width*0.03
                       ),),
                     ),
@@ -214,7 +200,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
             SizedBox(height: size.height*0.016,),
             Padding(
               padding: EdgeInsets.only(left:size.width*0.03),
-              child: Text("Maintenance reccords", style: GoogleFonts.lato(
+              child: Text("Appointment reccords", style: GoogleFonts.lato(
               color: AppColors.coffeeBean,
               fontWeight: FontWeight.bold,
               fontSize: size.width*0.04
@@ -228,7 +214,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
                 onChanged: (value) {
                 },
                 decoration: InputDecoration(
-                  labelText: 'search a Maintenance record',
+                  labelText: 'search a Appointment record',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10)
                   ),
@@ -287,7 +273,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
               ),
                       ),
            FutureBuilder(
-            future: maintenances,
+            future: appointments,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasError) {
@@ -295,7 +281,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
                     child: Text("An error occurred"),
                   );
                 } else if (snapshot.hasData) {
-                  final data = snapshot.data as List<Maintenance>;
+                  final data = snapshot.data as List<AppointmentData>;
                   return SingleChildScrollView(
                     child: Column(
                       children: [
@@ -323,12 +309,12 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
       ),
     );
   }
-  // 
-  Widget buildTableRowWidget(Maintenance maintenanceData, double size1, double size2, double idwidth, double idheight, double visitwidth, double descriptionwidth) {
+
+  Widget buildTableRowWidget(AppointmentData appointmentData, double size1, double size2, double idwidth, double idheight, double visitwidth, double descriptionwidth) {
     return InkWell(
       onTap: (){
         Navigator.push(context, MaterialPageRoute(builder: (context){
-        return SingleMainteananceDisplayScreen(maintenance: maintenanceData);
+        return AppointmentDetails(appointment: appointmentData);
       }));
       },
       child: Card(
@@ -342,7 +328,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
                     decoration: const BoxDecoration(
                       // color: AppColors.contentColorWhite,
                     ),
-                    child: Center(child: Text("${maintenanceData.id}", style: GoogleFonts.lato(
+                    child: Center(child: Text("${appointmentData.id}", style: GoogleFonts.lato(
                     ),),),
               ),
               Container(
@@ -351,7 +337,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
                     decoration: const BoxDecoration(
                       // color: AppColors.contentColorYellow,
                     ),
-                    child: Center(child: Text(maintenanceData.businessName, style: GoogleFonts.lato(
+                    child: Center(child: Text(appointmentData.businessName, style: GoogleFonts.lato(
               ),))),
               Container(
                     height: idheight,
@@ -359,7 +345,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
                     decoration: const BoxDecoration(
                       // color: AppColors.contentColorPurple,
                     ),
-                    child: Center(child: Text(maintenanceData.dateOfMaintenance, style: GoogleFonts.lato(
+                    child: Center(child: Text(appointmentData.meetingDate, style: GoogleFonts.lato(
                       color:Colors.black
                     ),
                     textAlign: TextAlign.center,
@@ -370,5 +356,5 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
       ),
     );
   }
-  // 
+
 }

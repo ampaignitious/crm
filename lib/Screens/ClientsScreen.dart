@@ -34,10 +34,18 @@ class _ClientsScreenState extends State<ClientsScreen> {
         if (response['data'] != null) {
           List<dynamic> businessesData = response['data'];
           List<Business> businesss = businessesData.map((businessInfo) {
-            return Business(
+           return Business(
               id: businessInfo['id'],
               businessName: businessInfo['business_name'],
               pitchInterest: businessInfo['pitch_interest'],
+              businessEmailContact:businessInfo['business_email_contact'],
+              businessTelephoneContact: businessInfo['business_telephone_contact'],
+              businessPhysicalAddress:businessInfo['physical_address'],
+              businessContactPersonName:businessInfo['contact_person_name'],
+              businessContactPersonTelephone:businessInfo['contact_person_telephone'],
+              businessContactPersonGender:businessInfo['contact_person_gender'],
+              businessDescription: businessInfo['notes'],
+              businessContactPersonEmail: businessInfo['contact_person_email'],
             );
           }).toList();
           return businesss;

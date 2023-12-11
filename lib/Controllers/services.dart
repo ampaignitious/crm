@@ -86,6 +86,32 @@ class AuthController {
     }
   }
 
+  Future<Map<String, dynamic>> deleteProfile() async {
+    final dio = Dio();
+    final client = RestClient(dio);
+    dio.options.headers['Accept'] = "application/json";
+    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
+    try {
+      
+      final response = await client.deleteProfile();
+      //check if the response contains message key
+      if (response.containsKey('message')) {
+        return response;
+      } else {
+        return {
+          "error": "Invalid credentials",
+          "status": "error",
+        };
+      }
+    } catch (e) {
+      print("delete error: $e");
+      return {
+        "error": "Invalid credentials",
+        "status": "error",
+      };
+    }
+  }
+
   saveAccessToken(String accessToken) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString(ACCESS_TOKEN, accessToken);
@@ -98,14 +124,11 @@ class AuthController {
     }
     return prefs.getString(ACCESS_TOKEN);
   }
-  
+
   removeAccessToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove(ACCESS_TOKEN);
   }
-
-
-
 
   Future<Map<String, dynamic>> signOut() async {
     final dio = Dio();
@@ -141,6 +164,7 @@ class AuthController {
       final response = await client.getMappings();
       //check if response contains message
       if (response.containsKey('message')) {
+        //calculate the number of businesses
         return response;
       } else {
         return {
@@ -153,6 +177,27 @@ class AuthController {
         "error": "Failed to get mappings",
         "status": "error",
       };
+    }
+  }
+
+  //calculate the number of businesses
+  Future<int> getNumberOfBusinesses() async {
+    final dio = Dio();
+    final client = RestClient(dio);
+    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
+
+    try {
+      final response = await client.getMappings();
+      //check if response contains message
+      if (response.containsKey('message')) {
+        //calculate the number of businesses
+        int numbeOfBusinesses = response['data'].length;
+        return numbeOfBusinesses;
+      } else {
+        return 0;
+      }
+    } catch (e) {
+      return 0;
     }
   }
 
@@ -250,9 +295,17 @@ class AuthController {
     final dio = Dio();
     final client = RestClient(dio);
     dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
+    dio.options.headers['Accept'] = "application/json";
     try {
       final response = await client.getProducts();
-      return response;
+      if (response.containsKey('message')) {
+        return response;
+      } else {
+        return {
+          "error": "Failed to get products",
+          "status": "error",
+        };
+      }
     } catch (e) {
       return {
         "error": "Failed to get products",
@@ -335,15 +388,27 @@ class AuthController {
     }
   }
 
-  Future<Map<String, dynamic>> getMaintenance() async {
+  Future<Map<String, dynamic>> getMaintenances() async {
     final dio = Dio();
     final client = RestClient(dio);
     dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
+    //accept application/json
+    dio.options.headers['Accept'] = "application/json";
 
     try {
-      final response = await client.getMaintenance();
-      return response;
+      final response = await client.getMaintenances();
+      print("response: $response");
+      //check if response contains message
+      if (response.containsKey('message')) {
+        return response;
+      } else {
+        return {
+          "error": "Failed to get maintenances",
+          "status": "error",
+        };
+      }
     } catch (e) {
+      print("status error code: $e");
       return {
         "error": "Failed to get maintenance",
         "status": "error",

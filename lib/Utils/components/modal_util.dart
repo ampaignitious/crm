@@ -1,8 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:valour/Controllers/services.dart';
 import 'package:valour/Utils/AppColors.dart';
 import 'package:valour/Models/Product.dart';
 
 class ModalUtils {
+  static Future<List<Product>> getProducts() async {
+    AuthController authController = AuthController();
+    try {
+      final response = await authController.getProducts();
+      if (response.containsKey("error")) {
+        throw Exception("The return is an error");
+      } else {
+        if (response['data'] != null) {
+          List<dynamic> productsData = response['data'];
+          List<Product> products = productsData.map((productsInfo) {
+            return Product(
+              id: productsInfo['id'],
+              product_name: productsInfo['product_name'],
+              product_price: productsInfo['price'],
+              product_quantity: 0,
+            );
+          }).toList();
+          return products;
+        } else {
+          // Handle the case where the 'contacts' field in the API response is null
+          return [];
+        }
+      }
+    } catch (error) {
+      // Handle the case where the 'contacts' field in the API response is null
+      return [];
+    }
+  }
+
   static void showSimpleModalDialog(
       BuildContext context, List<Product> productList,
       {bool isOrder = true}) {

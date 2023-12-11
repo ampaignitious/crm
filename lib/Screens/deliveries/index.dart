@@ -1,42 +1,42 @@
 import 'package:valour/Controllers/services.dart';
-import 'package:valour/Models/Maintenance.dart';
+import 'package:valour/Models/Delivery.dart';
 import 'package:valour/Models/Product.dart';
+import 'package:valour/Screens/deliveries/DeliveryDetails.dart';
 import 'package:valour/Utils/AppColors.dart';
-import 'package:valour/Widgets/MainteananceWidgets/SingleMainteananceDisplayScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 
-class MainteanceScreen extends StatefulWidget {
-  const MainteanceScreen({super.key});
+class Delivery extends StatefulWidget {
+  const Delivery({super.key});
 
   @override
-  State<MainteanceScreen> createState() => _MainteanceScreenState();
+  State<Delivery> createState() => DeliveryState();
 }
 
-class _MainteanceScreenState extends State<MainteanceScreen> {
-    late Future<List<Maintenance>> maintenances;
+class DeliveryState extends State<Delivery> {
+    late Future<List<DeliveryData>> deliveries;
   TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-            maintenances = getMaintenances();
+            deliveries = getDeliveries();
 
   }
 
-   Future<List<Maintenance>> getMaintenances() async {
+   Future<List<DeliveryData>> getDeliveries() async {
     AuthController authController = AuthController();
     try {
-      final response = await authController.getMaintenances();
+      final response = await authController.getDeliveries();
       if (response.containsKey("error")) {
         throw Exception("The return is an error");
       } else {
         if (response['data'] != null) {
-          List<dynamic> eventsData = response['data'];
-          List<Maintenance> events = eventsData.map((contactData) {
+          List<dynamic> deliveriesData = response['data'];
+          List<DeliveryData> deliveries = deliveriesData.map((contactData) {
 
-            List<dynamic> productsData = contactData['maintenance_products'];
+            List<dynamic> productsData = contactData['delivery_products'];
             List<Product> products = productsData.map((productData) {
               return Product(
                 id: productData['id'],
@@ -48,24 +48,20 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
               );
             }).toList();
 
-            return Maintenance(
+            return DeliveryData(
               id: contactData['id'],
-              dateOfMaintenance: contactData['date_of_maintenance'],
-              comment: contactData['comment'],
               businessName: contactData['visit']['visit']['business_name'],
               visitNotes: contactData['visit']['visit_notes'],
-              maintenanceProducts: products,
+              deliveryProducts: products,
             );
           }).toList();
-          print("Events: ${events.toString()}");
-          return events;
+          return deliveries;
         } else {
           // Handle the case where the 'contacts' field in the API response is null
           throw Exception("No data found");
         }
       }
     } catch (error) {
-      print("Error: $error");
       // Handle the case where the 'contacts' field in the API response is null
       throw Exception("Un expected error occurred");
     }
@@ -93,7 +89,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
  
         title: Padding(
           padding: EdgeInsets.only(left: size.width*0.03),
-          child: Text("Machine Maintenance",
+          child: Text("Deliveries",
            style: GoogleFonts.lato(
             fontSize: size.width*0.05, 
             color: AppColors.menuBackground,
@@ -149,7 +145,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
                     Padding(
                       padding: EdgeInsets.only(top: size.height*0.015 ),
                       child: Center(
-                        child: Text("Maintenance Status", style: GoogleFonts.lato(
+                        child: Text("Delivery Status", style: GoogleFonts.lato(
                           fontSize:size.width*0.050,
                           color: AppColors.contentColorPurple,
                           fontWeight: FontWeight.bold
@@ -187,7 +183,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
                     // Upcoming
                     Padding(
                       padding: EdgeInsets.only(top: size.height*0.015, left: size.width*0.04),
-                      child: Text("Upcoming Maintenances: 23", style: GoogleFonts.lato(
+                      child: Text("Upcoming Deliverys: 23", style: GoogleFonts.lato(
                  fontSize: size.width*0.03
                       ),),
                     ),
@@ -196,7 +192,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
                     //// Completed
                     Padding(
                       padding: EdgeInsets.only(top: size.height*0.015, left: size.width*0.04),
-                      child: Text("Completed Maintenances: 182", style: GoogleFonts.lato(
+                      child: Text("Completed Deliverys: 182", style: GoogleFonts.lato(
                      fontSize: size.width*0.03
                       ),),
                     ),
@@ -214,7 +210,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
             SizedBox(height: size.height*0.016,),
             Padding(
               padding: EdgeInsets.only(left:size.width*0.03),
-              child: Text("Maintenance reccords", style: GoogleFonts.lato(
+              child: Text("Delivery reccords", style: GoogleFonts.lato(
               color: AppColors.coffeeBean,
               fontWeight: FontWeight.bold,
               fontSize: size.width*0.04
@@ -228,7 +224,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
                 onChanged: (value) {
                 },
                 decoration: InputDecoration(
-                  labelText: 'search a Maintenance record',
+                  labelText: 'search a Delivery record',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10)
                   ),
@@ -278,7 +274,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
                         decoration: BoxDecoration(
                           color: AppColors.contentColorBlack,
                         ),
-                        child: Center(child: Text("Date", style: GoogleFonts.lato(
+                        child: Center(child: Text("Status", style: GoogleFonts.lato(
                           color:Colors.white
                         ),)))
                     ],
@@ -287,7 +283,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
               ),
                       ),
            FutureBuilder(
-            future: maintenances,
+            future: deliveries,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasError) {
@@ -295,7 +291,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
                     child: Text("An error occurred"),
                   );
                 } else if (snapshot.hasData) {
-                  final data = snapshot.data as List<Maintenance>;
+                  final data = snapshot.data as List<DeliveryData>;
                   return SingleChildScrollView(
                     child: Column(
                       children: [
@@ -324,11 +320,11 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
     );
   }
   // 
-  Widget buildTableRowWidget(Maintenance maintenanceData, double size1, double size2, double idwidth, double idheight, double visitwidth, double descriptionwidth) {
+  Widget buildTableRowWidget(DeliveryData deliveryData, double size1, double size2, double idwidth, double idheight, double visitwidth, double descriptionwidth) {
     return InkWell(
       onTap: (){
         Navigator.push(context, MaterialPageRoute(builder: (context){
-        return SingleMainteananceDisplayScreen(maintenance: maintenanceData);
+        return DeliveryDetails(delivery: deliveryData);
       }));
       },
       child: Card(
@@ -342,7 +338,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
                     decoration: const BoxDecoration(
                       // color: AppColors.contentColorWhite,
                     ),
-                    child: Center(child: Text("${maintenanceData.id}", style: GoogleFonts.lato(
+                    child: Center(child: Text("${deliveryData.id}", style: GoogleFonts.lato(
                     ),),),
               ),
               Container(
@@ -351,7 +347,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
                     decoration: const BoxDecoration(
                       // color: AppColors.contentColorYellow,
                     ),
-                    child: Center(child: Text(maintenanceData.businessName, style: GoogleFonts.lato(
+                    child: Center(child: Text(deliveryData.businessName, style: GoogleFonts.lato(
               ),))),
               Container(
                     height: idheight,
@@ -359,7 +355,7 @@ class _MainteanceScreenState extends State<MainteanceScreen> {
                     decoration: const BoxDecoration(
                       // color: AppColors.contentColorPurple,
                     ),
-                    child: Center(child: Text(maintenanceData.dateOfMaintenance, style: GoogleFonts.lato(
+                    child: Center(child: Text("Delivered", style: GoogleFonts.lato(
                       color:Colors.black
                     ),
                     textAlign: TextAlign.center,

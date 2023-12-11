@@ -13,20 +13,7 @@ class BusinessMappingForm extends StatefulWidget {
 }
 
 class _BusinessMappingFormState extends State<BusinessMappingForm> {
-  List<Product> productList = [
-    Product(
-      id: 1,
-      product_name: 'Product 1',
-      product_price: 100,
-      product_quantity: 0,
-    ),
-    Product(
-      id: 2,
-      product_name: 'Product 2',
-      product_price: 200,
-      product_quantity: 0,
-    ),
-  ];
+  List<Product> productList = [];
 
   bool showBusinessForm = false;
   bool showContactPersonDetailForm = false;
@@ -57,6 +44,14 @@ class _BusinessMappingFormState extends State<BusinessMappingForm> {
   void initState() {
     super.initState();
     _captureGPSLocation();
+    _fetchProducts();
+  }
+
+  Future<void> _fetchProducts() async {
+    List<Product> products = await ModalUtils.getProducts();
+    setState(() {
+      productList = products;
+    });
   }
 
   Future<void> _captureGPSLocation() async {
@@ -103,14 +98,14 @@ class _BusinessMappingFormState extends State<BusinessMappingForm> {
 
   //extract ordered products from the list
   List<Map<String, dynamic>> getOrderedProducts() {
-  List<Map<String, dynamic>> orderedProducts = [];
+    List<Map<String, dynamic>> orderedProducts = [];
     for (Product product in productList) {
       if (product.isOrdered == true) {
         //make a json object of the product
         orderedProducts.add({
           "product_id": product.id,
           "quantity": product.product_quantity,
-      });
+        });
       }
     }
     return orderedProducts;

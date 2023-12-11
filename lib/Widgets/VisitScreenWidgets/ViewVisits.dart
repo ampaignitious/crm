@@ -38,9 +38,17 @@ class _ViewVisitsState extends State<ViewVisits> {
               id: contactData['id'],
               businessName: contactData['business_name'],
               pitchInterest: contactData['pitch_interest'],
+              businessEmailContact:contactData['business_email_contact'],
+              businessTelephoneContact: contactData['business_telephone_contact'],
+              businessPhysicalAddress:contactData['physical_address'],
+              businessContactPersonName:contactData['contact_person_name'],
+              businessContactPersonTelephone:contactData['contact_person_telephone'],
+              businessContactPersonGender:contactData['contact_person_gender'],
+              businessDescription: contactData['notes'],
+              businessContactPersonEmail: contactData['contact_person_email'],
             );
           }).toList();
-          print("Events: $events");
+          print("Events: ${events.toString()}");
           return events;
         } else {
           // Handle the case where the 'contacts' field in the API response is null
@@ -127,7 +135,7 @@ class _ViewVisitsState extends State<ViewVisits> {
                     decoration: const BoxDecoration(
                       color: AppColors.contentColorPurple,
                     ),
-                    child: Center(child: Text("Description", style: GoogleFonts.lato(
+                    child: Center(child: Text("Status", style: GoogleFonts.lato(
                       color:Colors.white
                     ),)))
                 ],
@@ -139,24 +147,17 @@ class _ViewVisitsState extends State<ViewVisits> {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasError) {
-                  //print the error
-                  print("snapshot error: ${snapshot.error.toString()}");
                   return const Center(
                     child: Text("An error occurred"),
                   );
                 } else if (snapshot.hasData) {
                   final data = snapshot.data as List<Business>;
-                  return SizedBox(
-                    height: size.height * 0.62,
-                    width: double.maxFinite,
-                    child: ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      itemCount: data.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final Business businessData = data[index];
-                        return buildTableRowWidget(businessData, spacing, spacing2,
-                            idwidth, idheight, visitwidth, descriptionwidth);
-                      },
+                  return SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        for (var i = 0; i < data.length; i++)
+                          buildTableRowWidget(data[i], spacing, spacing2, idwidth, idheight, visitwidth, descriptionwidth),
+                      ],
                     ),
                   );
                 } else {
@@ -179,7 +180,7 @@ class _ViewVisitsState extends State<ViewVisits> {
     return InkWell(
       onTap: (){
         Navigator.push(context, MaterialPageRoute(builder: (context){
-        return SingleVisitViewScreen(visitName: visitData.businessName, visitDescription: visitData.pitchInterest,);
+        return SingleVisitViewScreen(business: visitData);
       }));
       },
       child: Card(

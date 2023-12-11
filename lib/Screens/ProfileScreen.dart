@@ -66,13 +66,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.5),
-                  offset: Offset(0.8, 1.0),
+                  offset: const Offset(0.8, 1.0),
                   blurRadius: 4.0,
                   spreadRadius: 0.2,
                 ),
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.5),
-                  offset: Offset(0.8, 1.0),
+                  offset: const Offset(0.8, 1.0),
                   blurRadius: 4.0,
                   spreadRadius: 0.2,
                 ),
@@ -260,9 +260,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   //add an on tap function icon to log out the user
                   IconButton(
-                      onPressed: () {
+                      onPressed: () async {
                         AuthController authController = AuthController();
-                        authController.signOut();
+                        await authController.signOut();
                         Navigator.pushReplacement(context,
                             MaterialPageRoute(builder: (context) {
                           return const LoginScreen();
@@ -287,14 +287,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Settings",
+                  "Delete Account",
                   style: GoogleFonts.lato(fontSize: size.width * 0.06),
                 ),
-                Icon(
-                  Icons.arrow_circle_right_sharp,
-                  color: AppColors.contentColorPurple,
-                  size: size.width * 0.12,
-                )
+                IconButton(
+                    onPressed: () async {
+                      AuthController authController = AuthController();
+                      final response = await authController.deleteProfile();
+                      //check if the response contains the message
+                      if (response.containsKey("message")) {
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (context) {
+                          return const LoginScreen();
+                        }));
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              "Account deletion failed",
+                              style: GoogleFonts.lato(),
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                    icon: const Icon(
+                      Icons.delete,
+                      color: Colors.red,
+                      size: 30,
+                    ))
               ],
             ),
           )

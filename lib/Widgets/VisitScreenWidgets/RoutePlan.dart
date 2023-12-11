@@ -1,30 +1,27 @@
-import 'package:valour/Controllers/services.dart';
 import 'package:valour/Screens/NotificationScreen.dart';
 import 'package:valour/Screens/ProfileScreen.dart';
 import 'package:valour/Utils/AppColors.dart';
 import 'package:valour/Widgets/Drawer/DrawerItems.dart';
-import 'package:valour/Widgets/VisitScreenWidgets/MenuOptions.dart';
-import 'package:valour/Widgets/VisitScreenWidgets/ViewVisits.dart';
+import 'package:valour/Widgets/VisitScreenWidgets/RoutePlanHome.dart';
+import 'package:valour/Widgets/VisitScreenWidgets/ViewRoutePlans.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 
-class VisitsPage extends StatefulWidget {
-  const VisitsPage({super.key});
+class RoutePlan extends StatefulWidget {
+  const RoutePlan({super.key});
 
   @override
-  State<VisitsPage> createState() => _VisitsPageState();
+  State<RoutePlan> createState() => _RoutePlanState();
 }
 
-class _VisitsPageState extends State<VisitsPage> with TickerProviderStateMixin{
-  late TabController _tabController;
-  late Future<int> numberOfBusinessesFuture;
+class _RoutePlanState extends State<RoutePlan> with TickerProviderStateMixin{
+    late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
-    numberOfBusinessesFuture = getNumberOfBusinesses();
   }
 
   @override
@@ -32,17 +29,6 @@ class _VisitsPageState extends State<VisitsPage> with TickerProviderStateMixin{
     _tabController.dispose();
     super.dispose();
   }
-
-  Future<int> getNumberOfBusinesses() async {
-    AuthController authController = AuthController();
-
-    int numberOfBusinesses = await authController.getNumberOfBusinesses();
-
-    return numberOfBusinesses;
-  }
-
-  
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -63,7 +49,7 @@ class _VisitsPageState extends State<VisitsPage> with TickerProviderStateMixin{
  
         title: Padding(
           padding: EdgeInsets.only(left: size.width*0.09),
-          child: Text("Clients",
+          child: Text("Route Plans",
            style: GoogleFonts.lato(
             fontSize: size.width*0.055, 
             color: AppColors.menuBackground,
@@ -76,7 +62,7 @@ class _VisitsPageState extends State<VisitsPage> with TickerProviderStateMixin{
                 InkWell(
                   onTap: (){
                     Navigator.push(context, MaterialPageRoute(builder: (context){
-                      return NotificationScreen();
+                      return const NotificationScreen();
                     }));
                   },
                   child: Padding(
@@ -123,57 +109,38 @@ class _VisitsPageState extends State<VisitsPage> with TickerProviderStateMixin{
                     left: size.width*0.008
                   ),
                   child: Text("Home", style: GoogleFonts.lato(
-                    fontSize: size.height*0.025,
+                    fontSize: size.height*0.0135,
                     color: AppColors.darkRoast
                   ),),
                 ),
               ]),
             ),
+            
             Tab(
               child: Row(children: [
-                Icon(Icons.timeline,
+                Icon(Icons.event_seat,
                 size:size.height*0.014,
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: size.width * 0.004),
-                  child: FutureBuilder<int>(
-                    future: numberOfBusinessesFuture,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Text(
-                          "Clients(...)",
-                          style: GoogleFonts.lato(
-                            fontSize: size.height * 0.025,
-                            color: AppColors.darkRoast,
-                          ),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Text("Error: ${snapshot.error}");
-                      } else {
-                        return Text(
-                          "Clients(${snapshot.data ?? 0})",
-                          style: GoogleFonts.lato(
-                            fontSize: size.height * 0.025,
-                            color: AppColors.darkRoast,
-                          ),
-                        );
-                      }
-                    },  
-
+                  padding: EdgeInsets.only(
+                    left: size.width*0.008
                   ),
+                  child: Text("view route plans", style: GoogleFonts.lato(
+                    fontSize: size.height*0.013,
+                     color: AppColors.darkRoast
+                  ),),
                 ),
               ]),
             ),
-          ]),
+          ],
+        ),
       ),
-
       
      body: TabBarView(
         controller: _tabController,
         children: const [
-          MenuOptions(),
-          ViewVisits(),
-          // ViewRoutePlans(),
+          RoutePlanHome(),
+          ViewRoutePlans(),
         ],
       ),
     );

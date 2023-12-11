@@ -1,44 +1,44 @@
-import 'package:valour/Models/Maintenance.dart';
-import 'package:valour/Models/Product.dart';
 import 'package:valour/Utils/AppColors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:valour/Models/Demo.dart';
 
-class SingleMainteananceDisplayScreen extends StatefulWidget {
-  final Maintenance? maintenance;
-  const SingleMainteananceDisplayScreen({super.key, required this.maintenance});
+class DemoDetails extends StatefulWidget {
+  final DemoData? demo;
+  const DemoDetails({super.key, required this.demo});
 
   @override
-  SingleMainteananceDisplayScreenState createState() => SingleMainteananceDisplayScreenState();
+  DemoDetailsState createState() => DemoDetailsState();
 }
 
-class SingleMainteananceDisplayScreenState extends State<SingleMainteananceDisplayScreen> {
+class DemoDetailsState extends State<DemoDetails> {
   @override
   void initState() {
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-            appBar: AppBar(
+      appBar: AppBar(
         iconTheme: IconThemeData(
-        color: AppColors.contentColorPurple,
-        size: size.width*0.08,
-        ),  // Change the icon color here
+          color: AppColors.contentColorPurple,
+          size: size.width * 0.08,
+        ), // Change the icon color here
         elevation: 0,
         backgroundColor: AppColors.contentColorCyan,
- 
+
         title: Padding(
-          padding: EdgeInsets.only(left: size.width*0.03),
-          child: Text("Maintenance Details",
-           style: GoogleFonts.lato(
-            fontSize: size.width*0.038,
-            color: AppColors.menuBackground,
-            fontWeight: FontWeight.bold
-          ),),
+          padding: EdgeInsets.only(left: size.width * 0.03),
+          child: Text(
+            "Demo Details",
+            style: GoogleFonts.lato(
+                fontSize: size.width * 0.038,
+                color: AppColors.menuBackground,
+                fontWeight: FontWeight.bold),
+          ),
         ),
- 
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -61,34 +61,22 @@ class SingleMainteananceDisplayScreenState extends State<SingleMainteananceDispl
         children: [
           _buildSectionHeader("BUSINESS INFORMATION", size),
           SizedBox(height: size.height * 0.02),
-          _buildInfoRow("Business Name", widget.maintenance?.businessName ?? '',
-              size, Icons.business),
+          _buildInfoRow("Business Name", widget.demo?.businessName ?? '', size,
+              Icons.business),
           SizedBox(height: size.height * 0.02),
-          _buildSectionHeader("ABOUT MAINTENANCE", size),
+          _buildSectionHeader("ABOUT DEMO", size),
           SizedBox(height: size.height * 0.02),
-          _buildInfoRow(
-              "Date of Last Maintenance",
-              widget.maintenance?.dateOfMaintenance ?? '',
-              size,
+          _buildInfoRow("Machine Demo Date", widget.demo?.demoDate ?? '', size,
               Icons.calendar_today_outlined),
-                        SizedBox(height: size.height * 0.02),
-          _buildSectionHeader("MAINTENANCE PRODUCTS", size),
-        _buildMaintenanceProducts(size), // Display maintenance products here
           SizedBox(height: size.height * 0.02),
-          _buildSectionHeader("MAINTENANCE COMMENT", size),
+          _buildSectionHeader("DEMO NOTES", size),
           SizedBox(height: size.height * 0.02),
-          _buildInfoRow(
-              "Comment",
-              widget.maintenance?.comment ?? '',
-              size,
+          _buildInfoRow("Demo Notes", widget.demo?.demoNotes ?? '', size,
               Icons.comment_outlined),
-                        SizedBox(height: size.height * 0.02),
+          SizedBox(height: size.height * 0.02),
           _buildSectionHeader("VISIT REMARKS", size),
           SizedBox(height: size.height * 0.02),
-          _buildInfoRow(
-              "Visit Notes",
-              widget.maintenance?.dateOfMaintenance ?? '',
-              size,
+          _buildInfoRow("Visit Notes", widget.demo?.visitNotes ?? '', size,
               Icons.notes_outlined),
         ],
       ),
@@ -138,27 +126,4 @@ class SingleMainteananceDisplayScreenState extends State<SingleMainteananceDispl
       ],
     );
   }
-
-  Widget _buildMaintenanceProducts(Size size) {
-  final List<Product> maintenanceProducts =
-      widget.maintenance?.maintenanceProducts ?? [];
-
-      print("Maintenance Products: $maintenanceProducts");
-
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: maintenanceProducts.map((product) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildSectionHeader("Product Name", size),
-          _buildInfoRow("Name", product.product_name, size, Icons.shopping_bag),
-          SizedBox(height: size.height * 0.02),
-        ],
-      );
-    }).toList(),
-  );
-}
-
-
 }
