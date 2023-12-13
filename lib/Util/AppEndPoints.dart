@@ -1,5 +1,5 @@
 class AppEndPoints {
-  static const String baseUrl = "https://aidvantage.impact-outsourcing.com/api/";
+  static const String baseUrl = "http://10.0.2.2:8000/api/";
   //auth endpoints
   static const String loginEndPoint = "/login";
   static const String logoutEndPoint = "/logout";
@@ -19,6 +19,21 @@ class AppEndPoints {
   //products end points
   static const String products = "/products";
 
+  //update products end points
+  static const String updateProducts = "/products/{product}";
+
+  //delete products end points
+  static const String deleteProducts = "/products/{product}";
+
+  //update quantity products end points
+  static const String updateQuantityProducts = "/update-quantity/{product}";
+
+  //coffee products end points
+  static const String coffeeProducts = "/get-coffee-products";
+
+  //coffee machines end points
+  static const String coffeeMachines = "/get-coffee-machines";
+
   //visits end points
   static const String visits = "/visits";
 
@@ -33,4 +48,7 @@ class AppEndPoints {
 
   //demos end points
   static const String demos = "/demos";
+
+  //contacts end points
+  static const String contacts = "/contacts";
 }

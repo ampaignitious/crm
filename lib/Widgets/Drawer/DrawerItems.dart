@@ -4,12 +4,13 @@ import 'package:valour/Screens/AuthenticationSceens/LoginScreen.dart';
 import 'package:valour/Screens/DefaultScreen.dart';
 import 'package:valour/Screens/MainteanceScreen.dart';
 import 'package:valour/Screens/ProfileScreen.dart';
-import 'package:valour/Screens/SalesScreen.dart';
-import 'package:valour/Screens/Targets.dart';
+ import 'package:valour/Screens/Targets.dart';
 import 'package:valour/Screens/VisitsPage.dart';
 import 'package:valour/Screens/appointments/index.dart';
+import 'package:valour/Screens/contacts/index.dart';
 import 'package:valour/Screens/deliveries/index.dart';
 import 'package:valour/Screens/demos/index.dart';
+import 'package:valour/Screens/sales/index.dart';
 import 'package:valour/Utils/AppColors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -149,7 +150,7 @@ class _DrawerItemsState extends State<DrawerItems> {
                           Divider(),
                           Row(
                             children: [
-                              Icon(
+                              const Icon(
                                 Icons.phone,
                                 color: AppColors.contentColorPurple,
                               ),
@@ -169,10 +170,10 @@ class _DrawerItemsState extends State<DrawerItems> {
                     onTap: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
-                        return DefaultScreen();
+                        return const DefaultScreen();
                       }));
                     },
-                    child: Card(
+                    child: const Card(
                       child: ListTile(
                         leading: Icon(
                           Icons.home,
@@ -226,7 +227,7 @@ class _DrawerItemsState extends State<DrawerItems> {
                     onTap: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
-                        return SalesScreen();
+                        return const Sale();
                       }));
                     },
                     child: Card(
@@ -237,11 +238,11 @@ class _DrawerItemsState extends State<DrawerItems> {
                           height: size.height * 0.16,
                           fit: BoxFit.fill,
                         ),
-                        title: Text('Sales'),
+                        title: const Text('Sales'),
                         onTap: () {
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
-                            return SalesScreen();
+                            return const Sale();
                           }));
                         },
                       ),
@@ -256,39 +257,39 @@ class _DrawerItemsState extends State<DrawerItems> {
                         height: size.height * 0.05,
                         fit: BoxFit.fill,
                       ),
-                      title: Text('Targets'),
+                      title: const Text('Targets'),
                       onTap: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
-                          return Targets();
+                          return const Targets();
                         }));
                       },
                     ),
                   ),
                   Card(
                     child: ListTile(
-                      leading: Icon(
+                      leading: const Icon(
                         Icons.settings,
                         color: AppColors
                             .contentColorPurple, // Change the color of the drawer icon here
                       ),
-                      title: Text('Maintenance'),
+                      title: const Text('Maintenance'),
                       onTap: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
-                          return MainteanceScreen();
+                          return const MainteanceScreen();
                         }));
                       },
                     ),
                   ),
                     Card(
                     child: ListTile(
-                      leading: Icon(
+                      leading: const Icon(
                         Icons.settings,
                         color: AppColors
                             .contentColorPurple, // Change the color of the drawer icon here
                       ),
-                      title: Text('Demos'),
+                      title: const Text('Demos'),
                       onTap: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
@@ -299,12 +300,12 @@ class _DrawerItemsState extends State<DrawerItems> {
                   ),
                     Card(
                     child: ListTile(
-                      leading: Icon(
+                      leading: const Icon(
                         Icons.settings,
                         color: AppColors
                             .contentColorPurple, // Change the color of the drawer icon here
                       ),
-                      title: Text('Appointments'),
+                      title: const Text('Appointments'),
                       onTap: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
@@ -315,12 +316,12 @@ class _DrawerItemsState extends State<DrawerItems> {
                   ),
                     Card(
                     child: ListTile(
-                      leading: Icon(
+                      leading: const Icon(
                         Icons.settings,
                         color: AppColors
                             .contentColorPurple, // Change the color of the drawer icon here
                       ),
-                      title: Text('Deliveries'),
+                      title: const Text('Deliveries'),
                       onTap: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
@@ -329,15 +330,31 @@ class _DrawerItemsState extends State<DrawerItems> {
                       },
                     ),
                   ),
+                    Card(
+                    child: ListTile(
+                      leading: const Icon(
+                        Icons.settings,
+                        color: AppColors
+                            .contentColorPurple, // Change the color of the drawer icon here
+                      ),
+                      title: const Text('Contacts'),
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return const Contacts();
+                        }));
+                      },
+                    ),
+                  ),
 
                   Card(
                     child: ListTile(
-                      leading: Icon(
+                      leading: const Icon(
                         Icons.exit_to_app_rounded,
                         color: AppColors
                             .contentColorPurple, // Change the color of the drawer icon here
                       ),
-                      title: Text('Logout'),
+                      title: const Text('Logout'),
                       onTap: () {
                         signOut();
                       },

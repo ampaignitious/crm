@@ -33,7 +33,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
 
         backgroundColor: AppColors.contentColorCyan,
  
-        title: Text("Inventory page",
+        title: Text("Inventory",
          style: GoogleFonts.lato(
           fontSize: size.width*0.05, 
           color: AppColors.menuBackground,
@@ -114,9 +114,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       ],
                     ),
                    ),
-                  // 
                   Container(
-                    // container wrapping the sold machine item
                     height: size.height*0.10,
                     width: size.width*0.47,
                     decoration: BoxDecoration(
@@ -307,7 +305,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                             ],
                           ),
                         )
-                      ],
+                      ], 
                     ),
                    ),
                    ],
@@ -482,7 +480,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
             InkWell(
               onTap: (){
                 Navigator.push(context, MaterialPageRoute(builder: (context){
-                  return MachineRegistrationScreen();
+                  return const MachineRegistrationScreen(machineFormMode: MachineFormMode.Add);
                 }));
               },
               child: Container(
@@ -506,7 +504,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
             InkWell(
               onTap: (){
                 Navigator.push(context, MaterialPageRoute(builder: (context){
-                  return CoffeeProductRegistrationFrom();
+                  return const CoffeeProductRegistrationFrom(formMode: FormMode.Add);
                 }));
               },
               child: Container(

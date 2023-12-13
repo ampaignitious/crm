@@ -76,7 +76,7 @@ class _VisitsPageState extends State<VisitsPage> with TickerProviderStateMixin{
                 InkWell(
                   onTap: (){
                     Navigator.push(context, MaterialPageRoute(builder: (context){
-                      return NotificationScreen();
+                      return const NotificationScreen();
                     }));
                   },
                   child: Padding(
@@ -173,7 +173,6 @@ class _VisitsPageState extends State<VisitsPage> with TickerProviderStateMixin{
         children: const [
           MenuOptions(),
           ViewVisits(),
-          // ViewRoutePlans(),
         ],
       ),
     );

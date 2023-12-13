@@ -57,6 +57,20 @@ class _CreateVisitScreenState extends State<CreateVisitScreen> {
   List<Map<String, dynamic>> getOrderedProducts() {
     List<Map<String, dynamic>> orderedProducts = [];
     for (Product product in productList) {
+      if (product.isSelected == true) {
+        //make a json object of the product
+        orderedProducts.add({
+          "product_id": product.id,
+          "quantity": product.product_quantity,
+        });
+      }
+    }
+    return orderedProducts;
+  }
+
+    List<Map<String, dynamic>> getSelectedProducts() {
+    List<Map<String, dynamic>> orderedProducts = [];
+    for (Product product in productList) {
       if (product.isOrdered == true) {
         //make a json object of the product
         orderedProducts.add({
@@ -78,7 +92,7 @@ class _CreateVisitScreenState extends State<CreateVisitScreen> {
         "visit_purpose": "Maintenance",
         "date_of_maintenance": maintenanceDate.text,
         "comment": maintenanceComment.text,
-        "maintenance_products": getOrderedProducts()
+        "maintenance_products": getSelectedProducts()
       };
     }
 
@@ -121,6 +135,9 @@ class _CreateVisitScreenState extends State<CreateVisitScreen> {
         "sale_products": getOrderedProducts()
       };
     }
+
+          print("ordered products $body");
+    print("selected products $body");
     AuthController authController = AuthController();
 
     final response = await authController.addVisit(body);

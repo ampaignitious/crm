@@ -1,10 +1,10 @@
 import 'package:valour/Screens/MainteanceScreen.dart';
-import 'package:valour/Screens/ProfileScreen.dart';
-import 'package:valour/Screens/SalesScreen.dart';
 import 'package:valour/Screens/VisitsPage.dart';
 import 'package:valour/Screens/appointments/index.dart';
+import 'package:valour/Screens/contacts/index.dart';
 import 'package:valour/Screens/deliveries/index.dart';
 import 'package:valour/Screens/demos/index.dart';
+import 'package:valour/Screens/sales/index.dart';
 import 'package:valour/Utils/AppColors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -95,7 +95,7 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
              InkWell(
               onTap: (){
                   Navigator.push(context, MaterialPageRoute(builder: (context){
-                      return MainteanceScreen();
+                      return const MainteanceScreen();
                     }));
               },
                child: Container(
@@ -110,13 +110,13 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
                     boxShadow: [
                           BoxShadow(
                             color: Colors.grey.withOpacity(0.3),
-                            offset: Offset(0.8, 1.0),
+                            offset: const Offset(0.8, 1.0),
                             blurRadius: 4.0,
                             spreadRadius: 0.2,
                           ),
                           BoxShadow(
                             color: Colors.grey.withOpacity(0.3),
-                            offset: Offset(-0.8, -1.0),
+                            offset: const Offset(-0.8, -1.0),
                             blurRadius: 4.0,
                             spreadRadius: 0.2,
                           ),
@@ -304,13 +304,13 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
                   boxShadow: [
                         BoxShadow(
                           color: Colors.grey.withOpacity(0.3),
-                          offset: Offset(0.8, 1.0),
+                          offset: const Offset(0.8, 1.0),
                           blurRadius: 4.0,
                           spreadRadius: 0.2,
                         ),
                         BoxShadow(
                           color: Colors.grey.withOpacity(0.3),
-                          offset: Offset(-0.8, -1.0),
+                          offset: const Offset(-0.8, -1.0),
                           blurRadius: 4.0,
                           spreadRadius: 0.2,
                         ),
@@ -328,7 +328,7 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
                       Container(
                         height:size.height*0.17 ,
                         width: size.width*0.19,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: AppColors.contentColorCyan,
                           shape: BoxShape.circle,
                          ),
@@ -341,9 +341,10 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
                             ),
                          ),
                       ),
-                      Text("Appointments", style: GoogleFonts.lato(
-                        fontSize: size.width*0.04,
-                      ),)
+                      Flexible(
+                        child: Text("Appointments", style: GoogleFonts.lato(
+                        fontSize: size.width*0.03,
+                      ),)),
                     ],
                   ),
                 ),
@@ -362,13 +363,13 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
                   boxShadow: [
                         BoxShadow(
                           color: Colors.grey.withOpacity(0.3),
-                          offset: Offset(0.8, 1.0),
+                          offset: const Offset(0.8, 1.0),
                           blurRadius: 4.0,
                           spreadRadius: 0.2,
                         ),
                         BoxShadow(
                           color: Colors.grey.withOpacity(0.3),
-                          offset: Offset(-0.8, -1.0),
+                          offset: const Offset(-0.8, -1.0),
                           blurRadius: 4.0,
                           spreadRadius: 0.2,
                         ),
@@ -377,7 +378,7 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
                 child: InkWell(
                   onTap: (){
                      Navigator.push(context, MaterialPageRoute(builder: (context){
-                      return SalesScreen();
+                      return const Sale();
                     }));
                   },
                   child: Row(
@@ -413,8 +414,6 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
           ],
         ),
       ),
-      //
-      // four row
       SizedBox(height: size.height*0.03,),
       Padding(
         padding: EdgeInsets.symmetric(horizontal: size.width*0.03),
@@ -439,13 +438,13 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
                     boxShadow: [
                           BoxShadow(
                             color: Colors.grey.withOpacity(0.3),
-                            offset: Offset(0.8, 1.0),
+                            offset: const Offset(0.8, 1.0),
                             blurRadius: 4.0,
                             spreadRadius: 0.2,
                           ),
                           BoxShadow(
                             color: Colors.grey.withOpacity(0.3),
-                            offset: Offset(-0.8, -1.0),
+                            offset: const Offset(-0.8, -1.0),
                             blurRadius: 4.0,
                             spreadRadius: 0.2,
                           ),
@@ -463,7 +462,7 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
                         Container(
                           height:size.height*0.17 ,
                           width: size.width*0.19,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             color: AppColors.contentColorCyan,
                             shape: BoxShape.circle,
                            ),
@@ -491,7 +490,7 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
              InkWell(
               onTap: (){
                 Navigator.push(context, MaterialPageRoute(builder: (context){
-                  return ProfileScreen();
+                  return const Contacts();
                 }));
               },
                child: Container(
@@ -506,13 +505,13 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
                     boxShadow: [
                           BoxShadow(
                             color: Colors.grey.withOpacity(0.3),
-                            offset: Offset(0.8, 1.0),
+                            offset: const Offset(0.8, 1.0),
                             blurRadius: 4.0,
                             spreadRadius: 0.2,
                           ),
                           BoxShadow(
                             color: Colors.grey.withOpacity(0.3),
-                            offset: Offset(-0.8, -1.0),
+                            offset: const Offset(-0.8, -1.0),
                             blurRadius: 4.0,
                             spreadRadius: 0.2,
                           ),
@@ -530,7 +529,7 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
                       Container(
                         height:size.height*0.17 ,
                         width: size.width*0.19,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: AppColors.contentColorCyan,
                           shape: BoxShape.circle,
                          ),
@@ -552,9 +551,6 @@ class _ContainerDisplayingMenuItemsState extends State<ContainerDisplayingMenuIt
         ),
       ),
        SizedBox(height: size.height*0.03,),
- 
-                  
-    
     ],
     );
   }

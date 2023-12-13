@@ -42,6 +42,28 @@ abstract class RestClient {
   @GET(AppEndPoints.products)
   Future<dynamic> getProducts();
 
+  @PUT(AppEndPoints.updateProducts)
+  Future<dynamic> updateProduct(
+      {@Path("product") required int product,
+      @Body() required Map<String, dynamic> body});
+
+  @DELETE(AppEndPoints.deleteProducts)
+  Future<dynamic> deleteProduct({@Path("product") required int product});
+
+  @PUT(AppEndPoints.updateQuantityProducts)
+  Future<dynamic> updateQuantityProduct(
+      {@Path("product") required int product,
+      @Body() required Map<String, dynamic> body});
+
+  @GET(AppEndPoints.coffeeProducts)
+  Future<dynamic> getCoffeeProducts();
+
+  @GET(AppEndPoints.coffeeMachines)
+  Future<dynamic> getCoffeeMachines();
+
+  @POST(AppEndPoints.products)
+  Future<dynamic> addProduct({@Body() required Map<String, dynamic> body});
+
   @GET(AppEndPoints.visits)
   Future<dynamic> getVisits();
 
@@ -59,5 +81,8 @@ abstract class RestClient {
 
   @GET(AppEndPoints.demos)
   Future<dynamic> getDemos();
+
+  @GET(AppEndPoints.contacts)
+  Future<dynamic> getContacts();
 }
 

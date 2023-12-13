@@ -1,7 +1,7 @@
 import 'package:valour/Screens/HomePage.dart';
 import 'package:valour/Screens/InventoryScreen.dart';
-import 'package:valour/Screens/SalesScreen.dart';
 import 'package:valour/Screens/VisitsPage.dart';
+import 'package:valour/Screens/sales/index.dart';
 import 'package:valour/Utils/AppColors.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +17,7 @@ class _DefaultScreenState extends State<DefaultScreen> {
   List Page = [
     const HomePage(),
     const VisitsPage(),
-    const SalesScreen(),
+    const Sale(),
     const InventoryScreen(),
 //  MainteanceScreen(),
   ];

@@ -228,8 +228,6 @@ class SingleVisitViewScreenState extends State<SingleVisitViewScreen> {
               '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
           .join('&');
     }
-
-// ···
     final Uri emailLaunchUri = Uri(
       scheme: 'mailto',
       path: email,

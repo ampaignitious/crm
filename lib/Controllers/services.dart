@@ -314,6 +314,171 @@ class AuthController {
     }
   }
 
+  Future<Map<String, dynamic>> getCoffeeProducts() async {
+    final dio = Dio();
+    final client = RestClient(dio);
+    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
+
+    try {
+      final response = await client.getCoffeeProducts();
+      if (response.containsKey('message')) {
+        return response;
+      } else {
+        return {
+          "error": "Failed to get coffee products",
+          "status": "error",
+        };
+      }
+    } catch (e) {
+      return {
+        "error": "Failed to get coffee products",
+        "status": "error",
+      };
+    }
+  }
+
+  Future<Map<String, dynamic>> getCoffeeMachines() async {
+    final dio = Dio();
+    final client = RestClient(dio);
+    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
+    dio.options.headers['Accept'] = "application/json";
+    try {
+      final response = await client.getCoffeeMachines();
+      if (response.containsKey('message')) {
+        return response;
+      } else {
+        return {
+          "error": "Failed to get coffee machines",
+          "status": "error",
+        };
+      }
+    } catch (e) {
+      print("status error code: $e");
+      return {
+        "error": "Failed to get coffee machines",
+        "status": "error",
+      };
+    }
+  }
+  
+  Future<Map<String, dynamic>> addProduct(Map<String, dynamic> body) async {
+    final dio = Dio();
+    final client = RestClient(dio);
+    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
+    dio.options.headers['Accept'] = "application/json";
+    try {
+      final response = await client.addProduct(body: body);
+      if (response.containsKey('message')) {
+        return {
+          "message": "Product added successfully",
+          "status": "success",
+        };
+      } else {
+        return {
+          "error": "Failed to add product",
+          "status": "error",
+        };
+      }
+    } catch (e) {
+      print("posting error: $e");
+      return {
+        "error": "Failed to add product",
+        "status": "error",
+      };
+    }
+  }
+
+  Future<Map<String, dynamic>> updateProduct(
+      int product, Map<String, dynamic> body) async {
+    final dio = Dio();
+    final client = RestClient(dio);
+    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
+    dio.options.headers['Accept'] = "application/json";
+
+    try {
+      final response = await client.updateProduct(product: product, body: body);
+      if (response.containsKey('message')) {
+        return {
+          "message": "Product updated successfully",
+          "status": "success",
+        };
+      } else {
+        return {
+          "error": "Failed to update product",
+          "status": "error",
+        };
+      }
+    } catch (e) {
+      print("posting error: $e");
+      return {
+        "error": "Failed to update product",
+        "status": "error",
+      };
+    }
+  }
+
+  Future<Map<String, dynamic>> deleteProduct(int product) async {
+    final dio = Dio();
+    final client = RestClient(dio);
+    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
+    dio.options.headers['Accept'] = "application/json";
+    dio.options.validateStatus = (status) => status! < 500;
+    try {
+      final response = await client.deleteProduct(product: product);
+      if (response.containsKey('message')) {
+        return {
+          "message": "Product deleted successfully",
+          "status": "success",
+        };
+      } else if (response.containsKey('error')){
+        return {
+          "error": response['error'],
+          "status": "error",
+        };
+      } else {
+        return {
+          "error": "Failed to delete product",
+          "status": "error",
+        };
+      }
+    } catch (e) {
+      return {
+        "error": "Failed to delete product",
+        "status": "error",
+      };
+    }
+  }
+
+  Future<Map<String, dynamic>> updateQuantityProduct(
+      int product, Map<String, dynamic> body) async {
+    final dio = Dio();
+    final client = RestClient(dio);
+    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
+    dio.options.headers['Accept'] = "application/json";
+    try {
+      final response =
+          await client.updateQuantityProduct(product: product, body: body);
+      if (response.containsKey('message')) {
+        return {
+          "message": "Product quantity updated successfully",
+          "status": "success",
+          "data": response['data']
+        };
+      } else {
+        return {
+          "error": "Failed to update product quantity",
+          "status": "error",
+        };
+      }
+    } catch (e) {
+      print("posting error: $e");
+      return {
+        "error": "Failed to update product quantity",
+        "status": "error",
+      };
+    }
+  }
+
   Future<Map<String, dynamic>> getVisits() async {
     final dio = Dio();
     final client = RestClient(dio);
@@ -392,7 +557,6 @@ class AuthController {
     final dio = Dio();
     final client = RestClient(dio);
     dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
-    //accept application/json
     dio.options.headers['Accept'] = "application/json";
 
     try {
@@ -427,6 +591,30 @@ class AuthController {
     } catch (e) {
       return {
         "error": "Failed to get demos",
+        "status": "error",
+      };
+    }
+  }
+
+  Future<Map<String, dynamic>> getContacts() async {
+    final dio = Dio();
+    final client = RestClient(dio);
+    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
+
+    try {
+      final response = await client.getContacts();
+      //check if response contains message
+      if (response.containsKey('message')) {
+        return response;
+      } else {
+        return {
+          "error": "Failed to get contacts",
+          "status": "error",
+        };
+      }
+    } catch (e) {
+      return {
+        "error": "Failed to get contacts",
         "status": "error",
       };
     }

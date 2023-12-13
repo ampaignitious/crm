@@ -75,10 +75,9 @@ class _ClientsScreenState extends State<ClientsScreen> {
         iconTheme: IconThemeData(
           color: AppColors.contentColorPurple,
           size: size.width * 0.08,
-        ), // Change the icon color here
+        ), 
         elevation: 0.6,
         backgroundColor: AppColors.contentColorCyan,
-
         title: Padding(
           padding: EdgeInsets.only(left: size.width * 0.06),
           child: Text(
