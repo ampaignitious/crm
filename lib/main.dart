@@ -1,7 +1,8 @@
 // ignore: unused_import
-import 'package:valour/Screens/AuthenticationSceens/LoginScreen.dart';
-import 'package:valour/Screens/AuthenticationSceens/Register.dart';
-import 'package:valour/Screens/SplashScreen/FirstScreen.dart';
+import 'package:vfu/Screens/AuthenticationSceens/LoginScreen.dart';
+import 'package:vfu/Screens/AuthenticationSceens/Register.dart';
+import 'package:vfu/Screens/DefaultScreen.dart';
+import 'package:vfu/Screens/SplashScreen/FirstScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,29 +24,47 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   bool isFirstLaunch = true;
   bool isLoading = true;
+  bool isLoggedIn = false;
 
   @override
   void initState() {
     super.initState();
-    setValue().then((isFirstLaunch) {
-      setState(() {
-        this.isFirstLaunch = isFirstLaunch;
-        isLoading =
-            false; // Set loading to false once the operation is complete
-      });
+    loadData();
+  }
+
+  void loadData() async {
+    // Set loading to true while data is being fetched
+    setState(() {
+      isLoading = true;
+    });
+
+    await Future.wait([setValue(), checkStaffId()]);
+
+    setState(() {
+      isLoading = false;
     });
   }
 
-  Future<bool> setValue() async {
+  Future<void> setValue() async {
     final prefs = await SharedPreferences.getInstance();
     int launchCount = prefs.getInt('counter') ?? 0;
     prefs.setInt('counter', launchCount + 1);
     if (launchCount == 0) {
       // If it's the first launch, return true.
-      return true;
+      isFirstLaunch = true;
     } else {
       // If it's not the first launch, return false.
-      return false;
+      isFirstLaunch = false;
+    }
+  }
+
+  Future<void> checkStaffId() async {
+    final prefs = await SharedPreferences.getInstance();
+    String staffId = prefs.getString('username') ?? '';
+    if (staffId == '') {
+      isLoggedIn = false;
+    } else {
+      isLoggedIn = true;
     }
   }
 
@@ -53,7 +72,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'VFU Arrears And Tracker',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -71,7 +90,9 @@ class _MyAppState extends State<MyApp> {
             )
           : isFirstLaunch
               ? const FirstScreen()
-              : const LoginScreen(),
+              : isLoggedIn
+                  ? const DefaultScreen()
+                  : const LoginScreen(),
       routes: {
         '/register': (context) => const Register(),
         '/login': (context) => const LoginScreen(),

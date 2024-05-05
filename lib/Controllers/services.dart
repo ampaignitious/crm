@@ -1,4 +1,8 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
+
+import 'package:vfu/Models/User.dart';
 import 'endpoint.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -9,45 +13,29 @@ class AuthController {
     final dio = Dio();
     final client = RestClient(dio);
     try {
-      Map<String, String> user = {"email": email, "password": password};
+      Map<String, String> user = {"username": email, "password": password};
       final response = await client.signIn(body: user);
-      print('Response: $response');
-
       if (response.containsKey('authorization') &&
           response['authorization'].containsKey('token')) {
         final accessToken = response['authorization']['token'];
         await saveAccessToken(accessToken);
+        await saveUserDetails(
+            response['user']['names'],
+            response['user']['username'],
+            response['user']['staff_id'] ?? 0,
+            response['user']['user_type'] ?? 0,
+            response['user']['region_id'] ?? 0,
+            response['user']['branch_id'] ?? 0);
         return response;
       } else {
+        log("failed exception during login: $response");
         return {
           "error": "Invalid credentials",
           "status": "error",
         };
       } // Handle the case when the access token is not present in the response
     } catch (e) {
-      return {
-        "error": "Invalid credentials",
-        "status": "error",
-      };
-    }
-  }
-
-  Future<Map<String, dynamic>> getProfile() async {
-    final dio = Dio();
-    final client = RestClient(dio);
-    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
-    try {
-      final response = await client.getProfile();
-      //check if the response contains message key
-      if (response.containsKey('message')) {
-        return response;
-      } else {
-        return {
-          "error": "Invalid credentials",
-          "status": "error",
-        };
-      }
-    } catch (e) {
+      log("failed exception happened during login: $e");
       return {
         "error": "Invalid credentials",
         "status": "error",
@@ -78,33 +66,6 @@ class AuthController {
         };
       }
     } catch (e) {
-      print("save error: $e");
-      return {
-        "error": "Invalid credentials",
-        "status": "error",
-      };
-    }
-  }
-
-  Future<Map<String, dynamic>> deleteProfile() async {
-    final dio = Dio();
-    final client = RestClient(dio);
-    dio.options.headers['Accept'] = "application/json";
-    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
-    try {
-      
-      final response = await client.deleteProfile();
-      //check if the response contains message key
-      if (response.containsKey('message')) {
-        return response;
-      } else {
-        return {
-          "error": "Invalid credentials",
-          "status": "error",
-        };
-      }
-    } catch (e) {
-      print("delete error: $e");
       return {
         "error": "Invalid credentials",
         "status": "error",
@@ -130,6 +91,65 @@ class AuthController {
     await prefs.remove(ACCESS_TOKEN);
   }
 
+  saveUserDetails(
+    String name,
+    String username,
+    int staffId,
+    int userType,
+    int regionId,
+    int branchId,
+  ) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString("name", name);
+    await prefs.setString("username", username);
+    await prefs.setString("staff_id", staffId.toString());
+    await prefs.setString("user_type", userType.toString());
+    await prefs.setString("region_id", regionId.toString());
+    await prefs.setString("branch_id", branchId.toString());
+  }
+
+  Future<User> getUserDetails() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    User userDetails = User(
+        name: '',
+        username: '',
+        staffId: '',
+        userType: '',
+        regionId: '',
+        branchId: '',
+        status: '');
+
+    //add name to user details
+    userDetails.name = prefs.getString("name").toString();
+
+    //add username to user details
+    userDetails.username = prefs.getString("username").toString();
+
+    userDetails.staffId = prefs.getString("staff_id").toString();
+
+    userDetails.userType = prefs.getString("user_type").toString();
+
+    //add region id to user details
+    userDetails.regionId = prefs.getString("region_id").toString();
+
+    userDetails.branchId = prefs.getString("branch_id").toString();
+
+    //add status to user details
+    userDetails.status = "success";
+
+    return userDetails;
+  }
+
+  removeUserDetails() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove("name");
+    await prefs.remove("username");
+    await prefs.remove("staff_id");
+    await prefs.remove("user_type");
+    await prefs.remove("region_id");
+    await prefs.remove("branch_id");
+  }
+
   Future<Map<String, dynamic>> signOut() async {
     final dio = Dio();
     final client = RestClient(dio);
@@ -141,6 +161,7 @@ class AuthController {
       //check if response contains message
       if (response.containsKey('message')) {
         await removeAccessToken();
+        await removeUserDetails();
         return response;
       } else {
         return {
@@ -156,133 +177,58 @@ class AuthController {
     }
   }
 
-  Future<Map<String, dynamic>> getMappings() async {
+  //getArrears
+  Future<Map<String, dynamic>> getArrears(String group) async {
     final dio = Dio();
     final client = RestClient(dio);
     dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
-    try {
-      final response = await client.getMappings();
-      //check if response contains message
-      if (response.containsKey('message')) {
-        //calculate the number of businesses
-        return response;
-      } else {
-        return {
-          "error": "Failed to get mappings",
-          "status": "error",
-        };
-      }
-    } catch (e) {
-      return {
-        "error": "Failed to get mappings",
-        "status": "error",
-      };
-    }
-  }
-
-  //calculate the number of businesses
-  Future<int> getNumberOfBusinesses() async {
-    final dio = Dio();
-    final client = RestClient(dio);
-    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
-
-    try {
-      final response = await client.getMappings();
-      //check if response contains message
-      if (response.containsKey('message')) {
-        //calculate the number of businesses
-        int numbeOfBusinesses = response['data'].length;
-        return numbeOfBusinesses;
-      } else {
-        return 0;
-      }
-    } catch (e) {
-      return 0;
-    }
-  }
-
-  Future<Map<String, dynamic>> addMapping(
-      Map<String, dynamic> businessDetails) async {
-    final dio = Dio();
-    final client = RestClient(dio);
-    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
+    //accept application/json
     dio.options.headers['Accept'] = "application/json";
-    try {
-      final response = await client.addMapping(body: businessDetails);
-      if (response.containsKey('message')) {
-        return {
-          "message": "Mapping added successfully",
-          "status": "success",
-        };
-      } else {
-        return {
-          "error": "Failed to add mapping",
-          "status": "error",
-        };
-      }
-    } catch (e) {
-      print("posting error: $e");
-      return {
-        "error": "Failed to add mapping",
-        "status": "error",
-      };
-    }
-  }
+    //add the content type
+    dio.options.headers['Content-Type'] = "application/json";
 
-  Future<Map<String, dynamic>> getRoutePlans() async {
-    final dio = Dio();
-    final client = RestClient(dio);
-    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
+    final body = {"group": group};
     try {
-      final response = await client.getRoutePlans();
+      final response = await client.getArrears(body: body);
+      //check if response contains message
       if (response.containsKey('message')) {
         return response;
       } else {
         return {
-          "error": "Failed to get route plans",
+          "error": "Failed to get arrears",
           "status": "error",
         };
       }
     } catch (e) {
       return {
-        "error": "Failed to get route plan",
+        "error": "Failed to get arrears",
         "status": "error",
       };
     }
   }
 
-  Future<Map<String, dynamic>> addRoutePlan(Map<String, dynamic> body) async {
+  //getSales
+  Future<Map<String, dynamic>> getSales(String group) async {
     final dio = Dio();
     final client = RestClient(dio);
     dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
+    //accept application/json
+    dio.options.headers['Accept'] = "application/json";
+    //add the content type
+    dio.options.headers['Content-Type'] = "application/json";
+
+    final body = {"group": group};
     try {
-      final response = await client.addRoutePlan(body: body);
+      final response = await client.getSales(body: body);
+      //check if response contains message
       if (response.containsKey('message')) {
-        return {
-          "message": "Route plan added successfully",
-          "status": "success",
-        };
+        return response;
       } else {
         return {
-          "error": "Failed to add route plan",
+          "error": "Failed to get sales",
           "status": "error",
         };
       }
-    } catch (e) {
-      return {
-        "error": "Failed to add route plan",
-        "status": "error",
-      };
-    }
-  }
-
-  Future<Map<String, dynamic>> getSales() async {
-    final dio = Dio();
-    final client = RestClient(dio);
-    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
-    try {
-      final response = await client.getSales();
-      return response;
     } catch (e) {
       return {
         "error": "Failed to get sales",
@@ -291,330 +237,65 @@ class AuthController {
     }
   }
 
-  Future<Map<String, dynamic>> getProducts() async {
+  //getExpected
+  Future<Map<String, dynamic>> getExpected(String group) async {
     final dio = Dio();
     final client = RestClient(dio);
     dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
+    //accept application/json
     dio.options.headers['Accept'] = "application/json";
+    //add the content type
+    dio.options.headers['Content-Type'] = "application/json";
+
+    //Charset utf8
+    dio.options.headers['charset'] = "utf-8";
+
+    final body = {"group": group};
     try {
-      final response = await client.getProducts();
+      final response = await client.getExpected(body: body);
+      //check if response contains message
       if (response.containsKey('message')) {
         return response;
       } else {
+        log("failed exception during getExpected else: $response");
         return {
-          "error": "Failed to get products",
+          "error": "Failed to get expected",
           "status": "error",
         };
       }
     } catch (e) {
+      log("failed exception happened during getExpected: $e");
       return {
-        "error": "Failed to get products",
+        "error": "Failed to get expected",
         "status": "error",
       };
     }
   }
 
-  Future<Map<String, dynamic>> getCoffeeProducts() async {
+  //getDashboard
+  Future<Map<String, dynamic>> getDashboard() async {
     final dio = Dio();
     final client = RestClient(dio);
     dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
-
-    try {
-      final response = await client.getCoffeeProducts();
-      if (response.containsKey('message')) {
-        return response;
-      } else {
-        return {
-          "error": "Failed to get coffee products",
-          "status": "error",
-        };
-      }
-    } catch (e) {
-      return {
-        "error": "Failed to get coffee products",
-        "status": "error",
-      };
-    }
-  }
-
-  Future<Map<String, dynamic>> getCoffeeMachines() async {
-    final dio = Dio();
-    final client = RestClient(dio);
-    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
+    //accept application/json
     dio.options.headers['Accept'] = "application/json";
-    try {
-      final response = await client.getCoffeeMachines();
-      if (response.containsKey('message')) {
-        return response;
-      } else {
-        return {
-          "error": "Failed to get coffee machines",
-          "status": "error",
-        };
-      }
-    } catch (e) {
-      print("status error code: $e");
-      return {
-        "error": "Failed to get coffee machines",
-        "status": "error",
-      };
-    }
-  }
-  
-  Future<Map<String, dynamic>> addProduct(Map<String, dynamic> body) async {
-    final dio = Dio();
-    final client = RestClient(dio);
-    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
-    dio.options.headers['Accept'] = "application/json";
-    try {
-      final response = await client.addProduct(body: body);
-      if (response.containsKey('message')) {
-        return {
-          "message": "Product added successfully",
-          "status": "success",
-        };
-      } else {
-        return {
-          "error": "Failed to add product",
-          "status": "error",
-        };
-      }
-    } catch (e) {
-      print("posting error: $e");
-      return {
-        "error": "Failed to add product",
-        "status": "error",
-      };
-    }
-  }
-
-  Future<Map<String, dynamic>> updateProduct(
-      int product, Map<String, dynamic> body) async {
-    final dio = Dio();
-    final client = RestClient(dio);
-    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
-    dio.options.headers['Accept'] = "application/json";
+    //add the content type
+    dio.options.headers['Content-Type'] = "application/json";
 
     try {
-      final response = await client.updateProduct(product: product, body: body);
-      if (response.containsKey('message')) {
-        return {
-          "message": "Product updated successfully",
-          "status": "success",
-        };
-      } else {
-        return {
-          "error": "Failed to update product",
-          "status": "error",
-        };
-      }
-    } catch (e) {
-      print("posting error: $e");
-      return {
-        "error": "Failed to update product",
-        "status": "error",
-      };
-    }
-  }
-
-  Future<Map<String, dynamic>> deleteProduct(int product) async {
-    final dio = Dio();
-    final client = RestClient(dio);
-    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
-    dio.options.headers['Accept'] = "application/json";
-    dio.options.validateStatus = (status) => status! < 500;
-    try {
-      final response = await client.deleteProduct(product: product);
-      if (response.containsKey('message')) {
-        return {
-          "message": "Product deleted successfully",
-          "status": "success",
-        };
-      } else if (response.containsKey('error')){
-        return {
-          "error": response['error'],
-          "status": "error",
-        };
-      } else {
-        return {
-          "error": "Failed to delete product",
-          "status": "error",
-        };
-      }
-    } catch (e) {
-      return {
-        "error": "Failed to delete product",
-        "status": "error",
-      };
-    }
-  }
-
-  Future<Map<String, dynamic>> updateQuantityProduct(
-      int product, Map<String, dynamic> body) async {
-    final dio = Dio();
-    final client = RestClient(dio);
-    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
-    dio.options.headers['Accept'] = "application/json";
-    try {
-      final response =
-          await client.updateQuantityProduct(product: product, body: body);
-      if (response.containsKey('message')) {
-        return {
-          "message": "Product quantity updated successfully",
-          "status": "success",
-          "data": response['data']
-        };
-      } else {
-        return {
-          "error": "Failed to update product quantity",
-          "status": "error",
-        };
-      }
-    } catch (e) {
-      print("posting error: $e");
-      return {
-        "error": "Failed to update product quantity",
-        "status": "error",
-      };
-    }
-  }
-
-  Future<Map<String, dynamic>> getVisits() async {
-    final dio = Dio();
-    final client = RestClient(dio);
-    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
-    try {
-      final response = await client.getVisits();
-      return response;
-    } catch (e) {
-      return {
-        "error": "Failed to get visits",
-        "status": "error",
-      };
-    }
-  }
-
-  Future<Map<String, dynamic>> addVisit(
-      Map<String, dynamic> visitDetails) async {
-    final dio = Dio();
-    final client = RestClient(dio);
-    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
-    dio.options.headers['Accept'] = "application/json";
-    try {
-      final response = await client.addVisit(body: visitDetails);
-      if (response.containsKey('message')) {
-        return {
-          "message": "Visit added successfully",
-          "status": "success",
-        };
-      } else {
-        return {
-          "error": "Failed to add vsit",
-          "status": "error",
-        };
-      }
-    } catch (e) {
-      return {
-        "error": "Failed to add mapping",
-        "status": "error",
-      };
-    }
-  }
-
-  Future<Map<String, dynamic>> getDeliveries() async {
-    final dio = Dio();
-    final client = RestClient(dio);
-    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
-
-    try {
-      final response = await client.getDeliveries();
-      return response;
-    } catch (e) {
-      return {
-        "error": "Failed to get deliveries",
-        "status": "error",
-      };
-    }
-  }
-
-  Future<Map<String, dynamic>> getAppointments() async {
-    final dio = Dio();
-    final client = RestClient(dio);
-    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
-
-    try {
-      final response = await client.getAppointments();
-      return response;
-    } catch (e) {
-      return {
-        "error": "Failed to get appointments",
-        "status": "error",
-      };
-    }
-  }
-
-  Future<Map<String, dynamic>> getMaintenances() async {
-    final dio = Dio();
-    final client = RestClient(dio);
-    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
-    dio.options.headers['Accept'] = "application/json";
-
-    try {
-      final response = await client.getMaintenances();
-      print("response: $response");
+      final response = await client.getDashboard();
       //check if response contains message
       if (response.containsKey('message')) {
         return response;
       } else {
         return {
-          "error": "Failed to get maintenances",
-          "status": "error",
-        };
-      }
-    } catch (e) {
-      print("status error code: $e");
-      return {
-        "error": "Failed to get maintenance",
-        "status": "error",
-      };
-    }
-  }
-
-  Future<Map<String, dynamic>> getDemos() async {
-    final dio = Dio();
-    final client = RestClient(dio);
-    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
-
-    try {
-      final response = await client.getDemos();
-      return response;
-    } catch (e) {
-      return {
-        "error": "Failed to get demos",
-        "status": "error",
-      };
-    }
-  }
-
-  Future<Map<String, dynamic>> getContacts() async {
-    final dio = Dio();
-    final client = RestClient(dio);
-    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
-
-    try {
-      final response = await client.getContacts();
-      //check if response contains message
-      if (response.containsKey('message')) {
-        return response;
-      } else {
-        return {
-          "error": "Failed to get contacts",
+          "error": "Failed to get dashboard",
           "status": "error",
         };
       }
     } catch (e) {
       return {
-        "error": "Failed to get contacts",
+        "error": "Failed to get dashboard",
         "status": "error",
       };
     }

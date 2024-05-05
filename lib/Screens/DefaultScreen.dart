@@ -1,8 +1,8 @@
-import 'package:valour/Screens/HomePage.dart';
-import 'package:valour/Screens/InventoryScreen.dart';
-import 'package:valour/Screens/VisitsPage.dart';
-import 'package:valour/Screens/sales/index.dart';
-import 'package:valour/Utils/AppColors.dart';
+import 'package:vfu/Screens/ArrearPage.dart';
+import 'package:vfu/Screens/CalculatorPage.dart';
+import 'package:vfu/Screens/HomePage.dart';
+import 'package:vfu/Screens/SalesTrackerPage.dart';
+import 'package:vfu/Utils/AppColors.dart';
 import 'package:flutter/material.dart';
 
 class DefaultScreen extends StatefulWidget {
@@ -16,9 +16,9 @@ class _DefaultScreenState extends State<DefaultScreen> {
   int _selectedIndex = 0;
   List Page = [
     const HomePage(),
-    const VisitsPage(),
-    const Sale(),
-    const InventoryScreen(),
+    const ArrearPage(),
+    const CalculatorPage(),
+    const SalesTrackerPage(),
 //  MainteanceScreen(),
   ];
   void onItemTapped(int index) {
@@ -44,12 +44,11 @@ class _DefaultScreenState extends State<DefaultScreen> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.location_on_rounded), label: 'Visits'),
+              icon: Icon(Icons.location_on_rounded), label: 'Arrears'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.wallet_travel_rounded), label: 'Sales'),
+              icon: Icon(Icons.wallet_travel_rounded), label: 'Calculator'),
           // admin==true?BottomNavigationBarItem(icon: Icon(Icons.store), label: 'Inventory'):BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Mainteance'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.settings), label: 'Inventories'),
+          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Tracker'),
           // BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Mainteance'),
         ],
       ),

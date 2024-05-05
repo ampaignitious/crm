@@ -1,9 +1,8 @@
-import 'package:valour/Controllers/services.dart';
-import 'package:valour/Screens/DefaultScreen.dart';
-import 'package:valour/Utils/AppColors.dart';
+import 'package:vfu/Controllers/services.dart';
+import 'package:vfu/Screens/DefaultScreen.dart';
+import 'package:vfu/Utils/AppColors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:lottie/lottie.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -19,7 +18,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Please enter your email';
+      return 'Please enter your Staff ID';
     }
     // Add more email validation logic if needed
     return null;
@@ -39,8 +38,6 @@ class _LoginScreenState extends State<LoginScreen> {
       // For example, you can send a request to your API for authentication
       String email = _emailController.text;
       String password = _passwordController.text;
-
-      print('Email: $email---Password: $password');
 
       try {
         showDialog(
@@ -62,12 +59,12 @@ class _LoginScreenState extends State<LoginScreen> {
           // Handle authentication error
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text(
-                "Invalid credentials, check your email and password and try again!"),
+                "Invalid credentials, check your Staff ID and password and try again!"),
           ));
         } else {
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) {
-            return DefaultScreen();
+            return const DefaultScreen();
           }));
         }
       } catch (e) {
@@ -78,6 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
@@ -90,28 +88,24 @@ class _LoginScreenState extends State<LoginScreen> {
             Container(
               height: size.height * 0.40,
               width: double.maxFinite,
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 253, 245, 229),
-                borderRadius: const BorderRadius.only(
+              decoration: const BoxDecoration(
+                color: Color.fromARGB(255, 255, 255, 255),
+                borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(20),
                   bottomRight: Radius.circular(20),
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
+                    color: Color.fromARGB(255, 255, 255, 255),
                     offset: Offset(0.8, 1.0),
                     blurRadius: 4.0,
                     spreadRadius: 0.2,
                   ),
                 ],
               ),
-              child: Center(
-                  child: Lottie.asset(
-                'assets/json/login2.json', // Path to your Lottie animation JSON file
-                width: size.width * 0.7, // Adjust width as needed
-                height: size.height * 0.38, // Adjust height as needed
-                fit: BoxFit.fill,
-              )),
+              child: const Center(
+                  child:
+                      Image(image: AssetImage('assets/images/download.png'))),
             ),
             // textfield section
             Padding(
@@ -135,7 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
-                        labelText: 'Email',
+                        labelText: 'Staff ID',
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(
                                 15)), // Border for the email field
@@ -160,35 +154,25 @@ class _LoginScreenState extends State<LoginScreen> {
                     Text("Forgot password ?", style: GoogleFonts.lato()),
                     SizedBox(height: size.height * 0.055),
                     ElevatedButton(
-                      onPressed: _handleLogin,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors
-                            .contentColorPurple, // Set button color to purple
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: size.width * 0.26,
-                          vertical: size.height * 0.032,
+                        onPressed: _handleLogin,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors
+                              .contentColorYellow, // Set button color to purple
                         ),
-                        child: Text('Login'),
-                      ),
-                    ),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: size.width * 0.26,
+                            vertical: size.height * 0.032,
+                          ),
+                          child: const Text(
+                            'Login',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        )),
                     SizedBox(height: size.height * 0.055),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Don't have an account ? ",
-                            style: GoogleFonts.lato()),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pushNamed(context, '/register');
-                          },
-                          child: Text("Sign up",
-                              style: GoogleFonts.lato(
-                                  color: AppColors.contentColorPurple)),
-                        ),
-                      ],
-                    ),
                   ],
                 ),
               ),

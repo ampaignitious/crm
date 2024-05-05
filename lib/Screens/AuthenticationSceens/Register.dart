@@ -1,5 +1,5 @@
-import 'package:valour/Controllers/services.dart';
-import 'package:valour/Utils/AppColors.dart';
+import 'package:vfu/Controllers/services.dart';
+import 'package:vfu/Utils/AppColors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
@@ -51,7 +51,7 @@ class _RegisterState extends State<Register> {
       String email = _emailController.text;
       String password = _passwordController.text;
       String name = nameController.text;
-            
+
       try {
         showDialog(
           context: context,
@@ -76,10 +76,10 @@ class _RegisterState extends State<Register> {
                 "Invalid credentials, check your email and password and try again!"),
           ));
         } else {
-           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             backgroundColor: AppColors.contentColorPurple,
-            content: Text(
-                "Account Created successfully", style: TextStyle(color: Colors.white)),
+            content: Text("Account Created successfully",
+                style: TextStyle(color: Colors.white)),
           ));
           Navigator.pushNamed(context, '/login');
         }
