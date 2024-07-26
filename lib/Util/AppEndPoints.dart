@@ -1,5 +1,5 @@
 class AppEndPoints {
-  static const String baseUrl = "http://10.0.2.2:8000/api/";
+  static const String baseUrl = "https://www.vfuperformance.vfuganda.com/api/";
   static const String loginEndPoint = "/login";
   static const String logoutEndPoint = "/logout";
   static const String registerEndPoint = "/register";
@@ -12,4 +12,8 @@ class AppEndPoints {
   static const String addComment = "/add-comment";
   static const String getAllComments = "/get-all-comments";
   static const String showAllComments = "/show-all-comments";
+  static const String getMonitors = '/get-monitors';
+  static const String appraise = '/appraise';
+  static const String apply = '/apply';
+  static const String createMonitor = '/store-monitor';
 }

@@ -1,295 +1,443 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:syncfusion_flutter_datagrid/datagrid.dart';
+import 'package:vfu/Models/LoanSchedule.dart';
+import 'package:vfu/Util/DayInputFormatter.dart';
+import 'package:vfu/Util/MonthInputFormatter.dart';
+import 'package:vfu/Util/ThousandsSeparatorInputFormatter.dart';
 import 'package:vfu/Utils/AppColors.dart';
+import 'LoanSchedulePage.dart';
 
-import '../Widgets/Drawer/DrawerItems.dart';
-import 'package:syncfusion_flutter_datagrid_export/export.dart';
-
-//import save_file_mobile as helper
-import '../Util/save_file_mobile.dart' as helper;
-
-/// The home page of the application which hosts the datagrid.
 class CalculatorPage extends StatefulWidget {
-  /// Creates the home page.
-  const CalculatorPage({super.key});
+  const CalculatorPage({Key? key}) : super(key: key);
 
   @override
   _CalculatorPageState createState() => _CalculatorPageState();
 }
 
 class _CalculatorPageState extends State<CalculatorPage> {
-  List<Employee> employees = <Employee>[];
-  late EmployeeDataSource employeeDataSource;
-
-  final GlobalKey<SfDataGridState> _key = GlobalKey<SfDataGridState>();
-  @override
-  void initState() {
-    super.initState();
-    employees = getEmployeeData();
-    employeeDataSource = EmployeeDataSource(employeeData: employees);
-  }
-
-  Future<void> _exportDataGridToExcel() async {
-    print(_key.currentState);
-    final workbook = _key.currentState?.exportToExcelWorkbook();
-    if (workbook != null) {
-      final bytes = workbook.saveAsStream();
-      workbook.dispose();
-      await helper.saveAndLaunchFile(bytes, 'DataGrid.xlsx');
-    } else {
-      print("workbook is null");
-    }
-  }
-
-  Future<void> _exportDataGridToPdf() async {
-    final document =
-        _key.currentState?.exportToPdfDocument(fitAllColumnsInOnePage: true);
-    if (document != null) {
-      final bytes = document.saveSync();
-      document.dispose();
-      await helper.saveAndLaunchFile(bytes, 'DataGrid.pdf');
-    } else {
-      print("document is null");
-    }
-  }
+  // Loan detail controllers
+  final TextEditingController loanAmount = TextEditingController();
+  final TextEditingController annualInterest = TextEditingController();
+  final TextEditingController duration = TextEditingController();
+  final TextEditingController gracePeriod = TextEditingController();
+  final TextEditingController startMonth = TextEditingController();
+  final TextEditingController startDay = TextEditingController();
+  final TextEditingController startYear = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      drawer: Drawer(
-        backgroundColor: AppColors.contentColorPurple,
-        width: size.width * 0.8,
-        child: const DrawerItems(),
-      ),
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: AppColors.contentColorPurple,
-          size: size.width * 0.11,
-        ), // Change the icon color here
-
-        backgroundColor: AppColors.contentColorCyan,
-
-        title: Text(
-          "Calculators",
-          style: GoogleFonts.lato(
-              fontSize: size.width * 0.062,
-              color: AppColors.menuBackground,
-              fontWeight: FontWeight.bold),
-        ),
+        title: Text("Loan Calculator",
+            style: GoogleFonts.lato(
+                fontSize: size.width * 0.062, fontWeight: FontWeight.bold)),
         centerTitle: true,
+        backgroundColor: AppColors.contentColorCyan,
+        iconTheme: IconThemeData(
+            color: AppColors.contentColorOrange, size: size.width * 0.11),
       ),
-      body: Column(
-        children: [
-          Container(
-            margin: const EdgeInsets.all(12.0),
-            child: Row(
-              children: <Widget>[
-                SizedBox(
-                  height: 40.0,
-                  width: 150.0,
-                  child: MaterialButton(
-                      color: Colors.blue,
-                      onPressed: _exportDataGridToExcel,
-                      child: const Center(
-                          child: Text(
-                        'Export to Excel',
-                        style: TextStyle(color: Colors.white),
-                      ))),
-                ),
-                const Padding(padding: EdgeInsets.all(20)),
-                SizedBox(
-                  height: 40.0,
-                  width: 150.0,
-                  child: MaterialButton(
-                      color: Colors.blue,
-                      onPressed: _exportDataGridToPdf,
-                      child: const Center(
-                          child: Text(
-                        'Export to PDF',
-                        style: TextStyle(color: Colors.white),
-                      ))),
-                ),
-              ],
+      body: SingleChildScrollView(
+        reverse: true,
+        child: Column(
+          children: [
+            Form(
+              child: Column(
+                children: [
+                  // Loan amount
+                  Padding(
+                    padding: EdgeInsets.all(size.width * 0.05),
+                    child: TextFormField(
+                      controller: loanAmount,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [ThousandsSeparatorInputFormatter()],
+                      decoration: InputDecoration(
+                        labelText: "Loan Amount (UGX)",
+                        hintText: "e.g. 3,800",
+                        suffixText: "UGX",
+                        labelStyle: const TextStyle(
+                            color: AppColors.contentColorOrange),
+                        floatingLabelStyle: const TextStyle(
+                            color: AppColors.contentColorOrange),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: const BorderSide(
+                              color: AppColors.contentColorOrange),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: const BorderSide(
+                              color: AppColors.contentColorOrange, width: 2.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: const BorderSide(
+                              color: AppColors.contentColorOrange, width: 1.0),
+                        ),
+                      ),
+                    ),
+                  ),
+                  // Annual interest
+                  Padding(
+                    padding: EdgeInsets.all(size.width * 0.05),
+                    child: TextFormField(
+                      controller: annualInterest,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        labelText: "Annual Interest (%)",
+                        hintText: "e.g 32",
+                        suffixText: "%",
+                        labelStyle: const TextStyle(
+                            color: AppColors.contentColorOrange),
+                        floatingLabelStyle: const TextStyle(
+                            color: AppColors.contentColorOrange),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: const BorderSide(
+                              color: AppColors.contentColorOrange),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: const BorderSide(
+                              color: AppColors.contentColorOrange, width: 2.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: const BorderSide(
+                              color: AppColors.contentColorOrange, width: 1.0),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  // Duration
+                  Padding(
+                    padding: EdgeInsets.all(size.width * 0.05),
+                    child: TextFormField(
+                      controller: duration,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        labelText: "Duration (Months)",
+                        hintText: "e.g. 48",
+                        suffixText: "Months",
+                        labelStyle: const TextStyle(
+                            color: AppColors.contentColorOrange),
+                        floatingLabelStyle: const TextStyle(
+                            color: AppColors.contentColorOrange),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: const BorderSide(
+                              color: AppColors.contentColorOrange),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: const BorderSide(
+                              color: AppColors.contentColorOrange, width: 2.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: const BorderSide(
+                              color: AppColors.contentColorOrange, width: 1.0),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  // Grace period
+                  Padding(
+                    padding: EdgeInsets.all(size.width * 0.05),
+                    child: TextFormField(
+                      controller: gracePeriod,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        labelText: "Grace Period (Months)",
+                        hintText: "e.g. 0",
+                        suffixText: "Months",
+                        labelStyle: GoogleFonts.lato(
+                            fontSize: size.width * 0.05,
+                            color: AppColors.contentColorOrange,
+                            fontWeight: FontWeight.bold),
+                        border: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.circular(size.width * 0.05)),
+                      ),
+                    ),
+                  ),
+
+                  // Start date
+                  Padding(
+                    padding: EdgeInsets.all(size.width * 0.05),
+                    child: Row(
+                      children: [
+                        // Start month
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Month",
+                                style: GoogleFonts.lato(
+                                    fontSize: size.width * 0.05,
+                                    color: AppColors.contentColorOrange,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              TextFormField(
+                                controller: startMonth,
+                                keyboardType: TextInputType.number,
+                                inputFormatters: [MonthInputFormatter()],
+                                decoration: InputDecoration(
+                                  hintText: "e.g. 12",
+                                  labelStyle: const TextStyle(
+                                      color: AppColors.contentColorOrange),
+                                  floatingLabelStyle: const TextStyle(
+                                      color: AppColors.contentColorOrange),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        size.width * 0.05),
+                                    borderSide: const BorderSide(
+                                        color: AppColors.contentColorOrange),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                    borderSide: const BorderSide(
+                                        color: AppColors.contentColorOrange,
+                                        width: 2.0),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                    borderSide: const BorderSide(
+                                        color: AppColors.contentColorOrange,
+                                        width: 1.0),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        // Start day
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Day",
+                                style: GoogleFonts.lato(
+                                    fontSize: size.width * 0.05,
+                                    color: AppColors.contentColorOrange,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              TextFormField(
+                                controller: startDay,
+                                inputFormatters: [DayInputFormatter()],
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(
+                                    hintText: "e.g. 28",
+                                    labelStyle: const TextStyle(
+                                        color: AppColors.contentColorOrange),
+                                    floatingLabelStyle: const TextStyle(
+                                        color: AppColors.contentColorOrange),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          size.width * 0.05),
+                                      borderSide: const BorderSide(
+                                          color: AppColors.contentColorOrange),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                      borderSide: const BorderSide(
+                                          color: AppColors.contentColorOrange,
+                                          width: 2.0),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                      borderSide: const BorderSide(
+                                          color: AppColors.contentColorOrange,
+                                          width: 1.0),
+                                    )),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        // Start year
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Year",
+                                style: GoogleFonts.lato(
+                                    fontSize: size.width * 0.05,
+                                    color: AppColors.contentColorOrange,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              TextFormField(
+                                controller: startYear,
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(
+                                    hintText: "e.g. 2024",
+                                    labelStyle: const TextStyle(
+                                        color: AppColors.contentColorOrange),
+                                    floatingLabelStyle: const TextStyle(
+                                        color: AppColors.contentColorOrange),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          size.width * 0.05),
+                                      borderSide: const BorderSide(
+                                          color: AppColors.contentColorOrange),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                      borderSide: const BorderSide(
+                                          color: AppColors.contentColorOrange,
+                                          width: 2.0),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                      borderSide: const BorderSide(
+                                          color: AppColors.contentColorOrange,
+                                          width: 1.0),
+                                    )),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  
+                  // Calculate button
+                  Padding(
+                    padding: EdgeInsets.all(size.width * 0.05),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        calculate();
+                      },
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            AppColors.contentColorCyan),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(size.width * 0.05)),
+                        ),
+                      ),
+                      child: Text(
+                        "Calculate",
+                        style: GoogleFonts.lato(
+                            fontSize: size.width * 0.05,
+                            color: AppColors.contentColorOrange,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          Expanded(
-            child: SfDataGrid(
-              source: employeeDataSource,
-              columnWidthMode: ColumnWidthMode.fitByCellValue,
-              frozenColumnsCount: 1, // Number of columns to freeze
-              frozenRowsCount: 1, // Number of rows to freeze
-              //apply pagination
-              allowSorting: true,
-              columns: <GridColumn>[
-                GridColumn(
-                    columnName: 'OfficerId',
-                    columnWidthMode: ColumnWidthMode.fitByColumnName,
-                    label: Container(
-                        padding: const EdgeInsets.all(8.0),
-                        alignment: Alignment.center,
-                        child: const Text(
-                          'Officer ID',
-                        ))),
-                GridColumn(
-                    columnName: 'name',
-                    label: Container(
-                        padding: const EdgeInsets.all(8.0),
-                        alignment: Alignment.center,
-                        child: const Text('Name'))),
-                GridColumn(
-                    columnName: 'clients',
-                    columnWidthMode: ColumnWidthMode.fitByColumnName,
-                    label: Container(
-                        padding: const EdgeInsets.all(8.0),
-                        alignment: Alignment.center,
-                        child: const Text(
-                          'Clients',
-                          overflow: TextOverflow.ellipsis,
-                        ))),
-                GridColumn(
-                    columnName: 'outstandingPrincipal',
-                    columnWidthMode: ColumnWidthMode.fitByColumnName,
-                    label: Container(
-                        padding: const EdgeInsets.all(8.0),
-                        alignment: Alignment.center,
-                        child: const Text('Outstanding Principal'))),
-                GridColumn(
-                    columnName: 'principalCalculators',
-                    columnWidthMode: ColumnWidthMode.fitByColumnName,
-                    label: Container(
-                        padding: const EdgeInsets.all(8.0),
-                        alignment: Alignment.center,
-                        child: const Text('Principal Calculators'))),
-                GridColumn(
-                    columnName: 'interestCalculators',
-                    columnWidthMode: ColumnWidthMode.fitByColumnName,
-                    label: Container(
-                        padding: const EdgeInsets.all(8.0),
-                        alignment: Alignment.center,
-                        child: const Text('Interest Calculators'))),
-                GridColumn(
-                    columnName: 'totalCalculators',
-                    columnWidthMode: ColumnWidthMode.fitByColumnName,
-                    label: Container(
-                        padding: const EdgeInsets.all(8.0),
-                        alignment: Alignment.center,
-                        child: const Text('Total Calculators'))),
-                GridColumn(
-                    columnName: 'clientsInCalculators',
-                    columnWidthMode: ColumnWidthMode.fitByColumnName,
-                    label: Container(
-                        padding: const EdgeInsets.all(8.0),
-                        alignment: Alignment.center,
-                        child: const Text('Clients In Calculators'))),
-                GridColumn(
-                    columnName: 'par1Day',
-                    columnWidthMode: ColumnWidthMode.fitByColumnName,
-                    label: Container(
-                        padding: const EdgeInsets.all(8.0),
-                        alignment: Alignment.center,
-                        child: const Text('PAR>1 Day(%)'))),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  List<Employee> getEmployeeData() {
-    return [
-      Employee(
-          '1', 'John', '10', '475,809,900', '100', '100', '200', '5', '10'),
-      Employee(
-          '2', 'Peter', '20', '475,809,900', '200', '200', '400', '10', '20'),
-      Employee(
-          '3', 'Andrew', '30', '475,809,900', '300', '300', '600', '15', '30'),
-      Employee(
-          '4', 'Paul', '40', '475,809,900', '400', '400', '800', '20', '40'),
-      Employee('5', 'Philip', '50', '5000', '500', '500', '1000', '25', '50'),
-      Employee('6', 'James', '60', '6000', '600', '600', '1200', '30', '60'),
-      Employee('7', 'Thomas', '70', '7000', '700', '700', '1400', '35', '70'),
-      Employee('8', 'Mathew', '80', '8000', '800', '800', '1600', '40', '80'),
-      Employee(
-          '9', 'Bartholomew', '90', '9000', '900', '900', '1800', '45', '90'),
-      Employee(
-          '10', 'Simon', '100', '10000', '1000', '1000', '2000', '50', '100'),
-    ];
+  void calculate() {
+    // Get input values
+    double loanAmountValue = double.parse(loanAmount.text.replaceAll(',', ''));
+    double loanInterestValue = double.parse(annualInterest.text);
+    double loanDurationValue = double.parse(duration.text);
+    double loanGraceValue = double.parse(gracePeriod.text);
+    double loanInitMonthValue = double.parse(startMonth.text);
+    double loanInitDayValue = double.parse(startDay.text);
+    double loanInitYearValue = double.parse(startYear.text);
+
+    // Validate input
+    if (loanAmountValue < 1 ||
+        loanInterestValue < 0 ||
+        loanInterestValue > 100 ||
+        loanDurationValue < 1 ||
+        loanGraceValue < 0 ||
+        loanInitMonthValue < 1 ||
+        loanInitMonthValue > 12 ||
+        loanInitDayValue < 1 ||
+        loanInitDayValue > 31 ||
+        loanInitYearValue < 1000 ||
+        loanInitYearValue > 9999) {
+      // Handle invalid input
+      return;
+    }
+
+    // Initialize loan start date
+    DateTime loanStart = DateTime(loanInitYearValue.toInt(),
+        loanInitMonthValue.toInt(), loanInitDayValue.toInt());
+    List<LoanSchedule> loanTable = [];
+
+    // Create loan schedule
+    for (int i = 0; i < loanDurationValue.toInt(); i++) {
+      DateTime d = DateTime(loanStart.year, loanStart.month + i, loanStart.day);
+
+      double p;
+      if (i > loanGraceValue) {
+        double pmt = PMT(
+            (loanInterestValue / 100) / 12,
+            loanDurationValue.toInt() - loanGraceValue.toInt(),
+            loanAmountValue);
+        double ipmt = IPMT(loanAmountValue, pmt, (loanInterestValue / 100) / 12,
+            i - loanGraceValue.toInt());
+        p = -ipmt;
+      } else {
+        p = loanAmountValue * (loanInterestValue / 100) / 12;
+      }
+
+      double inst;
+      if (i >= loanGraceValue) {
+        inst = -PMT(
+            (loanInterestValue / 100) / 12,
+            loanDurationValue.toInt() - loanGraceValue.toInt(),
+            loanAmountValue);
+      } else {
+        inst = p;
+      }
+
+      double b = inst - p;
+      double c = i == 0 ? loanAmountValue - b : loanTable[i - 1].balance - b;
+
+      // Round off values to 2 decimal places
+      p = double.parse(p.toStringAsFixed(2));
+      inst = double.parse(inst.toStringAsFixed(2));
+      b = double.parse(b.toStringAsFixed(2));
+      c = double.parse(c.toStringAsFixed(2));
+
+      loanTable.add(LoanSchedule(
+          date: d, base: b, percent: p, installment: inst, balance: c));
+    }
+
+    // Navigate to LoanSchedulePage and pass the loanTable
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => LoanSchedulePage(loanTable: loanTable)),
+    );
   }
-}
 
-/// Custom business object class which contains properties to hold the detailed
-/// information about the employee which will be rendered in datagrid.
-class Employee {
-  /// Creates the employee class with required details.
-  Employee(
-      this.OfficerId,
-      this.name,
-      this.clients,
-      this.outstandingPrincipal,
-      this.principalCalculators,
-      this.interestCalculators,
-      this.totalCalculators,
-      this.clientsInCalculators,
-      this.par1Day);
-
-  /// Id of an employee.
-  final String OfficerId;
-  final String name;
-  final String clients;
-  final String outstandingPrincipal;
-  final String principalCalculators;
-  final String interestCalculators;
-  final String totalCalculators;
-  final String clientsInCalculators;
-  final String par1Day;
-}
-
-/// An object to set the employee collection data source to the datagrid. This
-/// is used to map the employee data to the datagrid widget.
-class EmployeeDataSource extends DataGridSource {
-  /// Creates the employee data source class with required details.
-  EmployeeDataSource({required List<Employee> employeeData}) {
-    _employeeData = employeeData
-        .map<DataGridRow>((e) => DataGridRow(cells: [
-              DataGridCell<String>(columnName: 'id', value: e.OfficerId),
-              DataGridCell<String>(columnName: 'name', value: e.name),
-              DataGridCell<String>(columnName: 'clients', value: e.clients),
-              DataGridCell<String>(
-                  columnName: 'outstandingPrincipal',
-                  value: e.outstandingPrincipal),
-              DataGridCell<String>(
-                  columnName: 'principalCalculators',
-                  value: e.principalCalculators),
-              DataGridCell<String>(
-                  columnName: 'interestCalculators',
-                  value: e.interestCalculators),
-              DataGridCell<String>(
-                  columnName: 'totalCalculators', value: e.totalCalculators),
-              DataGridCell<String>(
-                  columnName: 'clientsInCalculators',
-                  value: e.clientsInCalculators),
-              DataGridCell<String>(columnName: 'par1Day', value: e.par1Day),
-            ]))
-        .toList();
+  double PMT(double rate, int nper, double pv, [double fv = 0, int type = 0]) {
+    if (fv == 0) fv = 0;
+    if (type == 0) type = 0;
+    if (rate == 0) return -(pv + fv) / nper;
+    var pvif = pow(1 + rate, nper);
+    var pmt = rate / (pvif - 1) * -(pv * pvif + fv);
+    if (type == 1) {
+      pmt /= (1 + rate);
+    }
+    return pmt;
   }
 
-  List<DataGridRow> _employeeData = [];
-
-  @override
-  List<DataGridRow> get rows => _employeeData;
-
-  @override
-  DataGridRowAdapter buildRow(DataGridRow row) {
-    return DataGridRowAdapter(
-        cells: row.getCells().map<Widget>((e) {
-      return Container(
-        alignment: Alignment.center,
-        padding: const EdgeInsets.all(8.0),
-        child: Text(e.value.toString()),
-      );
-    }).toList());
+  double IPMT(double pv, double pmt, double rate, int per) {
+    var tmp = pow(1 + rate, per);
+    return 0 - (pv * tmp * rate + pmt * (tmp - 1));
   }
 }

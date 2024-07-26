@@ -37,7 +37,7 @@ class _DefaultScreenState extends State<DefaultScreen> {
         currentIndex: _selectedIndex,
         onTap: ((value) => onItemTapped(value)),
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: AppColors.contentColorPurple,
+        selectedItemColor: AppColors.contentColorOrange,
         unselectedItemColor: Colors.grey.withOpacity(0.5),
         // keep me this color:Color.fromARGB(255, 169, 230, 216).withOpacity(0.5),
         showUnselectedLabels: true,

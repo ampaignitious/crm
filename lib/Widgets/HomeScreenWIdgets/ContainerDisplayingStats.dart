@@ -145,7 +145,7 @@ class _ContainerDisplayingStatsState extends State<ContainerDisplayingStats> {
                 child: Text(
                   "$greetingLine, $username",
                   style: GoogleFonts.lato(
-                    color: AppColors.contentColorPurple,
+                    color: AppColors.contentColorOrange,
                     fontSize: size.width * 0.05,
                   ),
                 ),

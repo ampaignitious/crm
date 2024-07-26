@@ -19,13 +19,13 @@ class _HomePageState extends State<HomePage> {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       drawer: Drawer(
-        backgroundColor: AppColors.contentColorPurple,
+        backgroundColor: AppColors.contentColorOrange,
         width: size.width * 0.8,
         child: const DrawerItems(),
       ),
       appBar: AppBar(
         iconTheme: IconThemeData(
-          color: AppColors.contentColorPurple,
+          color: AppColors.contentColorOrange,
           size: size.width * 0.11,
         ), // Change the icon color here
 

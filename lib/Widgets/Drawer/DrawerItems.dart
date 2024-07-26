@@ -2,14 +2,18 @@ import 'dart:developer';
 
 import 'package:vfu/Controllers/services.dart';
 import 'package:vfu/Models/User.dart';
+import 'package:vfu/Screens/AccountBalance.dart';
 import 'package:vfu/Screens/ArrearPage.dart';
 import 'package:vfu/Screens/AuthenticationSceens/LoginScreen.dart';
 import 'package:vfu/Screens/CalculatorPage.dart';
 import 'package:vfu/Screens/CommentsPage.dart';
 import 'package:vfu/Screens/DefaultScreen.dart';
 import 'package:vfu/Screens/ExpectedRepayments.dart';
+import 'package:vfu/Screens/GroupDetails.dart';
 import 'package:vfu/Screens/IncentivePage.dart';
+import 'package:vfu/Screens/SalesActivityPage.dart';
 import 'package:vfu/Screens/SalesTrackerPage.dart';
+import 'package:vfu/Screens/WrittenOffPage.dart';
 
 import 'package:vfu/Utils/AppColors.dart';
 import 'package:flutter/material.dart';
@@ -112,7 +116,7 @@ class _DrawerItemsState extends State<DrawerItems> {
                     margin: EdgeInsets.symmetric(horizontal: size.width * 0.01),
                     decoration: BoxDecoration(
                       border: Border.all(
-                          color: AppColors.contentColorPurple.withOpacity(0.2)),
+                          color: AppColors.contentColorOrange.withOpacity(0.2)),
                       borderRadius: BorderRadius.circular(10),
                       color: AppColors
                           .contentColorCyan, // Adjust the background color of the drawer header
@@ -143,7 +147,7 @@ class _DrawerItemsState extends State<DrawerItems> {
                             children: [
                               const Icon(
                                 Icons.app_registration,
-                                color: AppColors.contentColorPurple,
+                                color: AppColors.contentColorOrange,
                               ),
                               Expanded(
                                 child: Padding(
@@ -159,7 +163,7 @@ class _DrawerItemsState extends State<DrawerItems> {
                             children: [
                               const Icon(
                                 Icons.perm_identity,
-                                color: AppColors.contentColorPurple,
+                                color: AppColors.contentColorOrange,
                               ),
                               Padding(
                                 padding:
@@ -188,7 +192,7 @@ class _DrawerItemsState extends State<DrawerItems> {
                         leading: Icon(
                           Icons.home,
                           color: AppColors
-                              .contentColorPurple, // Change the color of the drawer icon here
+                              .contentColorOrange, // Change the color of the drawer icon here
                         ),
                         title: Text('Dashboard'),
                       ),
@@ -207,7 +211,7 @@ class _DrawerItemsState extends State<DrawerItems> {
                         leading: Icon(
                           Icons.person,
                           color: AppColors
-                              .contentColorPurple, // Change the color of the drawer icon here
+                              .contentColorOrange, // Change the color of the drawer icon here
                         ),
                         title: Text('Arrears'),
                       ),
@@ -226,9 +230,28 @@ class _DrawerItemsState extends State<DrawerItems> {
                         leading: Icon(
                           Icons.store,
                           color: AppColors
-                              .contentColorPurple, // Change the color of the drawer icon here
+                              .contentColorOrange, // Change the color of the drawer icon here
                         ),
-                        title: Text('Sales Tracker'),
+                        title: Text('Disbursement Tracker'),
+                      ),
+                    ),
+                  ),
+
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return const SalesActivityPage();
+                      }));
+                    },
+                    child: const Card(
+                      child: ListTile(
+                        leading: Icon(
+                          Icons.forward,
+                          color: AppColors
+                              .contentColorOrange, // Change the color of the drawer icon here
+                        ),
+                        title: Text('Sales Activity'),
                       ),
                     ),
                   ),
@@ -245,9 +268,63 @@ class _DrawerItemsState extends State<DrawerItems> {
                         leading: Icon(
                           Icons.calculate,
                           color: AppColors
-                              .contentColorPurple, // Change the color of the drawer icon here
+                              .contentColorOrange, // Change the color of the drawer icon here
                         ),
                         title: Text('Loan Calculator'),
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return const AccountBalance();
+                      }));
+                    },
+                    child: const Card(
+                      child: ListTile(
+                        leading: Icon(
+                          Icons.person,
+                          color: AppColors
+                              .contentColorOrange, // Change the color of the drawer icon here
+                        ),
+                        title: Text('Account Balance'),
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return const WrittenOffPage();
+                      }));
+                    },
+                    child: const Card(
+                      child: ListTile(
+                        leading: Icon(
+                          Icons.wind_power_outlined,
+                          color: AppColors
+                              .contentColorOrange, // Change the color of the drawer icon here
+                        ),
+                        title: Text('Written Off Customers'),
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return const GroupDetailsPage();
+                      }));
+                    },
+                    child: const Card(
+                      child: ListTile(
+                        leading: Icon(
+                          Icons.calculate,
+                          color: AppColors
+                              .contentColorOrange, // Change the color of the drawer icon here
+                        ),
+                        title: Text('Group Details'),
                       ),
                     ),
                   ),
@@ -263,13 +340,13 @@ class _DrawerItemsState extends State<DrawerItems> {
                         leading: Icon(
                           Icons.monitor_weight,
                           color: AppColors
-                              .contentColorPurple, // Change the color of the drawer icon here
+                              .contentColorOrange, // Change the color of the drawer icon here
                         ),
                         title: Text('Expected Repayments'),
                       ),
                     ),
                   ),
-
+                  if(user.userType != '1')
                   InkWell(
                     onTap: () {
                       Navigator.push(context,
@@ -282,7 +359,7 @@ class _DrawerItemsState extends State<DrawerItems> {
                         leading: Icon(
                           Icons.insert_comment,
                           color: AppColors
-                              .contentColorPurple, // Change the color of the drawer icon here
+                              .contentColorOrange, // Change the color of the drawer icon here
                         ),
                         title: Text('Comments'),
                       ),
@@ -298,9 +375,9 @@ class _DrawerItemsState extends State<DrawerItems> {
                     child: const Card(
                       child: ListTile(
                         leading: Icon(
-                          Icons.location_on,
+                          Icons.monetization_on,
                           color: AppColors
-                              .contentColorPurple, // Change the color of the drawer icon here
+                              .contentColorOrange, // Change the color of the drawer icon here
                         ),
                         title: Text('Incentives'),
                       ),
@@ -317,7 +394,7 @@ class _DrawerItemsState extends State<DrawerItems> {
                         leading: Icon(
                           Icons.logout,
                           color: AppColors
-                              .contentColorPurple, // Change the color of the drawer icon here
+                              .contentColorOrange, // Change the color of the drawer icon here
                         ),
                         title: Text('Logout'),
                       ),

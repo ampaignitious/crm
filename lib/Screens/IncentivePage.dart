@@ -1,13 +1,22 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
+import 'package:vfu/Controllers/services.dart';
+import 'package:vfu/Models/Incentive.dart';
+import 'package:vfu/Models/User.dart';
+import 'package:vfu/Util/ballons.dart';
 import 'package:vfu/Utils/AppColors.dart';
 
 import '../Widgets/Drawer/DrawerItems.dart';
+import 'package:syncfusion_flutter_xlsio/xlsio.dart' hide Column, Row;
+import 'package:syncfusion_flutter_pdf/src/pdf/implementation/pdf_document/pdf_document.dart';
 import 'package:syncfusion_flutter_datagrid_export/export.dart';
-
-//import save_file_mobile as helper
-import '../Util/save_file_mobile.dart' as helper;
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
 
 /// The home page of the application which hosts the datagrid.
 class IncentivePage extends StatefulWidget {
@@ -18,39 +27,110 @@ class IncentivePage extends StatefulWidget {
   _IncentivePageState createState() => _IncentivePageState();
 }
 
-class _IncentivePageState extends State<IncentivePage> {
-  List<Employee> employees = <Employee>[];
-  late EmployeeDataSource employeeDataSource;
+class _IncentivePageState extends State<IncentivePage>
+    with SingleTickerProviderStateMixin {
+  late Future<List<Incentive>> incentives;
+  late IncentiveDataSource generalDataSource;
+  late IncentiveDataSource individualDataSource;
+  late IncentiveDataSource groupDataSource;
+  late IncentiveDataSource fastDataSource;
+  late TabController _tabController;
+  int currentTabIndex = 0;
 
-  final GlobalKey<SfDataGridState> _key = GlobalKey<SfDataGridState>();
+  final GlobalKey<SfDataGridState> _generalKey = GlobalKey<SfDataGridState>();
+  final GlobalKey<SfDataGridState> _individualKey =
+      GlobalKey<SfDataGridState>();
+  final GlobalKey<SfDataGridState> _groupKey = GlobalKey<SfDataGridState>();
+  final GlobalKey<SfDataGridState> _fastKey = GlobalKey<SfDataGridState>();
+  late Future<void> userFuture;
+  User? user;
+
   @override
   void initState() {
     super.initState();
-    employees = getEmployeeData();
-    employeeDataSource = EmployeeDataSource(employeeData: employees);
+    userFuture = getUser();
+    incentives = getIncentiveData();
+    _tabController = TabController(length: 4, vsync: this);
+    _tabController.addListener(_handleTabChange);
   }
 
-  Future<void> _exportDataGridToExcel() async {
-    print(_key.currentState);
-    final workbook = _key.currentState?.exportToExcelWorkbook();
-    if (workbook != null) {
-      final bytes = workbook.saveAsStream();
-      workbook.dispose();
-      await helper.saveAndLaunchFile(bytes, 'DataGrid.xlsx');
-    } else {
-      print("workbook is null");
-    }
+  void _handleTabChange() {
+    setState(() {
+      currentTabIndex = _tabController.index;
+    });
   }
 
-  Future<void> _exportDataGridToPdf() async {
-    final document =
-        _key.currentState?.exportToPdfDocument(fitAllColumnsInOnePage: true);
-    if (document != null) {
-      final bytes = document.saveSync();
-      document.dispose();
-      await helper.saveAndLaunchFile(bytes, 'DataGrid.pdf');
-    } else {
-      print("document is null");
+  Future<void> exportDataGridToExcel(GlobalKey<SfDataGridState> key) async {
+    final Workbook workbook = key.currentState!.exportToExcelWorkbook();
+    final List<int> bytes = workbook.saveAsStream();
+
+    // Get the temporary directory path
+    final directory = await getTemporaryDirectory();
+    // generate the file path using the current date and time
+    final path = '${directory.path}/Incentive_${DateTime.now()}.xlsx';
+
+    // Write the file
+    File(path).writeAsBytes(bytes).then((_) {
+      // Open the file using platform agnostic API
+      OpenFile.open(path);
+    });
+
+    workbook.dispose();
+  }
+
+  Future<void> _exportDataGridToPdf(GlobalKey<SfDataGridState> key) async {
+    final PdfDocument document =
+        key.currentState!.exportToPdfDocument(fitAllColumnsInOnePage: true);
+
+    final List<int> bytes = document.saveSync();
+    // Get the temporary directory path
+    final directory = await getTemporaryDirectory();
+
+    // generate the file path using the current date and time
+    final path = '${directory.path}/Incentive_${DateTime.now()}.pdf';
+
+    File(path).writeAsBytes(bytes).then((_) {
+      // Open the file using platform agnostic API
+      OpenFile.open(path);
+    });
+  }
+
+  Future<void> getUser() async {
+    try {
+      AuthController authController = AuthController();
+      User response = await authController.getUserDetails();
+      log("user details: $response");
+      if (response.status == 'success') {
+        setState(() {
+          user = response;
+        });
+      } else {
+        log("no success in user details: $response");
+        setState() {
+          user = User(
+            name: 'Error',
+            username: 'Error',
+            staffId: 'Error',
+            userType: 'Error',
+            regionId: 'Error',
+            branchId: 'Error',
+            status: 'Error',
+          );
+        }
+      }
+    } catch (e) {
+      log("user error: $e");
+      setState(() {
+        user = User(
+          name: 'Error',
+          username: 'Error',
+          staffId: 'Error',
+          userType: 'Error',
+          regionId: 'Error',
+          branchId: 'Error',
+          status: 'Error',
+        );
+      });
     }
   }
 
@@ -59,13 +139,13 @@ class _IncentivePageState extends State<IncentivePage> {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       drawer: Drawer(
-        backgroundColor: AppColors.contentColorPurple,
+        backgroundColor: AppColors.contentColorOrange,
         width: size.width * 0.8,
         child: const DrawerItems(),
       ),
       appBar: AppBar(
         iconTheme: IconThemeData(
-          color: AppColors.contentColorPurple,
+          color: AppColors.contentColorOrange,
           size: size.width * 0.11,
         ), // Change the icon color here
 
@@ -79,209 +159,451 @@ class _IncentivePageState extends State<IncentivePage> {
               fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
+        bottom: user!.userType == '1'
+            ? null
+            : TabBar(
+                controller: _tabController,
+                tabs: const [
+                  Tab(text: 'General'),
+                  Tab(text: 'Individual'),
+                  Tab(text: 'Group'),
+                  Tab(text: 'Fast'),
+                ],
+              ),
       ),
-      body: Column(
-        children: [
-          Container(
-            margin: const EdgeInsets.all(12.0),
-            child: Row(
-              children: <Widget>[
-                SizedBox(
-                  height: 40.0,
-                  width: 150.0,
-                  child: MaterialButton(
-                      color: Colors.blue,
-                      onPressed: _exportDataGridToExcel,
-                      child: const Center(
-                          child: Text(
-                        'Export to Excel',
-                        style: TextStyle(color: Colors.white),
-                      ))),
-                ),
-                const Padding(padding: EdgeInsets.all(20)),
-                SizedBox(
-                  height: 40.0,
-                  width: 150.0,
-                  child: MaterialButton(
-                      color: Colors.blue,
-                      onPressed: _exportDataGridToPdf,
-                      child: const Center(
-                          child: Text(
-                        'Export to PDF',
-                        style: TextStyle(color: Colors.white),
-                      ))),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: SfDataGrid(
-              source: employeeDataSource,
-              columnWidthMode: ColumnWidthMode.fitByCellValue,
-              frozenColumnsCount: 1, // Number of columns to freeze
-              frozenRowsCount: 1, // Number of rows to freeze
-              //apply pagination
-              allowSorting: true,
-              columns: <GridColumn>[
-                GridColumn(
-                    columnName: 'OfficerId',
-                    columnWidthMode: ColumnWidthMode.fitByColumnName,
-                    label: Container(
-                        padding: const EdgeInsets.all(8.0),
-                        alignment: Alignment.center,
-                        child: const Text(
-                          'Officer ID',
-                        ))),
-                GridColumn(
-                    columnName: 'name',
-                    label: Container(
-                        padding: const EdgeInsets.all(8.0),
-                        alignment: Alignment.center,
-                        child: const Text('Name'))),
-                GridColumn(
-                    columnName: 'clients',
-                    columnWidthMode: ColumnWidthMode.fitByColumnName,
-                    label: Container(
-                        padding: const EdgeInsets.all(8.0),
-                        alignment: Alignment.center,
-                        child: const Text(
-                          'Clients',
-                          overflow: TextOverflow.ellipsis,
-                        ))),
-                GridColumn(
-                    columnName: 'outstandingPrincipal',
-                    columnWidthMode: ColumnWidthMode.fitByColumnName,
-                    label: Container(
-                        padding: const EdgeInsets.all(8.0),
-                        alignment: Alignment.center,
-                        child: const Text('Outstanding Principal'))),
-                GridColumn(
-                    columnName: 'principalArrears',
-                    columnWidthMode: ColumnWidthMode.fitByColumnName,
-                    label: Container(
-                        padding: const EdgeInsets.all(8.0),
-                        alignment: Alignment.center,
-                        child: const Text('Principal Arrears'))),
-                GridColumn(
-                    columnName: 'interestArrears',
-                    columnWidthMode: ColumnWidthMode.fitByColumnName,
-                    label: Container(
-                        padding: const EdgeInsets.all(8.0),
-                        alignment: Alignment.center,
-                        child: const Text('Interest Arrears'))),
-                GridColumn(
-                    columnName: 'totalArrears',
-                    columnWidthMode: ColumnWidthMode.fitByColumnName,
-                    label: Container(
-                        padding: const EdgeInsets.all(8.0),
-                        alignment: Alignment.center,
-                        child: const Text('Total Arrears'))),
-                GridColumn(
-                    columnName: 'clientsInArrears',
-                    columnWidthMode: ColumnWidthMode.fitByColumnName,
-                    label: Container(
-                        padding: const EdgeInsets.all(8.0),
-                        alignment: Alignment.center,
-                        child: const Text('Clients In Arrears'))),
-                GridColumn(
-                    columnName: 'par1Day',
-                    columnWidthMode: ColumnWidthMode.fitByColumnName,
-                    label: Container(
-                        padding: const EdgeInsets.all(8.0),
-                        alignment: Alignment.center,
-                        child: const Text('PAR>1 Day(%)'))),
-              ],
-            ),
-          ),
-        ],
+      body: FutureBuilder(
+        future: incentives,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          if (snapshot.hasError) {
+            return const Center(
+              child: Text('An error occurred while loading data'),
+            );
+          }
+
+          if (user!.userType == '1') {
+            //return a beatiful card with incentive data from snapshot
+            return BalloonCard(snapshot: snapshot);
+          }
+
+          //check if the data is empty
+          if (snapshot.data!.isEmpty) {
+            return const Center(
+              child: Text('No data available'),
+            );
+          }
+          final List<Incentive> incentives = snapshot.data as List<Incentive>;
+
+          generalDataSource = IncentiveDataSource(
+              incentiveData: incentives,
+              currentTabIndex: currentTabIndex); // General data source
+          individualDataSource = IncentiveDataSource(
+              incentiveData: incentives,
+              currentTabIndex:
+                  currentTabIndex); // Individual data source (customize)
+          groupDataSource = IncentiveDataSource(
+              incentiveData: incentives,
+              currentTabIndex:
+                  currentTabIndex); // Group data source (customize)
+          fastDataSource = IncentiveDataSource(
+              incentiveData: incentives,
+              currentTabIndex: currentTabIndex); // Fast data source (customize)
+
+          return TabBarView(
+            controller: _tabController,
+            children: [
+              _buildDataGrid(context, generalDataSource, _generalKey,
+                  currentTabIndex), // General Tab
+              _buildDataGrid(context, individualDataSource, _individualKey,
+                  currentTabIndex), // Individual Tab
+              _buildDataGrid(context, groupDataSource, _groupKey,
+                  currentTabIndex), // Group Tab
+              _buildDataGrid(context, fastDataSource, _fastKey,
+                  currentTabIndex), // Fast Tab
+            ],
+          );
+        },
       ),
     );
   }
 
-  List<Employee> getEmployeeData() {
-    return [
-      Employee(
-          '1', 'John', '10', '475,809,900', '100', '100', '200', '5', '10'),
-      Employee(
-          '2', 'Peter', '20', '475,809,900', '200', '200', '400', '10', '20'),
-      Employee(
-          '3', 'Andrew', '30', '475,809,900', '300', '300', '600', '15', '30'),
-      Employee(
-          '4', 'Paul', '40', '475,809,900', '400', '400', '800', '20', '40'),
-      Employee('5', 'Philip', '50', '5000', '500', '500', '1000', '25', '50'),
-      Employee('6', 'James', '60', '6000', '600', '600', '1200', '30', '60'),
-      Employee('7', 'Thomas', '70', '7000', '700', '700', '1400', '35', '70'),
-      Employee('8', 'Mathew', '80', '8000', '800', '800', '1600', '40', '80'),
-      Employee(
-          '9', 'Bartholomew', '90', '9000', '900', '900', '1800', '45', '90'),
-      Employee(
-          '10', 'Simon', '100', '10000', '1000', '1000', '2000', '50', '100'),
-    ];
+  Widget _buildDataGrid(BuildContext context, IncentiveDataSource dataSource,
+      GlobalKey<SfDataGridState> key, int currentTabIndex) {
+    return Column(
+      children: [
+        Container(
+          margin: const EdgeInsets.all(12.0),
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: SizedBox(
+                  height: 40.0,
+                  child: MaterialButton(
+                    color: AppColors.contentColorOrange,
+                    onPressed: () {
+                      exportDataGridToExcel(key);
+                    },
+                    child: const Center(
+                      child: Icon(
+                        Icons.description,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 20), // Adjusted to SizedBox
+              Expanded(
+                child: SizedBox(
+                  height: 40.0,
+                  child: MaterialButton(
+                    color: AppColors.contentColorOrange,
+                    onPressed: () {
+                      exportDataGridToExcel(key);
+                    },
+                    child: const Center(
+                      child: Icon(
+                        Icons.picture_as_pdf,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: SfDataGrid(
+            key: key,
+            source: dataSource,
+            columnWidthMode: ColumnWidthMode.fitByCellValue,
+            frozenColumnsCount: 1, // Number of columns to freeze
+            //apply pagination
+            allowSorting: true,
+            columns: <GridColumn>[
+              GridColumn(
+                  columnName: 'OfficerId',
+                  columnWidthMode: ColumnWidthMode.fitByColumnName,
+                  label: Container(
+                      padding: const EdgeInsets.all(8.0),
+                      alignment: Alignment.center,
+                      child: const Text(
+                        'Officer ID',
+                      ))),
+              GridColumn(
+                  columnName: 'name',
+                  label: Container(
+                      padding: const EdgeInsets.all(8.0),
+                      alignment: Alignment.center,
+                      child: const Text('Full Name'))),
+              if (currentTabIndex == 1 || currentTabIndex == 0)
+                GridColumn(
+                    columnName: 'outstandingPrincipalIndividual',
+                    columnWidthMode: ColumnWidthMode.fitByColumnName,
+                    label: Container(
+                        padding: const EdgeInsets.all(8.0),
+                        alignment: Alignment.center,
+                        child:
+                            const Text('Outstanding Principal(Individual)'))),
+              if (currentTabIndex == 2 || currentTabIndex == 0)
+                GridColumn(
+                    columnName: 'outstandingPrincipalGroup',
+                    columnWidthMode: ColumnWidthMode.fitByColumnName,
+                    label: Container(
+                        padding: const EdgeInsets.all(8.0),
+                        alignment: Alignment.center,
+                        child: const Text('Outstanding Principal(Group)'))),
+              if (currentTabIndex == 3)
+                GridColumn(
+                    columnName: 'outstandingPrincipalSGL',
+                    columnWidthMode: ColumnWidthMode.fitByColumnName,
+                    label: Container(
+                        padding: const EdgeInsets.all(8.0),
+                        alignment: Alignment.center,
+                        child: const Text('Outstanding Principal(SGL)'))),
+              if (currentTabIndex == 1 || currentTabIndex == 0)
+                GridColumn(
+                    columnName: 'noOfCustomersIndividual',
+                    columnWidthMode: ColumnWidthMode.fitByColumnName,
+                    label: Container(
+                        padding: const EdgeInsets.all(8.0),
+                        alignment: Alignment.center,
+                        child: const Text('No of Customers(Individual)'))),
+              if (currentTabIndex == 2 || currentTabIndex == 0)
+                GridColumn(
+                    columnName: 'noOfCustomersGroup',
+                    columnWidthMode: ColumnWidthMode.fitByColumnName,
+                    label: Container(
+                        padding: const EdgeInsets.all(8.0),
+                        alignment: Alignment.center,
+                        child: const Text('No of Customers(Group)'))),
+              GridColumn(
+                  columnName: 'par1Day',
+                  columnWidthMode: ColumnWidthMode.fitByColumnName,
+                  label: Container(
+                      padding: const EdgeInsets.all(8.0),
+                      alignment: Alignment.center,
+                      child: const Text('PAR>1 Day(%)'))),
+              GridColumn(
+                  columnName: 'llr',
+                  columnWidthMode: ColumnWidthMode.fitByColumnName,
+                  label: Container(
+                      padding: const EdgeInsets.all(8.0),
+                      alignment: Alignment.center,
+                      child: const Text('llr'))),
+              if (currentTabIndex == 3 || currentTabIndex == 0)
+                GridColumn(
+                    columnName: 'sgl',
+                    columnWidthMode: ColumnWidthMode.fitByColumnName,
+                    label: Container(
+                        padding: const EdgeInsets.all(8.0),
+                        alignment: Alignment.center,
+                        child: const Text('sgl'))),
+              GridColumn(
+                  columnName: 'incentivePar1Day',
+                  columnWidthMode: ColumnWidthMode.fitByColumnName,
+                  label: Container(
+                      padding: const EdgeInsets.all(8.0),
+                      alignment: Alignment.center,
+                      child: const Text('Incentive(PAR>1 Day)'))),
+              GridColumn(
+                  columnName: 'incentiveNetPortifolioGrowth',
+                  columnWidthMode: ColumnWidthMode.fitByColumnName,
+                  label: Container(
+                      padding: const EdgeInsets.all(8.0),
+                      alignment: Alignment.center,
+                      child: const Text('Incentive(Net Portifolio Growth)'))),
+              GridColumn(
+                  columnName: 'incentiveNetClientGrowth',
+                  columnWidthMode: ColumnWidthMode.fitByColumnName,
+                  label: Container(
+                      padding: const EdgeInsets.all(8.0),
+                      alignment: Alignment.center,
+                      child: const Text('Incentive(Net Client Growth)'))),
+              if (currentTabIndex == 3)
+                GridColumn(
+                    columnName: 'incentiveNoOfSglGroups',
+                    columnWidthMode: ColumnWidthMode.fitByColumnName,
+                    label: Container(
+                        padding: const EdgeInsets.all(8.0),
+                        alignment: Alignment.center,
+                        child: const Text('Incentive(No Of SGL Groups)'))),
+              GridColumn(
+                  columnName: 'totalIncentive',
+                  columnWidthMode: ColumnWidthMode.fitByColumnName,
+                  label: Container(
+                      padding: const EdgeInsets.all(8.0),
+                      alignment: Alignment.center,
+                      child: const Text('Total Incentive'))),
+            ],
+          ),
+        ),
+      ],
+    );
   }
-}
 
-/// Custom business object class which contains properties to hold the detailed
-/// information about the employee which will be rendered in datagrid.
-class Employee {
-  /// Creates the employee class with required details.
-  Employee(
-      this.OfficerId,
-      this.name,
-      this.clients,
-      this.outstandingPrincipal,
-      this.principalArrears,
-      this.interestArrears,
-      this.totalArrears,
-      this.clientsInArrears,
-      this.par1Day);
+  Future<List<Incentive>> getIncentiveData() async {
+    try {
+      AuthController authController = AuthController();
 
-  /// Id of an employee.
-  final String OfficerId;
-  final String name;
-  final String clients;
-  final String outstandingPrincipal;
-  final String principalArrears;
-  final String interestArrears;
-  final String totalArrears;
-  final String clientsInArrears;
-  final String par1Day;
+      final response = await authController.getIncentives();
+
+      List<Incentive> incentives = [];
+
+      response.forEach((key, value) {
+        try {
+          incentives.add(Incentive.fromJson(value));
+        } catch (e) {
+          log("Error parsing incentive data for key $key: $e");
+        }
+      });
+
+      return incentives;
+    } catch (e) {
+      log("Fetching incentive Error: $e");
+      return [];
+    }
+  }
 }
 
 /// An object to set the employee collection data source to the datagrid. This
 /// is used to map the employee data to the datagrid widget.
-class EmployeeDataSource extends DataGridSource {
+class IncentiveDataSource extends DataGridSource {
   /// Creates the employee data source class with required details.
-  EmployeeDataSource({required List<Employee> employeeData}) {
-    _employeeData = employeeData
-        .map<DataGridRow>((e) => DataGridRow(cells: [
-              DataGridCell<String>(columnName: 'id', value: e.OfficerId),
-              DataGridCell<String>(columnName: 'name', value: e.name),
-              DataGridCell<String>(columnName: 'clients', value: e.clients),
-              DataGridCell<String>(
-                  columnName: 'outstandingPrincipal',
-                  value: e.outstandingPrincipal),
-              DataGridCell<String>(
-                  columnName: 'principalArrears', value: e.principalArrears),
-              DataGridCell<String>(
-                  columnName: 'interestArrears', value: e.interestArrears),
-              DataGridCell<String>(
-                  columnName: 'totalArrears', value: e.totalArrears),
-              DataGridCell<String>(
-                  columnName: 'clientsInArrears', value: e.clientsInArrears),
-              DataGridCell<String>(columnName: 'par1Day', value: e.par1Day),
-            ]))
-        .toList();
+  IncentiveDataSource(
+      {required List<Incentive> incentiveData, required int currentTabIndex}) {
+    List<Incentive> filteredData;
+    if (currentTabIndex == 0) {
+      _incentiveData = incentiveData
+          .map<DataGridRow>((e) => DataGridRow(cells: [
+                DataGridCell<String>(
+                    columnName: 'OfficerId', value: e.OfficerId),
+                DataGridCell<String>(columnName: 'name', value: e.name),
+                DataGridCell<String>(
+                    columnName: 'outstandingPrincipalIndividual',
+                    value: e.outstandingPrincipalIndividual),
+                DataGridCell<String>(
+                    columnName: 'outstandingPrincipalGroup',
+                    value: e.outstandingPrincipalGroup),
+                DataGridCell<String>(
+                    columnName: 'noOfCustomersIndividual',
+                    value: e.noOfCustomersIndividual),
+                DataGridCell<String>(
+                    columnName: 'noOfCustomersGroup',
+                    value: e.noOfCustomersGroup),
+                DataGridCell<String>(columnName: 'par1Day', value: e.par1Day),
+                DataGridCell<String>(columnName: 'llr', value: e.llr),
+                DataGridCell<String>(columnName: 'sgl', value: e.sgl),
+                DataGridCell<String>(
+                    columnName: 'incentivePar1Day', value: e.incentivePar1Day),
+                DataGridCell<String>(
+                    columnName: 'incentiveNetPortifolioGrowth',
+                    value: e.incentiveNetPortifolioGrowth),
+                DataGridCell<String>(
+                    columnName: 'incentiveNetClientGrowth',
+                    value: e.incentiveNetClientGrowth),
+                DataGridCell<String>(
+                    columnName: 'totalIncentive', value: e.totalIncentive),
+              ]))
+          .toList();
+    }
+
+    if (currentTabIndex == 1) {
+      filteredData =
+          incentiveData.where((e) => e.incentiveType == 'individual').toList();
+      _incentiveData = filteredData
+          .map<DataGridRow>((e) => DataGridRow(cells: [
+                DataGridCell<String>(
+                    columnName: 'OfficerId', value: e.OfficerId),
+                DataGridCell<String>(columnName: 'name', value: e.name),
+                DataGridCell<String>(
+                    columnName: 'outstandingPrincipalIndividual',
+                    value: e.outstandingPrincipalIndividual),
+                DataGridCell<String>(
+                    columnName: 'noOfCustomersIndividual',
+                    value: e.noOfCustomersIndividual),
+                DataGridCell<String>(columnName: 'par1Day', value: e.par1Day),
+                DataGridCell<String>(columnName: 'llr', value: e.llr),
+                DataGridCell<String>(
+                    columnName: 'incentivePar1Day', value: e.incentivePar1Day),
+                DataGridCell<String>(
+                    columnName: 'incentiveNetPortifolioGrowth',
+                    value: e.incentiveNetPortifolioGrowth),
+                DataGridCell<String>(
+                    columnName: 'incentiveNetClientGrowth',
+                    value: e.incentiveNetClientGrowth),
+                DataGridCell<String>(
+                    columnName: 'totalIncentive', value: e.totalIncentive),
+              ]))
+          .toList();
+    }
+
+    if (currentTabIndex == 2) {
+      // Group
+      filteredData =
+          incentiveData.where((e) => e.incentiveType == 'group').toList();
+      _incentiveData = incentiveData
+          .map<DataGridRow>((e) => DataGridRow(cells: [
+                DataGridCell<String>(
+                    columnName: 'OfficerId', value: e.OfficerId),
+                DataGridCell<String>(columnName: 'name', value: e.name),
+                DataGridCell<String>(
+                    columnName: 'outstandingPrincipalGroup',
+                    value: e.outstandingPrincipalGroup),
+                DataGridCell<String>(
+                    columnName: 'noOfCustomersGroup',
+                    value: e.noOfCustomersGroup),
+                DataGridCell<String>(columnName: 'par1Day', value: e.par1Day),
+                DataGridCell<String>(columnName: 'llr', value: e.llr),
+                DataGridCell<String>(
+                    columnName: 'incentivePar1Day', value: e.incentivePar1Day),
+                DataGridCell<String>(
+                    columnName: 'incentiveNetPortifolioGrowth',
+                    value: e.incentiveNetPortifolioGrowth),
+                DataGridCell<String>(
+                    columnName: 'incentiveNetClientGrowth',
+                    value: e.incentiveNetClientGrowth),
+                DataGridCell<String>(
+                    columnName: 'totalIncentive', value: e.totalIncentive),
+              ]))
+          .toList();
+    }
+
+    if (currentTabIndex == 3) {
+      // Fast
+      filteredData =
+          incentiveData.where((e) => e.incentiveType == 'fast').toList();
+      log("Fast Data: $filteredData");
+      _incentiveData = filteredData
+          .map<DataGridRow>((e) => DataGridRow(cells: [
+                DataGridCell<String>(
+                    columnName: 'OfficerId', value: e.OfficerId),
+                DataGridCell<String>(columnName: 'name', value: e.name),
+                DataGridCell<String>(
+                    columnName: 'outstandingPrincipalSGL',
+                    value: e.outstandingPrincipalSgl),
+                DataGridCell<String>(columnName: 'par1Day', value: e.par1Day),
+                DataGridCell<String>(columnName: 'llr', value: e.llr),
+                DataGridCell<String>(columnName: 'sgl', value: e.sgl),
+                DataGridCell<String>(
+                    columnName: 'incentivePar1Day', value: e.incentivePar1Day),
+                DataGridCell<String>(
+                    columnName: 'incentiveNetPortifolioGrowth',
+                    value: e.incentiveNetPortifolioGrowth),
+                DataGridCell<String>(
+                    columnName: 'incentiveNetClientGrowth',
+                    value: e.incentiveNetClientGrowth),
+                DataGridCell<String>(
+                    columnName: 'incentiveNoOfSglGroups',
+                    value: e.incentiveNetClientGrowth),
+                DataGridCell<String>(
+                    columnName: 'totalIncentive', value: e.totalIncentive),
+              ]))
+          .toList();
+    }
   }
 
-  List<DataGridRow> _employeeData = [];
+  List<DataGridRow> _incentiveData = [];
 
   @override
-  List<DataGridRow> get rows => _employeeData;
+  List<DataGridRow> get rows => _incentiveData;
 
   @override
   DataGridRowAdapter buildRow(DataGridRow row) {
+    final formatter = NumberFormat('#,###'); //formatter for number format
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((e) {
+      if ([
+        'totalIncentive',
+        'incentiveNetClientGrowth',
+        'incentiveNetPortifolioGrowth',
+        'incentivePar1Day',
+        'sgl',
+        'noOfCustomersGroup',
+        'noOfCustomersIndividual',
+        'outstandingPrincipalGroup',
+        'outstandingPrincipalIndividual',
+        'outstandingPrincipalSGL'
+      ].contains(e.columnName)) {
+        if (e.value == 'null') {
+          return Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.all(8.0),
+              child: Text('0'));
+        }
+        return Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.all(8.0),
+            child: Text(formatter.format(double.parse(e.value.toString())))
+            // or any default value you prefer
+            );
+      }
       return Container(
         alignment: Alignment.center,
         padding: const EdgeInsets.all(8.0),

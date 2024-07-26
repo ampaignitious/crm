@@ -77,7 +77,7 @@ class _RegisterState extends State<Register> {
           ));
         } else {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            backgroundColor: AppColors.contentColorPurple,
+            backgroundColor: AppColors.contentColorOrange,
             content: Text("Account Created successfully",
                 style: TextStyle(color: Colors.white)),
           ));
@@ -142,7 +142,7 @@ class _RegisterState extends State<Register> {
                     SizedBox(height: size.height * 0.016),
                     const Divider(
                       thickness: 0.3,
-                      color: AppColors.contentColorPurple,
+                      color: AppColors.contentColorOrange,
                     ),
                     SizedBox(height: size.height * 0.02),
                     TextFormField(
@@ -223,7 +223,7 @@ class _RegisterState extends State<Register> {
                           },
                           child: Text("Login",
                               style: GoogleFonts.lato(
-                                  color: AppColors.contentColorPurple)),
+                                  color: AppColors.contentColorOrange)),
                         ),
                       ],
                     ),

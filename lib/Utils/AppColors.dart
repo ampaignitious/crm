@@ -18,7 +18,7 @@ class AppColors {
   static const Color contentColorYellow = Color(0xFFFFC300);
   static const Color contentColorOrange = Color(0xFFFF683B);
   static const Color contentColorGreen = Color(0xFF3BFF49);
-  static const Color contentColorPurple = Color.fromARGB(255, 110, 8, 136);
+  static const Color contentColorPurple = Colors.orange;
   static const Color contentColorPink = Color.fromARGB(255, 241, 29, 241);
   static const Color contentColorRed = Color(0xFFE80054);
   static const Color contentColorCyan = Color.fromARGB(255, 240, 253, 255);
@@ -31,4 +31,6 @@ class AppColors {
   static const Color hazelnut = Color(0xFFC18A42);
   static const Color mocha = Color(0xFF8D6854);
   static const Color creamyWhite = Color(0xFFFFFAF0);
+
+
 }

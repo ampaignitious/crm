@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -9,9 +7,13 @@ import 'package:vfu/Models/Sale.dart';
 import 'package:vfu/Utils/AppColors.dart';
 
 import '../Widgets/Drawer/DrawerItems.dart';
+
 import 'package:syncfusion_flutter_datagrid_export/export.dart';
-import '../Util/save_file_mobile.dart' as helper;
-// import 'package:intl/intl.dart';
+import 'package:syncfusion_flutter_xlsio/xlsio.dart' hide Column, Row;
+import 'package:syncfusion_flutter_pdf/src/pdf/implementation/pdf_document/pdf_document.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
 
 class SalesTrackerPage extends StatefulWidget {
   const SalesTrackerPage({super.key});
@@ -26,33 +28,46 @@ class _SalesTrackerPageState extends State<SalesTrackerPage> {
   String selectedGroup = 'Product';
 
   final GlobalKey<SfDataGridState> _key = GlobalKey<SfDataGridState>();
+
   @override
   void initState() {
     super.initState();
     sales = getSaleData();
   }
 
-  Future<void> _exportDataGridToExcel() async {
-    final workbook = _key.currentState?.exportToExcelWorkbook();
-    if (workbook != null) {
-      final bytes = workbook.saveAsStream();
-      workbook.dispose();
-      await helper.saveAndLaunchFile(bytes, 'DataGrid.xlsx');
-    } else {
-      print("workbook is null");
-    }
+  Future<void> exportDataGridToExcel() async {
+    final Workbook workbook = _key.currentState!.exportToExcelWorkbook();
+    final List<int> bytes = workbook.saveAsStream();
+
+    // Get the temporary directory path
+    final directory = await getTemporaryDirectory();
+    // Generate the file path using the current date and time
+    final path = '${directory.path}/Arrear_${DateTime.now()}.xlsx';
+
+    // Write the file
+    File(path).writeAsBytes(bytes).then((_) {
+      // Open the file using platform agnostic API
+      OpenFile.open(path);
+    });
+
+    workbook.dispose();
   }
 
   Future<void> _exportDataGridToPdf() async {
-    final document =
-        _key.currentState?.exportToPdfDocument(fitAllColumnsInOnePage: true);
-    if (document != null) {
-      final bytes = document.saveSync();
-      document.dispose();
-      await helper.saveAndLaunchFile(bytes, 'DataGrid.pdf');
-    } else {
-      print("document is null");
-    }
+    final PdfDocument document =
+        _key.currentState!.exportToPdfDocument(fitAllColumnsInOnePage: true);
+
+    final List<int> bytes = document.saveSync();
+    // Get the temporary directory path
+    final directory = await getTemporaryDirectory();
+
+    // generate the file path using the current date and time
+    final path = '${directory.path}/Arrear_${DateTime.now()}.pdf';
+
+    File(path).writeAsBytes(bytes).then((_) {
+      // Open the file using platform agnostic API
+      OpenFile.open(path);
+    });
   }
 
   @override
@@ -60,20 +75,20 @@ class _SalesTrackerPageState extends State<SalesTrackerPage> {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       drawer: Drawer(
-        backgroundColor: AppColors.contentColorPurple,
+        backgroundColor: AppColors.contentColorOrange,
         width: size.width * 0.8,
         child: const DrawerItems(),
       ),
       appBar: AppBar(
         iconTheme: IconThemeData(
-          color: AppColors.contentColorPurple,
+          color: AppColors.contentColorOrange,
           size: size.width * 0.11,
         ), // Change the icon color here
 
         backgroundColor: AppColors.contentColorCyan,
 
         title: Text(
-          "Sales Tracker",
+          "Disbursement Tracker",
           style: GoogleFonts.lato(
               fontSize: size.width * 0.062,
               color: AppColors.menuBackground,
@@ -107,42 +122,48 @@ class _SalesTrackerPageState extends State<SalesTrackerPage> {
             saleDataSource = SaleDataSource(
                 arrearData: snapshot.data as List<Sale>,
                 groupBy: selectedGroup);
-
-            log("selected group here:$selectedGroup");
             return Column(
               children: [
-                // Container(
-                //   margin: const EdgeInsets.all(12.0),
-                //   child: Row(
-                //     children: <Widget>[
-                //       SizedBox(
-                //         height: 40.0,
-                //         width: 150.0,
-                //         child: MaterialButton(
-                //             color: Colors.blue,
-                //             onPressed: _exportDataGridToExcel,
-                //             child: const Center(
-                //                 child: Text(
-                //               'Export to Excel',
-                //               style: TextStyle(color: Colors.white),
-                //             ))),
-                //       ),
-                //       const Padding(padding: EdgeInsets.all(20)),
-                //       SizedBox(
-                //         height: 40.0,
-                //         width: 150.0,
-                //         child: MaterialButton(
-                //             color: Colors.blue,
-                //             onPressed: _exportDataGridToPdf,
-                //             child: const Center(
-                //                 child: Text(
-                //               'Export to PDF',
-                //               style: TextStyle(color: Colors.white),
-                //             ))),
-                //       ),
-                //     ],
-                //   ),
-                // ),
+                Container(
+                  margin: const EdgeInsets.all(12.0),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: SizedBox(
+                          height: 40.0,
+                          child: MaterialButton(
+                            color: AppColors.contentColorOrange,
+                            onPressed: () {
+                              exportDataGridToExcel();
+                            },
+                            child: const Center(
+                              child: Icon(
+                                Icons.description,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 20), // Adjusted to SizedBox
+                      Expanded(
+                        child: SizedBox(
+                          height: 40.0,
+                          child: MaterialButton(
+                            color: AppColors.contentColorOrange,
+                            onPressed: _exportDataGridToPdf,
+                            child: const Center(
+                              child: Icon(
+                                Icons.picture_as_pdf,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 //add a dropdown to select the group
                 Container(
                   margin: const EdgeInsets.all(12.0),
@@ -203,11 +224,10 @@ class _SalesTrackerPageState extends State<SalesTrackerPage> {
       widget = Expanded(
         child: SfDataGrid(
           source: saleDataSource,
-          columnWidthMode: ColumnWidthMode.fitByCellValue,
-          frozenColumnsCount: 1, // Number of columns to freeze
-          frozenRowsCount: 1, // Number of rows to freeze
+          columnWidthMode: ColumnWidthMode.auto,
           //apply pagination
           allowSorting: true,
+          key: _key,
           columns: <GridColumn>[
             GridColumn(
                 columnName: 'productName',
@@ -217,7 +237,7 @@ class _SalesTrackerPageState extends State<SalesTrackerPage> {
                     child: const Text('Product'))),
             GridColumn(
                 columnName: 'actualClients',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
@@ -227,28 +247,28 @@ class _SalesTrackerPageState extends State<SalesTrackerPage> {
                     ))),
             GridColumn(
                 columnName: 'actualVolume',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
                     child: const Text('Actual Volume(UGx)'))),
             GridColumn(
                 columnName: 'targetVolume',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
                     child: const Text('Target Volume(UGx)'))),
             GridColumn(
                 columnName: 'variance',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
                     child: const Text('Variance(UGx)'))),
             GridColumn(
                 columnName: 'score',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
@@ -533,11 +553,9 @@ class _SalesTrackerPageState extends State<SalesTrackerPage> {
       final response =
           await authController.getSales(getActualSelectedValue(selectedGroup));
       final salesData = response['data'] as List;
-      log("sales data here:$salesData");
       final sales = salesData.map((data) {
         try {
           final sales = Sale.fromJson(data, selectedGroup);
-          log("sales here:$sales");
           return sales;
         } catch (e) {
           // Consider returning a placeholder object or handling differently
@@ -572,6 +590,7 @@ class SaleDataSource extends DataGridSource {
                 DataGridCell<String>(columnName: 'score', value: e.score),
               ]))
           .toList();
+
     } else if (groupBy == 'Branch->Loan Disbursed') {
       _arrearData = arrearData
           .map<DataGridRow>((e) => DataGridRow(cells: [

@@ -1,1 +1,0 @@
-// large size  fontSize: size.width*0.062,

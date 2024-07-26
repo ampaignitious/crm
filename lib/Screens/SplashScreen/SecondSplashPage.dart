@@ -75,7 +75,7 @@ class _SecondSplashPageState extends State<SecondSplashPage> {
                   height: size.height * 0.08,
                   decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      border: Border.all(color: AppColors.contentColorPurple)),
+                      border: Border.all(color: AppColors.contentColorOrange)),
                   child: InkWell(
                     onTap: () {
                       Navigator.push(context,

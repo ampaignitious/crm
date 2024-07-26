@@ -6,11 +6,16 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:vfu/Controllers/services.dart';
 import 'package:vfu/Models/Expected.dart';
+import 'package:vfu/Models/User.dart';
 import 'package:vfu/Utils/AppColors.dart';
 
 import '../Widgets/Drawer/DrawerItems.dart';
 import 'package:syncfusion_flutter_datagrid_export/export.dart';
-import '../Util/save_file_mobile.dart' as helper;
+import 'package:syncfusion_flutter_xlsio/xlsio.dart' hide Column, Row;
+import 'package:syncfusion_flutter_pdf/src/pdf/implementation/pdf_document/pdf_document.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
 
 class ExpectedRepayments extends StatefulWidget {
   const ExpectedRepayments({super.key});
@@ -22,35 +27,89 @@ class ExpectedRepayments extends StatefulWidget {
 class _ExpectedRepaymentsState extends State<ExpectedRepayments> {
   late Future<List<Expected>> expecteds;
   late ExpectedDataSource expectedDataSource;
-  String selectedGroup = 'Officer';
+  String selectedGroup = 'Client';
+  User? user;
+  late Future<void> userFuture;
 
   final GlobalKey<SfDataGridState> _key = GlobalKey<SfDataGridState>();
   @override
   void initState() {
     super.initState();
+    userFuture = getUser();
     expecteds = getExpectedData();
   }
 
-  Future<void> _exportDataGridToExcel() async {
-    final workbook = _key.currentState?.exportToExcelWorkbook();
-    if (workbook != null) {
-      final bytes = workbook.saveAsStream();
-      workbook.dispose();
-      await helper.saveAndLaunchFile(bytes, 'DataGrid.xlsx');
-    } else {
-      print("workbook is null");
-    }
+  Future<void> exportDataGridToExcel() async {
+    final Workbook workbook = _key.currentState!.exportToExcelWorkbook();
+    final List<int> bytes = workbook.saveAsStream();
+
+    // Get the temporary directory path
+    final directory = await getTemporaryDirectory();
+    // generate the file path using the current date and time
+    final path = '${directory.path}/Expected_${DateTime.now()}.xlsx';
+
+    // Write the file
+    File(path).writeAsBytes(bytes).then((_) {
+      // Open the file using platform agnostic API
+      OpenFile.open(path);
+    });
+
+    workbook.dispose();
   }
 
   Future<void> _exportDataGridToPdf() async {
-    final document =
-        _key.currentState?.exportToPdfDocument(fitAllColumnsInOnePage: true);
-    if (document != null) {
-      final bytes = document.saveSync();
-      document.dispose();
-      await helper.saveAndLaunchFile(bytes, 'DataGrid.pdf');
-    } else {
-      print("document is null");
+    final PdfDocument document =
+        _key.currentState!.exportToPdfDocument(fitAllColumnsInOnePage: true);
+
+    final List<int> bytes = document.saveSync();
+    // Get the temporary directory path
+    final directory = await getTemporaryDirectory();
+
+    // generate the file path using the current date and time
+    final path = '${directory.path}/Expected_${DateTime.now()}.pdf';
+
+    File(path).writeAsBytes(bytes).then((_) {
+      // Open the file using platform agnostic API
+      OpenFile.open(path);
+    });
+  }
+
+  Future<void> getUser() async {
+    try {
+      AuthController authController = AuthController();
+      User response = await authController.getUserDetails();
+      log("user details: $response");
+      if (response.status == 'success') {
+        setState(() {
+          user = response;
+        });
+      } else {
+        log("no success in user details: $response");
+        setState() {
+          user = User(
+            name: 'Error',
+            username: 'Error',
+            staffId: 'Error',
+            userType: 'Error',
+            regionId: 'Error',
+            branchId: 'Error',
+            status: 'Error',
+          );
+        }
+      }
+    } catch (e) {
+      log("user error: $e");
+      setState(() {
+        user = User(
+          name: 'Error',
+          username: 'Error',
+          staffId: 'Error',
+          userType: 'Error',
+          regionId: 'Error',
+          branchId: 'Error',
+          status: 'Error',
+        );
+      });
     }
   }
 
@@ -59,13 +118,13 @@ class _ExpectedRepaymentsState extends State<ExpectedRepayments> {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       drawer: Drawer(
-        backgroundColor: AppColors.contentColorPurple,
+        backgroundColor: AppColors.contentColorOrange,
         width: size.width * 0.8,
         child: const DrawerItems(),
       ),
       appBar: AppBar(
         iconTheme: IconThemeData(
-          color: AppColors.contentColorPurple,
+          color: AppColors.contentColorOrange,
           size: size.width * 0.11,
         ), // Change the icon color here
 
@@ -110,38 +169,47 @@ class _ExpectedRepaymentsState extends State<ExpectedRepayments> {
             log("selected group here:$selectedGroup");
             return Column(
               children: [
-                // Container(
-                //   margin: const EdgeInsets.all(12.0),
-                //   child: Row(
-                //     children: <Widget>[
-                //       SizedBox(
-                //         height: 40.0,
-                //         width: 150.0,
-                //         child: MaterialButton(
-                //             color: Colors.blue,
-                //             onPressed: _exportDataGridToExcel,
-                //             child: const Center(
-                //                 child: Text(
-                //               'Export to Excel',
-                //               style: TextStyle(color: Colors.white),
-                //             ))),
-                //       ),
-                //       const Padding(padding: EdgeInsets.all(20)),
-                //       SizedBox(
-                //         height: 40.0,
-                //         width: 150.0,
-                //         child: MaterialButton(
-                //             color: Colors.blue,
-                //             onPressed: _exportDataGridToPdf,
-                //             child: const Center(
-                //                 child: Text(
-                //               'Export to PDF',
-                //               style: TextStyle(color: Colors.white),
-                //             ))),
-                //       ),
-                //     ],
-                //   ),
-                // ),
+                Container(
+                  margin: const EdgeInsets.all(12.0),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: SizedBox(
+                          height: 40.0,
+                          child: MaterialButton(
+                            color: AppColors.contentColorOrange,
+                            onPressed: () {
+                              exportDataGridToExcel();
+                            },
+                            child: const Center(
+                              child: Icon(
+                                Icons.description,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 20), // Adjusted to SizedBox
+                      Expanded(
+                        child: SizedBox(
+                          height: 40.0,
+                          child: MaterialButton(
+                            color: AppColors.contentColorOrange,
+                            onPressed: _exportDataGridToPdf,
+                            child: const Center(
+                              child: Icon(
+                                Icons.picture_as_pdf,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                if(user!.userType != '1')
                 //add a dropdown to select the group
                 Container(
                   margin: const EdgeInsets.all(12.0),
@@ -161,7 +229,8 @@ class _ExpectedRepaymentsState extends State<ExpectedRepayments> {
                           'Gender',
                           'District',
                           'Sub County',
-                          'Age'
+                          'Age',
+                          'Client'
                         ].map((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
@@ -204,11 +273,11 @@ class _ExpectedRepaymentsState extends State<ExpectedRepayments> {
       widget = Expanded(
         child: SfDataGrid(
           source: expectedDataSource,
-          columnWidthMode: ColumnWidthMode.fitByCellValue,
+          columnWidthMode: ColumnWidthMode.auto,
           frozenColumnsCount: 1, // Number of columns to freeze
-          frozenRowsCount: 1, // Number of rows to freeze
           //apply pagination
           allowSorting: true,
+          key: _key,
           columns: <GridColumn>[
             GridColumn(
                 columnName: 'officerId',
@@ -218,7 +287,7 @@ class _ExpectedRepaymentsState extends State<ExpectedRepayments> {
                     child: const Text('Officer ID'))),
             GridColumn(
                 columnName: 'name',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
@@ -228,35 +297,67 @@ class _ExpectedRepaymentsState extends State<ExpectedRepayments> {
                     ))),
             GridColumn(
                 columnName: 'clients',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
                     child: const Text('Clients'))),
+            // next repayment principal
+            GridColumn(
+                columnName: 'nextRepaymentPrincipal',
+                columnWidthMode: ColumnWidthMode.auto,
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text('Next Repayment Principal'))),
+            //principal in arrears
+            GridColumn(
+                columnName: 'principalInArrears',
+                columnWidthMode: ColumnWidthMode.auto,
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text('Principal In Arrears'))),
             GridColumn(
                 columnName: 'expectedPrincipal',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
                     child: const Text('Expected Principal(UGx)'))),
+            // next repayment interest
+            GridColumn(
+                columnName: 'nextRepaymentInterest',
+                columnWidthMode: ColumnWidthMode.auto,
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text('Next Repayment Interest'))),
+            //interest in arrears
+            GridColumn(
+                columnName: 'interestInArrears',
+                columnWidthMode: ColumnWidthMode.auto,
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text('Interest In Arrears'))),
             GridColumn(
                 columnName: 'expectedInterest',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
                     child: const Text('Expected Interest(UGx)'))),
             GridColumn(
                 columnName: 'expectedTotal',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
                     child: const Text('Expected Total(UGx)'))),
             GridColumn(
                 columnName: 'clientsInArrears',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
@@ -269,7 +370,7 @@ class _ExpectedRepaymentsState extends State<ExpectedRepayments> {
         child: SfDataGrid(
           key: _key,
           source: expectedDataSource,
-          columnWidthMode: ColumnWidthMode.fitByCellValue,
+          columnWidthMode: ColumnWidthMode.auto,
           frozenColumnsCount: 1, // Number of columns to freeze
           frozenRowsCount: 1, // Number of rows to freeze
           //apply pagination
@@ -289,35 +390,67 @@ class _ExpectedRepaymentsState extends State<ExpectedRepayments> {
                     child: const Text('Name'))),
             GridColumn(
                 columnName: 'clients',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
                     child: const Text('Clients'))),
+// next repayment principal
+            GridColumn(
+                columnName: 'nextRepaymentPrincipal',
+                columnWidthMode: ColumnWidthMode.auto,
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text('Next Repayment Principal'))),
+            //principal in arrears
+            GridColumn(
+                columnName: 'principalInArrears',
+                columnWidthMode: ColumnWidthMode.auto,
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text('Principal In Arrears'))),
             GridColumn(
                 columnName: 'expectedPrincipal',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
                     child: const Text('Expected Principal(UGx)'))),
+            // next repayment interest
+            GridColumn(
+                columnName: 'nextRepaymentInterest',
+                columnWidthMode: ColumnWidthMode.auto,
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text('Next Repayment Interest'))),
+            //interest in arrears
+            GridColumn(
+                columnName: 'interestInArrears',
+                columnWidthMode: ColumnWidthMode.auto,
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text('Interest In Arrears'))),
             GridColumn(
                 columnName: 'expectedInterest',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
                     child: const Text('Expected Interest(UGx)'))),
             GridColumn(
                 columnName: 'expectedTotal',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
                     child: const Text('Expected Total(UGx)'))),
             GridColumn(
                 columnName: 'clientsInArrears',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
@@ -330,7 +463,7 @@ class _ExpectedRepaymentsState extends State<ExpectedRepayments> {
         child: SfDataGrid(
           key: _key,
           source: expectedDataSource,
-          columnWidthMode: ColumnWidthMode.fitByCellValue,
+          columnWidthMode: ColumnWidthMode.auto,
           frozenColumnsCount: 1, // Number of columns to freeze
           frozenRowsCount: 1, // Number of rows to freeze
           //apply pagination
@@ -350,35 +483,67 @@ class _ExpectedRepaymentsState extends State<ExpectedRepayments> {
                     child: const Text('Name'))),
             GridColumn(
                 columnName: 'clients',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
                     child: const Text('Clients'))),
+// next repayment principal
+            GridColumn(
+                columnName: 'nextRepaymentPrincipal',
+                columnWidthMode: ColumnWidthMode.auto,
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text('Next Repayment Principal'))),
+            //principal in arrears
+            GridColumn(
+                columnName: 'principalInArrears',
+                columnWidthMode: ColumnWidthMode.auto,
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text('Principal In Arrears'))),
             GridColumn(
                 columnName: 'expectedPrincipal',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
                     child: const Text('Expected Principal(UGx)'))),
+            // next repayment interest
+            GridColumn(
+                columnName: 'nextRepaymentInterest',
+                columnWidthMode: ColumnWidthMode.auto,
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text('Next Repayment Interest'))),
+            //interest in arrears
+            GridColumn(
+                columnName: 'interestInArrears',
+                columnWidthMode: ColumnWidthMode.auto,
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text('Interest In Arrears'))),
             GridColumn(
                 columnName: 'expectedInterest',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
                     child: const Text('Expected Interest(UGx)'))),
             GridColumn(
                 columnName: 'expectedTotal',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
                     child: const Text('Expected Total(UGx)'))),
             GridColumn(
                 columnName: 'clientsInArrears',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
@@ -391,7 +556,7 @@ class _ExpectedRepaymentsState extends State<ExpectedRepayments> {
         child: SfDataGrid(
           key: _key,
           source: expectedDataSource,
-          columnWidthMode: ColumnWidthMode.fitByCellValue,
+          columnWidthMode: ColumnWidthMode.auto,
           frozenColumnsCount: 1, // Number of columns to freeze
           frozenRowsCount: 1, // Number of rows to freeze
           //apply pagination
@@ -405,35 +570,67 @@ class _ExpectedRepaymentsState extends State<ExpectedRepayments> {
                     child: const Text('Name'))),
             GridColumn(
                 columnName: 'clients',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
                     child: const Text('Clients'))),
+// next repayment principal
+            GridColumn(
+                columnName: 'nextRepaymentPrincipal',
+                columnWidthMode: ColumnWidthMode.auto,
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text('Next Repayment Principal'))),
+            //principal in arrears
+            GridColumn(
+                columnName: 'principalInArrears',
+                columnWidthMode: ColumnWidthMode.auto,
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text('Principal In Arrears'))),
             GridColumn(
                 columnName: 'expectedPrincipal',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
                     child: const Text('Expected Principal(UGx)'))),
+            // next repayment interest
+            GridColumn(
+                columnName: 'nextRepaymentInterest',
+                columnWidthMode: ColumnWidthMode.auto,
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text('Next Repayment Interest'))),
+            //interest in arrears
+            GridColumn(
+                columnName: 'interestInArrears',
+                columnWidthMode: ColumnWidthMode.auto,
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text('Interest In Arrears'))),
             GridColumn(
                 columnName: 'expectedInterest',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
                     child: const Text('Expected Interest(UGx)'))),
             GridColumn(
                 columnName: 'expectedTotal',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
                     child: const Text('Expected Total(UGx)'))),
             GridColumn(
                 columnName: 'clientsInArrears',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
@@ -446,7 +643,7 @@ class _ExpectedRepaymentsState extends State<ExpectedRepayments> {
         child: SfDataGrid(
           key: _key,
           source: expectedDataSource,
-          columnWidthMode: ColumnWidthMode.fitByCellValue,
+          columnWidthMode: ColumnWidthMode.auto,
           frozenColumnsCount: 1, // Number of columns to freeze
           frozenRowsCount: 1, // Number of rows to freeze
           //apply pagination
@@ -466,35 +663,67 @@ class _ExpectedRepaymentsState extends State<ExpectedRepayments> {
                     child: const Text('Name'))),
             GridColumn(
                 columnName: 'clients',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
                     child: const Text('Clients'))),
+// next repayment principal
+            GridColumn(
+                columnName: 'nextRepaymentPrincipal',
+                columnWidthMode: ColumnWidthMode.auto,
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text('Next Repayment Principal'))),
+            //principal in arrears
+            GridColumn(
+                columnName: 'principalInArrears',
+                columnWidthMode: ColumnWidthMode.auto,
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text('Principal In Arrears'))),
             GridColumn(
                 columnName: 'expectedPrincipal',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
                     child: const Text('Expected Principal(UGx)'))),
+            // next repayment interest
+            GridColumn(
+                columnName: 'nextRepaymentInterest',
+                columnWidthMode: ColumnWidthMode.auto,
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text('Next Repayment Interest'))),
+            //interest in arrears
+            GridColumn(
+                columnName: 'interestInArrears',
+                columnWidthMode: ColumnWidthMode.auto,
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text('Interest In Arrears'))),
             GridColumn(
                 columnName: 'expectedInterest',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
                     child: const Text('Expected Interest(UGx)'))),
             GridColumn(
                 columnName: 'expectedTotal',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
                     child: const Text('Expected Total(UGx)'))),
             GridColumn(
                 columnName: 'clientsInArrears',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
@@ -507,7 +736,7 @@ class _ExpectedRepaymentsState extends State<ExpectedRepayments> {
         child: SfDataGrid(
           key: _key,
           source: expectedDataSource,
-          columnWidthMode: ColumnWidthMode.fitByCellValue,
+          columnWidthMode: ColumnWidthMode.auto,
           frozenColumnsCount: 1, // Number of columns to freeze
           frozenRowsCount: 1, // Number of rows to freeze
           //apply pagination
@@ -521,35 +750,67 @@ class _ExpectedRepaymentsState extends State<ExpectedRepayments> {
                     child: const Text('Name'))),
             GridColumn(
                 columnName: 'clients',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
                     child: const Text('Clients'))),
+            // next repayment principal
+            GridColumn(
+                columnName: 'nextRepaymentPrincipal',
+                columnWidthMode: ColumnWidthMode.auto,
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text('Next Repayment Principal'))),
+            //principal in arrears
+            GridColumn(
+                columnName: 'principalInArrears',
+                columnWidthMode: ColumnWidthMode.auto,
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text('Principal In Arrears'))),
             GridColumn(
                 columnName: 'expectedPrincipal',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
                     child: const Text('Expected Principal(UGx)'))),
+            // next repayment interest
+            GridColumn(
+                columnName: 'nextRepaymentInterest',
+                columnWidthMode: ColumnWidthMode.auto,
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text('Next Repayment Interest'))),
+            //interest in arrears
+            GridColumn(
+                columnName: 'interestInArrears',
+                columnWidthMode: ColumnWidthMode.auto,
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text('Interest In Arrears'))),
             GridColumn(
                 columnName: 'expectedInterest',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
                     child: const Text('Expected Interest(UGx)'))),
             GridColumn(
                 columnName: 'expectedTotal',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
                     child: const Text('Expected Total(UGx)'))),
             GridColumn(
                 columnName: 'clientsInArrears',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
@@ -562,7 +823,7 @@ class _ExpectedRepaymentsState extends State<ExpectedRepayments> {
         child: SfDataGrid(
           key: _key,
           source: expectedDataSource,
-          columnWidthMode: ColumnWidthMode.fitByCellValue,
+          columnWidthMode: ColumnWidthMode.auto,
           frozenColumnsCount: 1, // Number of columns to freeze
           frozenRowsCount: 1, // Number of rows to freeze
           //apply pagination
@@ -582,35 +843,67 @@ class _ExpectedRepaymentsState extends State<ExpectedRepayments> {
                     child: const Text('Name'))),
             GridColumn(
                 columnName: 'clients',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
                     child: const Text('Clients'))),
+            // next repayment principal
+            GridColumn(
+                columnName: 'nextRepaymentPrincipal',
+                columnWidthMode: ColumnWidthMode.auto,
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text('Next Repayment Principal'))),
+            //principal in arrears
+            GridColumn(
+                columnName: 'principalInArrears',
+                columnWidthMode: ColumnWidthMode.auto,
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text('Principal In Arrears'))),
             GridColumn(
                 columnName: 'expectedPrincipal',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
                     child: const Text('Expected Principal(UGx)'))),
+            // next repayment interest
+            GridColumn(
+                columnName: 'nextRepaymentInterest',
+                columnWidthMode: ColumnWidthMode.auto,
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text('Next Repayment Interest'))),
+            //interest in arrears
+            GridColumn(
+                columnName: 'interestInArrears',
+                columnWidthMode: ColumnWidthMode.auto,
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text('Interest In Arrears'))),
             GridColumn(
                 columnName: 'expectedInterest',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
                     child: const Text('Expected Interest(UGx)'))),
             GridColumn(
                 columnName: 'expectedTotal',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
                     child: const Text('Expected Total(UGx)'))),
             GridColumn(
                 columnName: 'clientsInArrears',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
@@ -623,7 +916,7 @@ class _ExpectedRepaymentsState extends State<ExpectedRepayments> {
         child: SfDataGrid(
           key: _key,
           source: expectedDataSource,
-          columnWidthMode: ColumnWidthMode.fitByCellValue,
+          columnWidthMode: ColumnWidthMode.auto,
           frozenColumnsCount: 1, // Number of columns to freeze
           frozenRowsCount: 1, // Number of rows to freeze
           //apply pagination
@@ -637,39 +930,180 @@ class _ExpectedRepaymentsState extends State<ExpectedRepayments> {
                     child: const Text('Age Bracket'))),
             GridColumn(
                 columnName: 'clients',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
                     child: const Text('Clients'))),
+            // next repayment principal
+            GridColumn(
+                columnName: 'nextRepaymentPrincipal',
+                columnWidthMode: ColumnWidthMode.auto,
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text('Next Repayment Principal'))),
+            //principal in arrears
+            GridColumn(
+                columnName: 'principalInArrears',
+                columnWidthMode: ColumnWidthMode.auto,
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text('Principal In Arrears'))),
             GridColumn(
                 columnName: 'expectedPrincipal',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
                     child: const Text('Expected Principal(UGx)'))),
+            // next repayment interest
+            GridColumn(
+                columnName: 'nextRepaymentInterest',
+                columnWidthMode: ColumnWidthMode.auto,
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text('Next Repayment Interest'))),
+            //interest in arrears
+            GridColumn(
+                columnName: 'interestInArrears',
+                columnWidthMode: ColumnWidthMode.auto,
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text('Interest In Arrears'))),
             GridColumn(
                 columnName: 'expectedInterest',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
                     child: const Text('Expected Interest(UGx)'))),
             GridColumn(
                 columnName: 'expectedTotal',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
                     child: const Text('Expected Total(UGx)'))),
             GridColumn(
                 columnName: 'clientsInArrears',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
                     child: const Text('Clients In Arrears'))),
+          ],
+        ),
+      );
+    } else if (selectedGroup == 'Client') {
+      widget = Expanded(
+        child: SfDataGrid(
+          key: _key,
+          source: expectedDataSource,
+          columnWidthMode: ColumnWidthMode.auto,
+          frozenColumnsCount: 1, // Number of columns to freeze
+          frozenRowsCount: 1, // Number of rows to freeze
+          //apply pagination
+          allowSorting: true,
+          columns: <GridColumn>[
+            GridColumn(
+                columnName: 'officerId',
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text('Client ID'))),
+            GridColumn(
+                columnName: 'name',
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text('Names'))),
+            GridColumn(
+                columnName: 'phoneNumber',
+                columnWidthMode: ColumnWidthMode.auto,
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text('Phone Number'))),
+            GridColumn(
+                columnName: 'disbursementAmount',
+                columnWidthMode: ColumnWidthMode.auto,
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text(
+                      'Disbursement Amount',
+                      overflow: TextOverflow.ellipsis,
+                    ))),
+            // next repayment principal
+            GridColumn(
+                columnName: 'nextRepaymentPrincipal',
+                columnWidthMode: ColumnWidthMode.auto,
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text('Next Repayment Principal'))),
+            //principal in arrears
+            GridColumn(
+                columnName: 'principalInArrears',
+                columnWidthMode: ColumnWidthMode.auto,
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text('Principal In Arrears'))),
+            GridColumn(
+                columnName: 'expectedPrincipal',
+                columnWidthMode: ColumnWidthMode.auto,
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text('Expected Principal(UGx)'))),
+            // next repayment interest
+            GridColumn(
+                columnName: 'nextRepaymentInterest',
+                columnWidthMode: ColumnWidthMode.auto,
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text('Next Repayment Interest'))),
+            //interest in arrears
+            GridColumn(
+                columnName: 'interestInArrears',
+                columnWidthMode: ColumnWidthMode.auto,
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text('Interest In Arrears'))),
+            GridColumn(
+                columnName: 'expectedInterest',
+                columnWidthMode: ColumnWidthMode.auto,
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text('Expected Interest(UGx)'))),
+            GridColumn(
+                columnName: 'totalExpectedAmount',
+                columnWidthMode: ColumnWidthMode.auto,
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text(
+                      'Total Expected Amount',
+                      overflow: TextOverflow.ellipsis,
+                    ))),
+            GridColumn(
+                columnName: 'nextRepaymentDate',
+                columnWidthMode: ColumnWidthMode.auto,
+                label: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    child: const Text(
+                      'Next Repayment Date',
+                      overflow: TextOverflow.ellipsis,
+                    )))
           ],
         ),
       );
@@ -678,7 +1112,7 @@ class _ExpectedRepaymentsState extends State<ExpectedRepayments> {
         child: SfDataGrid(
           key: _key,
           source: expectedDataSource,
-          columnWidthMode: ColumnWidthMode.fitByColumnName,
+          columnWidthMode: ColumnWidthMode.auto,
           frozenColumnsCount: 1, // Number of columns to freeze
           frozenRowsCount: 1, // Number of rows to freeze
           //apply pagination
@@ -698,14 +1132,14 @@ class _ExpectedRepaymentsState extends State<ExpectedRepayments> {
                     child: const Text('Name'))),
             GridColumn(
                 columnName: 'actualVolume',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
                     child: const Text('Volume Disbursed(%)'))),
             GridColumn(
                 columnName: 'actualClients',
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 label: Container(
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
@@ -738,6 +1172,8 @@ class _ExpectedRepaymentsState extends State<ExpectedRepayments> {
         return 'sub_county';
       case 'Age':
         return 'age';
+      case 'Client':
+        return 'client';
       default:
         return 'staff_id';
     }
@@ -779,10 +1215,26 @@ class ExpectedDataSource extends DataGridSource {
                 DataGridCell<String>(columnName: 'name', value: e.name),
                 DataGridCell<String>(
                     columnName: 'clients', value: e.totalClients),
-                DataGridCell<String>(
+                // next repayment principal
+                DataGridCell(
+                    columnName: 'nextRepaymentPrincipal',
+                    value: e.nextRepaymentPrincipal),
+                //principal in arrears
+                DataGridCell(
+                    columnName: 'principalInArrears',
+                    value: e.totalPrincipalArrears),
+                DataGridCell(
                     columnName: 'expectedPrincipal',
                     value: e.expectedPrincipal),
-                DataGridCell<String>(
+                // next repayment interest
+                DataGridCell(
+                    columnName: 'nextRepaymentInterest',
+                    value: e.nextRepaymentInterest),
+                //interest in arrears
+                DataGridCell(
+                    columnName: 'interestInArrears',
+                    value: e.totalInterestArrears),
+                DataGridCell(
                     columnName: 'expectedInterest', value: e.expectedInterest),
                 DataGridCell<String>(
                     columnName: 'expectedTotal', value: e.expectedTotal),
@@ -797,10 +1249,26 @@ class ExpectedDataSource extends DataGridSource {
                 DataGridCell<String>(columnName: 'branchName', value: e.name),
                 DataGridCell<String>(
                     columnName: 'clients', value: e.totalClients),
-                DataGridCell<String>(
+                // next repayment principal
+                DataGridCell(
+                    columnName: 'nextRepaymentPrincipal',
+                    value: e.nextRepaymentPrincipal),
+                //principal in arrears
+                DataGridCell(
+                    columnName: 'principalInArrears',
+                    value: e.totalPrincipalArrears),
+                DataGridCell(
                     columnName: 'expectedPrincipal',
                     value: e.expectedPrincipal),
-                DataGridCell<String>(
+                // next repayment interest
+                DataGridCell(
+                    columnName: 'nextRepaymentInterest',
+                    value: e.nextRepaymentInterest),
+                //interest in arrears
+                DataGridCell(
+                    columnName: 'interestInArrears',
+                    value: e.totalInterestArrears),
+                DataGridCell(
                     columnName: 'expectedInterest', value: e.expectedInterest),
                 DataGridCell<String>(
                     columnName: 'expectedTotal', value: e.expectedTotal),
@@ -815,10 +1283,26 @@ class ExpectedDataSource extends DataGridSource {
                 DataGridCell<String>(columnName: 'regionName', value: e.name),
                 DataGridCell<String>(
                     columnName: 'clients', value: e.totalClients),
-                DataGridCell<String>(
+                // next repayment principal
+                DataGridCell(
+                    columnName: 'nextRepaymentPrincipal',
+                    value: e.nextRepaymentPrincipal),
+                //principal in arrears
+                DataGridCell(
+                    columnName: 'principalInArrears',
+                    value: e.totalPrincipalArrears),
+                DataGridCell(
                     columnName: 'expectedPrincipal',
                     value: e.expectedPrincipal),
-                DataGridCell<String>(
+                // next repayment interest
+                DataGridCell(
+                    columnName: 'nextRepaymentInterest',
+                    value: e.nextRepaymentInterest),
+                //interest in arrears
+                DataGridCell(
+                    columnName: 'interestInArrears',
+                    value: e.totalInterestArrears),
+                DataGridCell(
                     columnName: 'expectedInterest', value: e.expectedInterest),
                 DataGridCell<String>(
                     columnName: 'expectedTotal', value: e.expectedTotal),
@@ -832,10 +1316,26 @@ class ExpectedDataSource extends DataGridSource {
                 DataGridCell<String>(columnName: 'productName', value: e.name),
                 DataGridCell<String>(
                     columnName: 'clients', value: e.totalClients),
-                DataGridCell<String>(
+                // next repayment principal
+                DataGridCell(
+                    columnName: 'nextRepaymentPrincipal',
+                    value: e.nextRepaymentPrincipal),
+                //principal in arrears
+                DataGridCell(
+                    columnName: 'principalInArrears',
+                    value: e.totalPrincipalArrears),
+                DataGridCell(
                     columnName: 'expectedPrincipal',
                     value: e.expectedPrincipal),
-                DataGridCell<String>(
+                // next repayment interest
+                DataGridCell(
+                    columnName: 'nextRepaymentInterest',
+                    value: e.nextRepaymentInterest),
+                //interest in arrears
+                DataGridCell(
+                    columnName: 'interestInArrears',
+                    value: e.totalInterestArrears),
+                DataGridCell(
                     columnName: 'expectedInterest', value: e.expectedInterest),
                 DataGridCell<String>(
                     columnName: 'expectedTotal', value: e.expectedTotal),
@@ -849,10 +1349,26 @@ class ExpectedDataSource extends DataGridSource {
                 DataGridCell<String>(columnName: 'name', value: e.groupId),
                 DataGridCell<String>(
                     columnName: 'clients', value: e.totalClients),
-                DataGridCell<String>(
+                // next repayment principal
+                DataGridCell(
+                    columnName: 'nextRepaymentPrincipal',
+                    value: e.nextRepaymentPrincipal),
+                //principal in arrears
+                DataGridCell(
+                    columnName: 'principalInArrears',
+                    value: e.totalPrincipalArrears),
+                DataGridCell(
                     columnName: 'expectedPrincipal',
                     value: e.expectedPrincipal),
-                DataGridCell<String>(
+                // next repayment interest
+                DataGridCell(
+                    columnName: 'nextRepaymentInterest',
+                    value: e.nextRepaymentInterest),
+                //interest in arrears
+                DataGridCell(
+                    columnName: 'interestInArrears',
+                    value: e.totalInterestArrears),
+                DataGridCell(
                     columnName: 'expectedInterest', value: e.expectedInterest),
                 DataGridCell<String>(
                     columnName: 'expectedTotal', value: e.expectedTotal),
@@ -868,10 +1384,26 @@ class ExpectedDataSource extends DataGridSource {
                 DataGridCell<String>(columnName: 'name', value: e.name),
                 DataGridCell<String>(
                     columnName: 'clients', value: e.totalClients),
-                DataGridCell<String>(
+                // next repayment principal
+                DataGridCell(
+                    columnName: 'nextRepaymentPrincipal',
+                    value: e.nextRepaymentPrincipal),
+                //principal in arrears
+                DataGridCell(
+                    columnName: 'principalInArrears',
+                    value: e.totalPrincipalArrears),
+                DataGridCell(
                     columnName: 'expectedPrincipal',
                     value: e.expectedPrincipal),
-                DataGridCell<String>(
+                // next repayment interest
+                DataGridCell(
+                    columnName: 'nextRepaymentInterest',
+                    value: e.nextRepaymentInterest),
+                //interest in arrears
+                DataGridCell(
+                    columnName: 'interestInArrears',
+                    value: e.totalInterestArrears),
+                DataGridCell(
                     columnName: 'expectedInterest', value: e.expectedInterest),
                 DataGridCell<String>(
                     columnName: 'expectedTotal', value: e.expectedTotal),
@@ -887,10 +1419,26 @@ class ExpectedDataSource extends DataGridSource {
                 DataGridCell<String>(columnName: 'name', value: e.name),
                 DataGridCell<String>(
                     columnName: 'clients', value: e.totalClients),
-                DataGridCell<String>(
+                // next repayment principal
+                DataGridCell(
+                    columnName: 'nextRepaymentPrincipal',
+                    value: e.nextRepaymentPrincipal),
+                //principal in arrears
+                DataGridCell(
+                    columnName: 'principalInArrears',
+                    value: e.totalPrincipalArrears),
+                DataGridCell(
                     columnName: 'expectedPrincipal',
                     value: e.expectedPrincipal),
-                DataGridCell<String>(
+                // next repayment interest
+                DataGridCell(
+                    columnName: 'nextRepaymentInterest',
+                    value: e.nextRepaymentInterest),
+                //interest in arrears
+                DataGridCell(
+                    columnName: 'interestInArrears',
+                    value: e.totalInterestArrears),
+                DataGridCell(
                     columnName: 'expectedInterest', value: e.expectedInterest),
                 DataGridCell<String>(
                     columnName: 'expectedTotal', value: e.expectedTotal),
@@ -904,15 +1452,68 @@ class ExpectedDataSource extends DataGridSource {
                 DataGridCell<String>(columnName: 'name', value: e.groupId),
                 DataGridCell<String>(
                     columnName: 'clients', value: e.totalClients),
-                DataGridCell<String>(
+                // next repayment principal
+                DataGridCell(
+                    columnName: 'nextRepaymentPrincipal',
+                    value: e.nextRepaymentPrincipal),
+                //principal in arrears
+                DataGridCell(
+                    columnName: 'principalInArrears',
+                    value: e.totalPrincipalArrears),
+                DataGridCell(
                     columnName: 'expectedPrincipal',
                     value: e.expectedPrincipal),
-                DataGridCell<String>(
+                // next repayment interest
+                DataGridCell(
+                    columnName: 'nextRepaymentInterest',
+                    value: e.nextRepaymentInterest),
+                //interest in arrears
+                DataGridCell(
+                    columnName: 'interestInArrears',
+                    value: e.totalInterestArrears),
+                DataGridCell(
                     columnName: 'expectedInterest', value: e.expectedInterest),
                 DataGridCell<String>(
                     columnName: 'expectedTotal', value: e.expectedTotal),
                 DataGridCell<String>(
                     columnName: 'clientsInArrears', value: e.clientsInArrears)
+              ]))
+          .toList();
+    } else if (groupBy == 'Client') {
+      _arrearData = arrearData
+          .map<DataGridRow>((e) => DataGridRow(cells: [
+                DataGridCell<String>(columnName: 'officerId', value: e.groupId),
+                DataGridCell<String>(columnName: 'name', value: e.name),
+                DataGridCell<String>(
+                    columnName: 'phoneNumber', value: e.phoneNumber),
+                DataGridCell<String>(
+                    columnName: 'disbursementAmount', value: e.amountDisbursed),
+                // next repayment principal
+                DataGridCell(
+                    columnName: 'nextRepaymentPrincipal',
+                    value: e.nextRepaymentPrincipal),
+                //principal in arrears
+                DataGridCell(
+                    columnName: 'principalInArrears',
+                    value: e.totalPrincipalArrears),
+                DataGridCell(
+                    columnName: 'expectedPrincipal',
+                    value: e.expectedPrincipal),
+                // next repayment interest
+                DataGridCell(
+                    columnName: 'nextRepaymentInterest',
+                    value: e.nextRepaymentInterest),
+                //interest in arrears
+                DataGridCell(
+                    columnName: 'interestInArrears',
+                    value: e.totalInterestArrears),
+                DataGridCell(
+                    columnName: 'expectedInterest', value: e.expectedInterest),
+                DataGridCell<String>(
+                    columnName: 'totalExpectedAmount',
+                    value: e.totalPaymentAmount),
+                DataGridCell<String>(
+                    columnName: 'nextRepaymentDate', value: e.nextRepaymentDate)
               ]))
           .toList();
     } else {
@@ -936,6 +1537,8 @@ class ExpectedDataSource extends DataGridSource {
     }
   }
 
+  //pagination
+
   List<DataGridRow> _arrearData = [];
 
   @override
@@ -953,7 +1556,15 @@ class ExpectedDataSource extends DataGridSource {
         'expectedPrincipal',
         'expectedInterest',
         'expectedTotal',
-        'clientsInArrears'
+        'clientsInArrears',
+        'disbursementAmount',
+        'outstandingPrincipal',
+        'dda',
+        'nextRepaymentPrincipal',
+        'nextRepaymentInterest',
+        'principalInArrears',
+        'interestInArrears',
+        'totalExpectedAmount'
       ].contains(e.columnName)) {
         // Check if the value is numeric and can be formatted
         if (double.tryParse(e.value.toString()) != null) {

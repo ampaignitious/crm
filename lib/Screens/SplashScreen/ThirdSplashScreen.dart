@@ -78,7 +78,7 @@ class _ThirdSplashScreenState extends State<ThirdSplashScreen> {
                   height: size.height * 0.08,
                   decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      border: Border.all(color: AppColors.contentColorPurple)),
+                      border: Border.all(color: AppColors.contentColorOrange)),
                   child: InkWell(
                     onTap: () {
                       Navigator.push(context,
@@ -108,7 +108,7 @@ class _ThirdSplashScreenState extends State<ThirdSplashScreen> {
                     height: size.height * 0.08,
                     width: size.width * 0.6,
                     decoration: BoxDecoration(
-                        color: AppColors.contentColorPurple,
+                        color: AppColors.contentColorOrange,
                         borderRadius: BorderRadius.circular(10)),
                     child: Center(
                       child: Text(

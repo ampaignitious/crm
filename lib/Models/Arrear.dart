@@ -11,7 +11,12 @@ class Arrear {
       this.interestArrears,
       this.totalArrears,
       this.clientsInArrears,
-      this.par1Day);
+      this.numberOfDaysLate,
+      this.amountDisbursed,
+      this.par1Day,
+      this.numberOfComments,
+      this.customerId,
+      );
 
   /// Id of an Arrear.
   final String id;
@@ -23,7 +28,11 @@ class Arrear {
   final String interestArrears;
   final String totalArrears;
   final String clientsInArrears;
+  final String numberOfDaysLate;
+  final String amountDisbursed;
   final String par1Day;
+  final String numberOfComments;
+  final String customerId;
 
   //fromjson
   factory Arrear.fromJson(Map<String, dynamic> json) {
@@ -37,7 +46,11 @@ class Arrear {
       json['total_interest_arrears'].toString(),
       json['total_arrears'].toString(),
       json['clients_in_arrears'].toString(),
+      json['number_of_days_late'].toString(),
+      json['amount_disbursed'].toString(),
       json['total_par'],
+      json['number_of_comments'].toString(),
+      json['customer_id'].toString(),
     );
   }
 }

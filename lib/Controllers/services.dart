@@ -194,12 +194,14 @@ class AuthController {
       if (response.containsKey('message')) {
         return response;
       } else {
+        log("failed exception during getArrears else: $response");
         return {
           "error": "Failed to get arrears",
           "status": "error",
         };
       }
     } catch (e) {
+      log("failed exception happened during getArrears: $e");
       return {
         "error": "Failed to get arrears",
         "status": "error",
@@ -272,6 +274,40 @@ class AuthController {
     }
   }
 
+  Future<Map<String, dynamic>> getIncentives() async {
+    final dio = Dio();
+    final client = RestClient(dio);
+    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
+    //accept application/json
+    dio.options.headers['Accept'] = "application/json";
+    //add the content type
+    dio.options.headers['Content-Type'] = "application/json";
+
+    //Charset utf8
+    dio.options.headers['charset'] = "utf-8";
+
+    try {
+      final response = await client.getIncentives();
+      //check if response contains message
+      if (response.containsKey('message')) {
+        log("response['incentives']: ${response['incentives']}");
+        return response['incentives'];
+      } else {
+        log("failed exception during getIncentives else: $response");
+        return {
+          "error": "Failed to get incentives",
+          "status": "error",
+        };
+      }
+    } catch (e) {
+      log("failed exception happened during getIncentives: $e");
+      return {
+        "error": "Failed to get incentives",
+        "status": "error",
+      };
+    }
+  }
+
   //getDashboard
   Future<Map<String, dynamic>> getDashboard() async {
     final dio = Dio();
@@ -296,6 +332,200 @@ class AuthController {
     } catch (e) {
       return {
         "error": "Failed to get dashboard",
+        "status": "error",
+      };
+    }
+  }
+
+  //getMonitors
+  Future<Map<String, dynamic>> getMonitors(String activity) async {
+    final dio = Dio();
+    final client = RestClient(dio);
+    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
+    //accept application/json
+    dio.options.headers['Accept'] = "application/json";
+    //add the content type
+    dio.options.headers['Content-Type'] = "application/json";
+
+    try {
+      final response = await client.getMonitors(activity);
+      //check if response contains message
+      if (response.containsKey('message')) {
+        return response;
+      } else {
+        return {
+          "error": "Failed to get monitors",
+          "status": "error",
+        };
+      }
+    } catch (e) {
+      return {
+        "error": "Failed to get monitors",
+        "status": "error",
+      };
+    }
+  }
+
+  //apply
+  Future<bool> apply(int monitorId) async {
+    final dio = Dio();
+    final client = RestClient(dio);
+    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
+    //accept application/json
+    dio.options.headers['Accept'] = "application/json";
+    //add the content type
+    dio.options.headers['Content-Type'] = "application/json";
+
+    final body = {"monitor_id": monitorId};
+    try {
+      final response = await client.apply(body: body);
+      //check if response contains message
+      if (response.containsKey('message')) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      log("failed exception happened during apply: $e");
+      return false;
+    }
+  }
+
+  //appraise
+  Future<bool> appraise(int monitorId) async {
+    final dio = Dio();
+    final client = RestClient(dio);
+    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
+    //accept application/json
+    dio.options.headers['Accept'] = "application/json";
+    //add the content type
+    dio.options.headers['Content-Type'] = "application/json";
+
+    final body = {"monitor_id": monitorId};
+    try {
+      final response = await client.appraise(body: body);
+      //check if response contains message
+      if (response.containsKey('message')) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      log("failed exception happened during appraise: $e");
+      return false;
+    }
+  }
+
+  //createMonitor
+  Future<bool> createMonitor(
+      String name, String phone, String location, String activity) async {
+    final dio = Dio();
+    final client = RestClient(dio);
+    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
+    //accept application/json
+    dio.options.headers['Accept'] = "application/json";
+    //add the content type
+    dio.options.headers['Content-Type'] = "application/json";
+
+    final body = {
+      "name": name,
+      "phone": phone,
+      "location": location,
+      "activity": activity
+    };
+    try {
+      final response = await client.createMonitor(body: body);
+      //check if response contains message
+      if (response.containsKey('message')) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      log("failed exception happened during createMonitor: $e");
+      return false;
+    }
+  }
+
+  //add comment with comment, customer_id, staff_id
+  Future<bool> addComment(
+      String comment, String customerId, String numberOfDayLate) async {
+    final dio = Dio();
+    final client = RestClient(dio);
+    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
+    //accept application/json
+    dio.options.headers['Content-Type'] = "application/json";
+
+    final body = {
+      "comment": comment,
+      "customer_id": customerId,
+      'number_of_days_late': numberOfDayLate,
+    };
+    try {
+      final response = await client.addComment(body: body);
+      //check if response contains message
+      if (response.containsKey('comment')) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      log("failed exception happened during addComment: $e");
+      return false;
+    }
+  }
+
+  //show all comments that belong to a customer
+  Future<Map<String, dynamic>> showAllComments(String customerId) async {
+    final dio = Dio();
+    final client = RestClient(dio);
+    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
+    //accept application/json
+    dio.options.headers['Content-Type'] = "application/json";
+
+    try {
+      final response = await client.showAllComments(customerId);
+      //check if response contains message
+      if (response.containsKey('comments')) {
+        return response;
+      } else {
+        log("no comments field: $response");
+        return {
+          "error": "Failed to get comments",
+          "status": "error",
+        };
+      }
+    } catch (e) {
+      log("failed exception happened during showAllComments: $e");
+      return {
+        "error": "Failed to get comments",
+        "status": "error",
+      };
+    }
+  }
+
+  //get all comments
+  Future<Map<String, dynamic>> getAllComments() async {
+    final dio = Dio();
+    final client = RestClient(dio);
+    dio.options.headers['Authorization'] = "Bearer ${await getAccessToken()}";
+    //accept application/json
+    dio.options.headers['Content-Type'] = "application/json";
+
+    try {
+      final response = await client.getAllComments();
+      //check if response contains message
+      if (response.containsKey('comments')) {
+        return response;
+      } else {
+        return {
+          "error": "Failed to get comments",
+          "status": "error",
+        };
+      }
+    } catch (e) {
+      return {
+        "error": "Failed to get comments",
         "status": "error",
       };
     }

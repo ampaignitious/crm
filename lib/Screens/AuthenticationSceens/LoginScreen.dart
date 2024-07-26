@@ -79,9 +79,10 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
+        reverse: true,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -122,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     SizedBox(height: size.height * 0.016),
                     const Divider(
                       thickness: 0.3,
-                      color: AppColors.contentColorPurple,
+                      color: AppColors.contentColorOrange,
                     ),
                     SizedBox(height: size.height * 0.02),
                     TextFormField(
@@ -130,12 +131,29 @@ class _LoginScreenState extends State<LoginScreen> {
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
                         labelText: 'Staff ID',
+                        labelStyle: const TextStyle(
+                            color: AppColors.contentColorOrange),
+                        floatingLabelStyle: const TextStyle(
+                            color: AppColors.contentColorOrange),
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(
-                                15)), // Border for the email field
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: const BorderSide(
+                              color: AppColors.contentColorOrange),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: const BorderSide(
+                              color: AppColors.contentColorOrange, width: 2.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: const BorderSide(
+                              color: AppColors.contentColorOrange, width: 1.0),
+                        ),
                       ),
                       validator: _validateEmail,
                     ),
+
                     SizedBox(
                         height:
                             size.height * 0.035), // Add spacing between fields
@@ -144,12 +162,29 @@ class _LoginScreenState extends State<LoginScreen> {
                       obscureText: true,
                       decoration: InputDecoration(
                         labelText: 'Password',
+                        labelStyle: const TextStyle(
+                            color: AppColors.contentColorOrange),
+                        floatingLabelStyle: const TextStyle(
+                            color: AppColors.contentColorOrange),
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(
-                                15)), // Border for the password field
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: const BorderSide(
+                              color: AppColors.contentColorOrange),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: const BorderSide(
+                              color: AppColors.contentColorOrange, width: 2.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: const BorderSide(
+                              color: AppColors.contentColorOrange, width: 1.0),
+                        ),
                       ),
                       validator: _validatePassword,
                     ),
+
                     SizedBox(height: size.height * 0.015),
                     Text("Forgot password ?", style: GoogleFonts.lato()),
                     SizedBox(height: size.height * 0.055),
@@ -157,12 +192,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         onPressed: _handleLogin,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors
-                              .contentColorYellow, // Set button color to purple
+                              .contentColorOrange, // Set button color to purple
                         ),
                         child: Padding(
                           padding: EdgeInsets.symmetric(
                             horizontal: size.width * 0.26,
-                            vertical: size.height * 0.032,
+                            vertical: size.height * 0.016,
                           ),
                           child: const Text(
                             'Login',
